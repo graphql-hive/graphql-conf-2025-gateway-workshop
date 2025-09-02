@@ -8,9 +8,11 @@
   ],
   "scripts": {
     "format": "prettier --check --write .",
-    "compose": "mesh-compose -o supergraph.graphql"
+    "compose": "mesh-compose -o supergraph.graphql",
+    "start": "hive-gateway supergraph"
   },
   "dependencies": {
+    "@graphql-hive/gateway": "^2.0.0-next-644c389eef9f770fab018ad7bfc5f099c0fbedda",
     "@graphql-mesh/compose-cli": "^1.4.15"
   },
   "devDependencies": {
