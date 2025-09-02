@@ -3,11 +3,46 @@ import typeDefs from "./typeDefs.graphql" with { type: "text" };
 import { createYoga } from "graphql-yoga";
 import { parse } from "graphql";
 
+const products = [
+  {
+    upc: "1",
+    name: "Laptop",
+    price: 999,
+    weight: 30,
+  },
+  {
+    upc: "2",
+    name: "Smartphone",
+    price: 699,
+    weight: 5,
+  },
+  {
+    upc: "3",
+    name: "Headphones",
+    price: 199,
+    weight: 4,
+  },
+  {
+    upc: "4",
+    name: "Monitor",
+    price: 299,
+    weight: 50,
+  },
+];
+
 const yoga = createYoga({
   schema: buildSubgraphSchema([
     {
       typeDefs: parse(typeDefs),
-      // TODO: resolvers
+      resolvers: {
+        Query: {
+          topProducts: (_, args) => products.slice(0, args.first),
+        },
+        Product: {
+          __resolveReference: (product) =>
+            products.find((p) => p.upc === product.upc),
+        },
+      },
     },
   ]),
 });
