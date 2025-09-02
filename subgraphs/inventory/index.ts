@@ -3,11 +3,41 @@ import typeDefs from "./typeDefs.graphql" with { type: "text" };
 import { createYoga } from "graphql-yoga";
 import { parse } from "graphql";
 
+const inventory = [
+  {
+    upc: "1",
+    inStock: true,
+  },
+  {
+    upc: "2",
+    inStock: false,
+  },
+  {
+    upc: "3",
+    inStock: true,
+  },
+  {
+    upc: "4",
+    inStock: true,
+  },
+];
+
 const yoga = createYoga({
   schema: buildSubgraphSchema([
     {
       typeDefs: parse(typeDefs),
-      // TODO: resolvers
+      resolvers: {
+        Product: {
+          __resolveReference: (ref) => {
+            const found = inventory.find((i) => i.upc === ref.upc);
+            if (found) {
+              return { ...ref, ...found };
+            }
+          },
+          shippingEstimate: (product) =>
+            Math.floor(product.price / product.weight),
+        },
+      },
     },
   ]),
 });
