@@ -1,0 +1,19 @@
+import {
+  defineConfig,
+  loadGraphQLHTTPSubgraph,
+} from "@graphql-mesh/compose-cli";
+
+export const composeConfig = defineConfig({
+  subgraphs: [
+    {
+      sourceHandler: loadGraphQLHTTPSubgraph("products", {
+        endpoint: "http://localhost:4001/graphql",
+      }),
+    },
+    {
+      sourceHandler: loadGraphQLHTTPSubgraph("inventory", {
+        endpoint: "http://localhost:4002/graphql",
+      }),
+    },
+  ],
+});

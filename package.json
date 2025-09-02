@@ -7,7 +7,11 @@
     "subgraphs/*"
   ],
   "scripts": {
-    "format": "prettier --check --write ."
+    "format": "prettier --check --write .",
+    "compose": "mesh-compose -o supergraph.graphql"
+  },
+  "dependencies": {
+    "@graphql-mesh/compose-cli": "^1.4.15"
   },
   "devDependencies": {
     "@types/bun": "latest",
