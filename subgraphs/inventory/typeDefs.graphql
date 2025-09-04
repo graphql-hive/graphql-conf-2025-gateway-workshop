@@ -1,13 +1,27 @@
 extend schema
   @link(
     url: "https://specs.apollo.dev/federation/v2.7"
-    import: ["@key", "@extends", "@external", "@requires", "@authenticated", "@requiresScopes"]
-  )
+    import: ["@key", "@extends", "@external", "@requires", "@authenticated", "@requiresScopes", "@composeDirective"]
+  )  
+  @link(url: "https://the-guild.dev/graphql/mesh/spec/v1.0", import: ["@rateLimit"])
+  @composeDirective(name: "@rateLimit")
+
+directive @rateLimit(
+  max: Int
+  window: String
+  message: String
+  identityArgs: [String]
+  arrayLengthField: String
+) on FIELD_DEFINITION
+
+type Query {
+  shippingEstimate(upc: String!): Int
+}
 
 type Product @extends @key(fields: "upc") {
   upc: String! @external
   weight: Int @external
   price: Int @external
-  inStock: Boolean @authenticated
+  inStock: Boolean @authenticated @rateLimit(max: 5, window: "60s", message: "You can make only 5 requests per minute")
   shippingEstimate: Int @requires(fields: "price weight") @requiresScopes(scopes: [["shippingEstimate"], ["admin"]])
 }

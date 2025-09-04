@@ -46,4 +46,5 @@ export const gatewayConfig = defineConfig({
   hmacSignature: {
     secret: "VERY_SECRET",
   },
+  rateLimiting: true,
 });
