@@ -30,6 +30,8 @@ openTelemetrySetup({
 export const gatewayConfig = defineConfig({
   logging: log,
   pubsub: new NATSPubSub(await connect({ servers: ["localhost:4222"] }), {
+    // we make sure to use the same prefix for all gateways and publishers
+    // think of it as an application identifier
     subjectPrefix: "my-app",
   }),
   openTelemetry: {
