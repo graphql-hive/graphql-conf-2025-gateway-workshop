@@ -9,7 +9,8 @@
   "scripts": {
     "format": "prettier --check --write .",
     "compose": "mesh-compose -o supergraph.graphql",
-    "start": "hive-gateway supergraph"
+    "start": "hive-gateway supergraph",
+    "gen-jwt": "bun run ./scripts/gen-jwt.ts"
   },
   "dependencies": {
     "@graphql-hive/gateway": "^2.0.0",
