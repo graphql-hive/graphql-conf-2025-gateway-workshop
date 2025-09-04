@@ -47,7 +47,7 @@ export const gatewayConfig = defineConfig({
     },
   },
   genericAuth: {
-    // instructs gateway to use the `@authenticated` directive
+    // instructs gateway to use the auth directive (like @authenticated, @requiresScopes, @policy)
     mode: "protect-granular",
     // wont completely reject unauthenticated requests, but will not execute the field
     rejectUnauthenticated: false,
