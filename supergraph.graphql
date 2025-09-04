@@ -1,125 +1,78 @@
-schema
-    @link(url: "https://specs.apollo.dev/link/v1.0")
-    @link(url: "https://specs.apollo.dev/join/v0.4", for: EXECUTION)
-    
-    
-    
-    
-    @link(url: "https://specs.apollo.dev/requiresScopes/v0.1", for: SECURITY)
-    @link(url: "https://specs.apollo.dev/authenticated/v0.1", for: SECURITY)
-    @link(url: "https://the-guild.dev/graphql/mesh/spec/v1.0", import: ["@rateLimit"]) 
-  {
-    query: Query
-    mutation: Mutation
-    
-  }
+schema @link(url: "https://specs.apollo.dev/link/v1.0") @link(url: "https://specs.apollo.dev/join/v0.4", for: EXECUTION) @link(url: "https://specs.apollo.dev/requiresScopes/v0.1", for: SECURITY) @link(url: "https://specs.apollo.dev/authenticated/v0.1", for: SECURITY) @link(url: "https://the-guild.dev/graphql/mesh/spec/v1.0", import: ["@rateLimit"]) {
+  query: Query
+  mutation: Mutation
+  subscription: Subscription
+}
 
-  
-    directive @join__enumValue(graph: join__Graph!) repeatable on ENUM_VALUE
+directive @join__enumValue(graph: join__Graph!) repeatable on ENUM_VALUE
 
-    directive @join__graph(name: String!, url: String!) on ENUM_VALUE
+directive @join__graph(name: String!, url: String!) on ENUM_VALUE
 
-    
-      directive @join__field(
-        graph: join__Graph
-        requires: join__FieldSet
-        provides: join__FieldSet
-        type: String
-        external: Boolean
-        override: String
-        usedOverridden: Boolean
-        overrideLabel: String
-        
-      ) repeatable on FIELD_DEFINITION | INPUT_FIELD_DEFINITION
-    
-    
+directive @join__field(graph: join__Graph, requires: join__FieldSet, provides: join__FieldSet, type: String, external: Boolean, override: String, usedOverridden: Boolean, overrideLabel: String) repeatable on FIELD_DEFINITION | INPUT_FIELD_DEFINITION
 
-    directive @join__implements(
-      graph: join__Graph!
-      interface: String!
-    ) repeatable on OBJECT | INTERFACE
+directive @join__implements(graph: join__Graph!, interface: String!) repeatable on OBJECT | INTERFACE
 
-    directive @join__type(
-      graph: join__Graph!
-      key: join__FieldSet
-      extension: Boolean! = false
-      resolvable: Boolean! = true
-      isInterfaceObject: Boolean! = false
-    ) repeatable on OBJECT | INTERFACE | UNION | ENUM | INPUT_OBJECT | SCALAR
+directive @join__type(graph: join__Graph!, key: join__FieldSet, extension: Boolean! = false, resolvable: Boolean! = true, isInterfaceObject: Boolean! = false) repeatable on OBJECT | INTERFACE | UNION | ENUM | INPUT_OBJECT | SCALAR
 
-    directive @join__unionMember(
-      graph: join__Graph!
-      member: String!
-    ) repeatable on UNION
+directive @join__unionMember(graph: join__Graph!, member: String!) repeatable on UNION
 
-    scalar join__FieldSet
-    
-  
-  
-  directive @link(
-    url: String
-    as: String
-    for: link__Purpose
-    import: [link__Import]
-  ) repeatable on SCHEMA
+directive @link(url: String, as: String, for: link__Purpose, import: [link__Import]) repeatable on SCHEMA
 
-  scalar link__Import
+directive @requiresScopes(scopes: [[requiresScopes__Scope!]!]!) on FIELD_DEFINITION | OBJECT | INTERFACE | SCALAR | ENUM
 
-  enum link__Purpose {
-    """
-    `SECURITY` features provide metadata necessary to securely resolve fields.
-    """
-    SECURITY
+directive @authenticated on FIELD_DEFINITION | OBJECT | INTERFACE | SCALAR | ENUM
 
-    """
-    `EXECUTION` features provide metadata necessary for operation execution.
-    """
-    EXECUTION
-  }
+directive @rateLimit(max: Int, window: String, message: String) on FIELD_DEFINITION
 
-  
-  
-  
-  
-  
-  directive @requiresScopes(
-    scopes: [[requiresScopes__Scope!]!]!
-  ) on FIELD_DEFINITION | OBJECT | INTERFACE | SCALAR | ENUM
+directive @additionalField on FIELD_DEFINITION
 
-  scalar requiresScopes__Scope
+scalar join__FieldSet
 
-  
-  directive @authenticated on FIELD_DEFINITION | OBJECT | INTERFACE | SCALAR | ENUM
+scalar link__Import
 
-  
+enum link__Purpose {
+  """
+  `SECURITY` features provide metadata necessary to securely resolve fields.
+  """
+  SECURITY
+  """
+  `EXECUTION` features provide metadata necessary for operation execution.
+  """
+  EXECUTION
+}
+
+scalar requiresScopes__Scope
+
 enum join__Graph {
-  POSTS @join__graph(name: "posts", url: "http://localhost:4002/graphql") 
-  USERS @join__graph(name: "users", url: "http://localhost:4001/graphql") 
+  POSTS @join__graph(name: "posts", url: "http://localhost:4002/graphql")
+  USERS @join__graph(name: "users", url: "http://localhost:4001/graphql")
 }
 
-directive @rateLimit(max: Int, window: String, message: String)  on FIELD_DEFINITION
+scalar TransportOptions @join__type(graph: POSTS) @join__type(graph: USERS)
 
-scalar TransportOptions @join__type(graph: POSTS)  @join__type(graph: USERS) 
-
-type Query @join__type(graph: POSTS)  @join__type(graph: USERS)  {
-  posts: [Post!]! @join__field(graph: POSTS) 
-  users: [User!]! @join__field(graph: USERS) 
+type Query @join__type(graph: POSTS) @join__type(graph: USERS) {
+  posts: [Post!]! @join__field(graph: POSTS)
+  users: [User!]! @join__field(graph: USERS)
 }
 
-type Mutation @join__type(graph: POSTS)  {
-  createPost(title: String!, content: String!) : Post! @rateLimit(max: 5, window: "60s", message: "You can only create 5 posts per minute")  @requiresScopes(scopes: [["editor"]]) 
-  deletePost(id: ID!) : Post @requiresScopes(scopes: [["editor"], ["admin"]]) 
+type Mutation @join__type(graph: POSTS) {
+  createPost(title: String!, content: String!): Post! @rateLimit(max: 5, window: "60s", message: "You can only create 5 posts per minute") @requiresScopes(scopes: [["editor"]])
+  deletePost(id: ID!): Post @requiresScopes(scopes: [["editor"], ["admin"]])
 }
 
-type Post @join__type(graph: POSTS, key: "id")  {
+type Post @join__type(graph: POSTS, key: "id") {
   id: ID!
   title: String!
   content: String!
   author: User!
 }
 
-type User @join__type(graph: POSTS, key: "id")  @join__type(graph: USERS, key: "id")  {
+type User @join__type(graph: POSTS, key: "id") @join__type(graph: USERS, key: "id") {
   id: ID!
-  name: String! @join__field(graph: USERS) 
-  email: String! @join__field(graph: USERS)  @authenticated
+  name: String! @join__field(graph: USERS)
+  email: String! @join__field(graph: USERS) @authenticated
+}
+
+type Subscription {
+  newPost: Post! @resolveTo(pubsubTopic: "newPost") @additionalField
 }

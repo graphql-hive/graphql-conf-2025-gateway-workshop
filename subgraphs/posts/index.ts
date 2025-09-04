@@ -1,9 +1,18 @@
 import { buildSubgraphSchema } from "@apollo/subgraph";
 import { useHmacSignatureValidation } from "@graphql-hive/gateway";
+import { NATSPubSub } from "@graphql-hive/pubsub/nats";
+import { connect } from "@nats-io/transport-node";
 import { parse } from "graphql";
 import { createYoga } from "graphql-yoga";
 import { HMAC_SECRET } from "~env";
 import typeDefs from "./typeDefs.graphql" with { type: "text" };
+
+const pubsub = new NATSPubSub<{ newPost: { id: string } }>(
+  await connect({ servers: ["localhost:4222"] }),
+  {
+    subjectPrefix: "my-app",
+  },
+);
 
 let posts = [
   {
@@ -35,7 +44,7 @@ const yoga = createYoga({
           posts: () => posts,
         },
         Mutation: {
-          createPost: (_, { title, content }) => {
+          createPost: async (_, { title, content }) => {
             const newPost = {
               id: `p${posts.length + 1}`,
               title,
@@ -43,6 +52,7 @@ const yoga = createYoga({
               author: { id: "u1" }, // TODO: get from token
             };
             posts = [...posts, newPost];
+            pubsub.publish("newPost", { id: newPost.id });
             return newPost;
           },
           deletePost: (_, { id }) => {
