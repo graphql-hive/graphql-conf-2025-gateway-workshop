@@ -1,4 +1,4 @@
-import { createInlineSigningKeyProvider, defineConfig } from "@graphql-hive/gateway";
+import { createInlineSigningKeyProvider, defineConfig, type JWTExtendContextFields } from "@graphql-hive/gateway";
 import { openTelemetrySetup } from "@graphql-hive/gateway/opentelemetry/setup";
 import { AsyncLocalStorageContextManager } from "@opentelemetry/context-async-hooks";
 import { OTLPTraceExporter } from "@opentelemetry/exporter-trace-otlp-http";
@@ -35,8 +35,8 @@ export const gatewayConfig = defineConfig({
   },
   genericAuth: {
     mode: "protect-granular",
-    resolveUserFn: (ctx) => ctx.jwt?.payload,
-    extractScopes: (jwtPayload) => jwtPayload?.scopes,
+    resolveUserFn: (context: { jwt?: JWTExtendContextFields }) =>
+      context.jwt?.payload,
     rejectUnauthenticated: false,
   },
   disableIntrospection: {

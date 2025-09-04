@@ -12,7 +12,7 @@
     "start": "hive-gateway supergraph"
   },
   "dependencies": {
-    "@graphql-hive/gateway": "2.0.0-next-391b3ed9ced78a8e26b87f6a3983d1d7aff273e6",
+    "@graphql-hive/gateway": "2.0.0-alpha-dc8cd0aa5514f2b23c187921cea158f0effa1c8b",
     "@graphql-mesh/compose-cli": "^1.4.15",
     "@opentelemetry/context-async-hooks": "^2.1.0",
     "@opentelemetry/exporter-trace-otlp-http": "^0.204.0"
