@@ -64,6 +64,10 @@ export const gatewayConfig = defineConfig({
   },
   // enables rate limiting
   rateLimiting: true,
+  // caches the responses from subgraphs of identical queries for the same session
+  responseCaching: {
+    session: (req) => req.headers.get("authorization"),
+  },
   // depth limiting is enabled by default with 8 max depth
   // maxDepth: 8,
   // token limiting is enabled by default with 1000 tokens
