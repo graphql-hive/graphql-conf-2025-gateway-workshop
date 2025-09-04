@@ -47,4 +47,5 @@ export const gatewayConfig = defineConfig({
     secret: "VERY_SECRET",
   },
   rateLimiting: true,
+  maxDepth: 5,
 });
