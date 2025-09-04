@@ -16,7 +16,7 @@ let posts = [
     id: "p2",
     title: "Advanced GraphQL",
     content: "Deep dive into GraphQL features...",
-    autor: { id: "u1" },
+    author: { id: "u1" },
   },
   {
     id: "p3",
