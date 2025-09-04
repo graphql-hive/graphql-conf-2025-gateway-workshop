@@ -1,0 +1,42 @@
+extend schema
+  @link(
+    url: "https://specs.apollo.dev/federation/v2.7"
+    import: ["@key", "@authenticated", "@requiresScopes", "@composeDirective"]
+  )
+  @link(
+    url: "https://the-guild.dev/graphql/mesh/spec/v1.0"
+    import: ["@rateLimit"]
+  )
+  @composeDirective(name: "@rateLimit")
+
+directive @rateLimit(
+  max: Int
+  window: String
+  message: String
+) on FIELD_DEFINITION
+
+type Query {
+  posts: [Post!]!
+}
+
+type Mutation {
+  createPost(title: String!, content: String!): Post!
+    @rateLimit(
+      max: 5
+      window: "60s"
+      message: "You can only create 5 posts per minute"
+    )
+    @requiresScopes(scopes: [["editor"]])
+  deletePost(id: ID!): Post @requiresScopes(scopes: [["editor"], ["admin"]])
+}
+
+type Post @key(fields: "id") {
+  id: ID!
+  title: String!
+  content: String!
+  author: User!
+}
+
+type User @key(fields: "id") {
+  id: ID!
+}

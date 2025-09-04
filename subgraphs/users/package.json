@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "inventory",
+  "name": "users",
   "type": "module",
   "main": "index.ts",
   "scripts": {

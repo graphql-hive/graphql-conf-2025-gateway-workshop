@@ -10,7 +10,7 @@ schema
     @link(url: "https://the-guild.dev/graphql/mesh/spec/v1.0", import: ["@rateLimit"]) 
   {
     query: Query
-    
+    mutation: Mutation
     
   }
 
@@ -93,30 +93,33 @@ schema
 
   
 enum join__Graph {
-  INVENTORY @join__graph(name: "inventory", url: "http://localhost:4002/graphql") 
-  PRODUCTS @join__graph(name: "products", url: "http://localhost:4001/graphql") 
+  POSTS @join__graph(name: "posts", url: "http://localhost:4002/graphql") 
+  USERS @join__graph(name: "users", url: "http://localhost:4001/graphql") 
 }
 
-directive @rateLimit(
-  max: Int
-  window: String
-  message: String
-  identityArgs: [String]
-  arrayLengthField: String
-) on FIELD_DEFINITION
+directive @rateLimit(max: Int, window: String, message: String)  on FIELD_DEFINITION
 
-scalar TransportOptions @join__type(graph: INVENTORY)  @join__type(graph: PRODUCTS) 
+scalar TransportOptions @join__type(graph: POSTS)  @join__type(graph: USERS) 
 
-type Query @join__type(graph: INVENTORY)  @join__type(graph: PRODUCTS)  {
-  shippingEstimate(upc: String!) : Int @join__field(graph: INVENTORY) 
-  topProducts(first: Int = 5) : [Product] @join__field(graph: PRODUCTS) 
+type Query @join__type(graph: POSTS)  @join__type(graph: USERS)  {
+  posts: [Post!]! @join__field(graph: POSTS) 
+  users: [User!]! @join__field(graph: USERS) 
 }
 
-type Product @join__type(graph: INVENTORY, key: "upc", extension: true)  @join__type(graph: PRODUCTS, key: "upc")  {
-  upc: String!
-  weight: Int @join__field(graph: INVENTORY, external: true)  @join__field(graph: PRODUCTS) 
-  price: Int @join__field(graph: INVENTORY, external: true)  @join__field(graph: PRODUCTS) 
-  inStock: Boolean @join__field(graph: INVENTORY)  @authenticated
-  shippingEstimate: Int @join__field(graph: INVENTORY, requires: "price weight")  @requiresScopes(scopes: [["admin"]]) 
-  name: String @join__field(graph: PRODUCTS) 
+type Mutation @join__type(graph: POSTS)  {
+  createPost(title: String!, content: String!) : Post! @rateLimit(max: 5, window: "60s", message: "You can only create 5 posts per minute")  @requiresScopes(scopes: [["editor"]]) 
+  deletePost(id: ID!) : Post @requiresScopes(scopes: [["editor"], ["admin"]]) 
+}
+
+type Post @join__type(graph: POSTS, key: "id")  {
+  id: ID!
+  title: String!
+  content: String!
+  author: User!
+}
+
+type User @join__type(graph: POSTS, key: "id")  @join__type(graph: USERS, key: "id")  {
+  id: ID!
+  name: String! @join__field(graph: USERS) 
+  email: String! @join__field(graph: USERS)  @authenticated
 }

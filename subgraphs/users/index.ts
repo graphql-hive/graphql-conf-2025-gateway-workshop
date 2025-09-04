@@ -5,30 +5,21 @@ import { createYoga } from "graphql-yoga";
 import { HMAC_SECRET } from "~env";
 import typeDefs from "./typeDefs.graphql" with { type: "text" };
 
-const products = [
+const users = [
   {
-    upc: "1",
-    name: "Laptop",
-    price: 999,
-    weight: 30,
+    id: "u1",
+    name: "Alice",
+    email: "alice@example.com",
   },
   {
-    upc: "2",
-    name: "Smartphone",
-    price: 699,
-    weight: 5,
+    id: "u2",
+    name: "Bob",
+    email: "bob@example.com",
   },
   {
-    upc: "3",
-    name: "Headphones",
-    price: 199,
-    weight: 4,
-  },
-  {
-    upc: "4",
-    name: "Monitor",
-    price: 299,
-    weight: 50,
+    id: "u3",
+    name: "Charlie",
+    email: "charlie@example.com",
   },
 ];
 
@@ -38,11 +29,10 @@ const yoga = createYoga({
       typeDefs: parse(typeDefs),
       resolvers: {
         Query: {
-          topProducts: (_, args) => products.slice(0, args.first),
+          users: () => users,
         },
-        Product: {
-          __resolveReference: (product) =>
-            products.find((p) => p.upc === product.upc),
+        User: {
+          __resolveReference: (user) => users.find((u) => u.id === user.id),
         },
       },
     },

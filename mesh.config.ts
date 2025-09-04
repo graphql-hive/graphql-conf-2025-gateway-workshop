@@ -6,15 +6,15 @@ import {
 export const composeConfig = defineConfig({
   subgraphs: [
     {
-      sourceHandler: loadGraphQLHTTPSubgraph("products", {
+      sourceHandler: loadGraphQLHTTPSubgraph("users", {
         endpoint: "http://localhost:4001/graphql",
-        source: "./subgraphs/products/typeDefs.graphql",
+        source: "./subgraphs/users/typeDefs.graphql",
       }),
     },
     {
-      sourceHandler: loadGraphQLHTTPSubgraph("inventory", {
+      sourceHandler: loadGraphQLHTTPSubgraph("posts", {
         endpoint: "http://localhost:4002/graphql",
-        source: "./subgraphs/inventory/typeDefs.graphql",
+        source: "./subgraphs/posts/typeDefs.graphql",
       }),
     },
   ],
