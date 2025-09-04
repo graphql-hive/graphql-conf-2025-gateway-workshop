@@ -1,0 +1,6 @@
+services:
+  jaeger:
+    image: jaegertracing/all-in-one:1.73.0
+    ports:
+      - 16686:16686 # app
+      - 4318:4318 # tracing over http
