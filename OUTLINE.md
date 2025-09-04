@@ -60,6 +60,7 @@
 
 #### 2.4 Security Features (5 minutes)
 - Configure rate limiting (requests per minute)
+- Use `@rateLimit` directive to configure the rate limiting on the subgraph
 - Set max query depth limits
 - Set max query complexity/characters
 - Live demo: Show these protections in action with malicious queries
