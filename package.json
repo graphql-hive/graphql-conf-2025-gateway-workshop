@@ -7,7 +7,9 @@
     "subgraphs/*"
   ],
   "scripts": {
-    "format": "prettier --check --write .",
+    "check:format": "prettier --check .",
+    "format": "bun check:format --write",
+    "check:types": "tsc --noEmit",
     "compose": "mesh-compose -o supergraph.graphql",
     "start": "hive-gateway supergraph",
     "gen-jwt": "bun run ./scripts/gen-jwt.ts"
