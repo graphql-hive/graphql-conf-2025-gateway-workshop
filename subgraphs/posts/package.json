@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "products",
+  "name": "posts",
   "type": "module",
   "main": "index.ts",
   "scripts": {
