@@ -1,10 +1,7 @@
 extend schema
   @link(
     url: "https://specs.apollo.dev/federation/v2.7"
-    import: [
-      "@key",
-      "@extends"
-    ]
+    import: ["@key", "@extends"]
   )
 
 type Query @extends {
