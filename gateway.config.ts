@@ -1,7 +1,6 @@
 import {
   createInlineSigningKeyProvider,
   defineConfig,
-  type JWTExtendContextFields,
 } from "@graphql-hive/gateway";
 import { openTelemetrySetup } from "@graphql-hive/gateway/opentelemetry/setup";
 import { AsyncLocalStorageContextManager } from "@opentelemetry/context-async-hooks";
