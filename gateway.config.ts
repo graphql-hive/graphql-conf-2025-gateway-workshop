@@ -51,9 +51,9 @@ export const gatewayConfig = defineConfig({
     mode: "protect-granular",
     // wont completely reject unauthenticated requests, but will not execute the field
     rejectUnauthenticated: false,
-    // extracts the user from the token and provides it for the `@requiresScopes` directive
-    resolveUserFn: (context: { jwt?: JWTExtendContextFields }) =>
-      context.jwt?.payload,
+    // resolve the user and extract the scopes from the token and provides it for the `@requiresScopes` directive
+    resolveUserFn: (context) => context.jwt?.payload,
+    extractScopes: (payload) => payload.scopes,
   },
   disableIntrospection: {
     // only disables introspection for non-admins

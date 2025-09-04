@@ -33,14 +33,14 @@ type Product @extends @key(fields: "upc") {
   upc: String! @external
   weight: Int @external
   price: Int @external
-  inStock: Boolean
-    @authenticated
-    @rateLimit(
-      max: 5
-      window: "60s"
-      message: "You can make only 5 requests per minute"
-    )
+  inStock: Boolean @authenticated
+  # TODO: fix rate limit activating too early
+  # @rateLimit(
+  #   max: 5
+  #   window: "60s"
+  #   message: "You can make only 5 requests per minute"
+  # )
   shippingEstimate: Int
     @requires(fields: "price weight")
-    @requiresScopes(scopes: [["shippingEstimate"], ["admin"]])
+    @requiresScopes(scopes: [["admin"]])
 }
