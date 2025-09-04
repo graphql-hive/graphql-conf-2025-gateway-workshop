@@ -1,4 +1,13 @@
-extend type Query {
+extend schema
+  @link(
+    url: "https://specs.apollo.dev/federation/v2.7"
+    import: [
+      "@key",
+      "@extends"
+    ]
+  )
+
+type Query @extends {
   topProducts(first: Int = 5): [Product]
 }
 

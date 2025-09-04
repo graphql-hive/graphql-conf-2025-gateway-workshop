@@ -1,7 +1,13 @@
-extend type Product @key(fields: "upc") {
+extend schema
+  @link(
+    url: "https://specs.apollo.dev/federation/v2.7"
+    import: ["@key", "@extends", "@external", "@requires", "@authenticated", "@requiresScopes"]
+  )
+
+type Product @extends @key(fields: "upc") {
   upc: String! @external
   weight: Int @external
   price: Int @external
-  inStock: Boolean
-  shippingEstimate: Int @requires(fields: "price weight")
+  inStock: Boolean @authenticated
+  shippingEstimate: Int @requires(fields: "price weight") @requiresScopes(scopes: [["shippingEstimate"], ["admin"]])
 }
