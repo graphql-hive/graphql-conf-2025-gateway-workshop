@@ -18,10 +18,11 @@
 
 #### 1.1 Create Two Simple Subgraphs (15 minutes)
 
-- **Users subgraph**: `{ id, name, email }` with GraphQL Yoga
+- **Users subgraph**: `{ id, name, email, role }` with GraphQL Yoga
 - **Posts subgraph**: `{ id, title, content, authorId }` with federation key on User, also GraphQL Yoga
 - Live code both subgraphs
 - Add `@authenticated` directive to sensitive fields (like email)
+- Add `@requiresScopes` directive to admin-only fields (like role)
 - Explain federation directives as we write them
 
 #### 1.2 Bootstrap Hive Gateway (5 minutes)
@@ -53,13 +54,15 @@
 
 - **JWT Authentication Setup (8 minutes)**:
   - Configure JWT validation plugin with RS256/HS256
-  - Create demo JWT tokens with user claims
+  - Create demo JWT tokens with user claims and scopes
   - Show authenticated vs unauthenticated requests
   - Configure introspection to be allowed only for authenticated users
 - **Federation-Level Authorization (4 minutes)**:
   - Add `@authenticated` directive to sensitive fields
+  - Add `@requiresScopes` directive for role-based access control
   - Demonstrate granular field-level protection
   - Show how unauthorized users get null values for protected fields
+  - Test different user roles with different scopes in JWT tokens
 - **HMAC Signature Security (3 minutes)**:
   - Configure HMAC signatures between gateway and GraphQL Yoga subgraphs
   - Show secure subgraph communication
@@ -77,7 +80,7 @@
 
 - Add subscription support to Posts subgraph (`postAdded`)
 - Configure EDFS with NATS adapter (pre-running NATS instance)
-- Create subscription service (doesnt have to be subgraph) that publishes to NATS
+- Create subscription service that publishes to NATS
 - **Live demo**:
   - Open subscription in one tab
   - Create post in another tab
@@ -91,12 +94,12 @@
 - Add response caching configuration
 - Show intelligent response deduplication
 
-#### 3.2 Usage Reporting Integration (7 minutes)
+#### 3.2 Performance Monitoring (7 minutes)
 
-- Connect gateway to pre-configured Hive Console
+- Connect gateway to pre-configured Jaeger instance
 - Execute various queries
-- **Live demo**: Show usage analytics, query performance, schema usage in Hive Console
-- Highlight how this helps with schema evolution and performance monitoring
+- **Live demo**: Show performance traces and query analysis through OpenTelemetry
+- Highlight how distributed tracing helps with performance monitoring
 
 ### Wrap-up & Q&A (5 minutes)
 
@@ -113,10 +116,20 @@
 
 ```
 Users Service (GraphQL Yoga):
-- User @key(fields: "id") { id, name, email @authenticated }
+- User @key(fields: "id") {
+    id,
+    name,
+    email @authenticated,
+    role @requiresScopes(scopes: ["admin"])
+  }
 
 Posts Service (GraphQL Yoga):
 - Post { id, title, content, authorId }
+- Mutation {
+    createPost(input: PostInput!): Post!
+      @requiresScopes(scopes: ["editor"])
+      @rateLimit(max: 5, window: 60)
+  }
 - User @key(fields: "id") @external { id }
 - Post.author -> User (via federation)
 ```
@@ -134,7 +147,7 @@ This domain is:
 ### Pre-workshop Setup:
 
 - Local NATS instance running
-- Hive Console instance with demo project configured (if we end up using it)
+- Jaeger instance configured
 - Node.js v20+ environment
 - Basic code editor
 
