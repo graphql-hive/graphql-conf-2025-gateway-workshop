@@ -1,0 +1,7 @@
+overrides:
+  - files:
+      - SLIDES.md
+    options:
+      parser: slidev
+      plugins:
+        - prettier-plugin-slidev
