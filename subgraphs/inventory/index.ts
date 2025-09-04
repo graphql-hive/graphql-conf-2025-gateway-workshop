@@ -2,6 +2,8 @@ import { buildSubgraphSchema } from "@apollo/subgraph";
 import typeDefs from "./typeDefs.graphql" with { type: "text" };
 import { createYoga } from "graphql-yoga";
 import { parse } from "graphql";
+import { useHmacSignatureValidation } from "@graphql-hive/gateway";
+import { HMAC_SECRET } from "~env";
 
 const inventory = [
   {
@@ -27,6 +29,15 @@ const yoga = createYoga({
     {
       typeDefs: parse(typeDefs),
       resolvers: {
+        Query: {
+          shippingEstimate: (_, { upc }) => {
+            const product = inventory.find((p) => p.upc === upc);
+            if (!product || !product.inStock) {
+              return null;
+            }
+            return Math.floor(Math.random() * 10) + 1;
+          },
+        },
         Product: {
           __resolveReference: (ref) => {
             const found = inventory.find((i) => i.upc === ref.upc);
@@ -40,6 +51,7 @@ const yoga = createYoga({
       },
     },
   ]),
+  plugins: [useHmacSignatureValidation({ secret: HMAC_SECRET })],
 });
 
 const server = Bun.serve({

@@ -1,7 +1,9 @@
 import { buildSubgraphSchema } from "@apollo/subgraph";
-import typeDefs from "./typeDefs.graphql" with { type: "text" };
-import { createYoga } from "graphql-yoga";
+import { useHmacSignatureValidation } from "@graphql-hive/gateway";
 import { parse } from "graphql";
+import { createYoga } from "graphql-yoga";
+import { HMAC_SECRET } from "~env";
+import typeDefs from "./typeDefs.graphql" with { type: "text" };
 
 const products = [
   {
@@ -45,6 +47,7 @@ const yoga = createYoga({
       },
     },
   ]),
+  plugins: [useHmacSignatureValidation({ secret: HMAC_SECRET })],
 });
 
 const server = Bun.serve({
