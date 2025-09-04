@@ -1,11 +1,13 @@
 import {
   createInlineSigningKeyProvider,
   defineConfig,
+  Logger,
 } from "@graphql-hive/gateway";
 import { openTelemetrySetup } from "@graphql-hive/gateway/opentelemetry/setup";
+import { NATSPubSub } from "@graphql-hive/pubsub/nats";
+import { connect } from "@nats-io/transport-node";
 import { AsyncLocalStorageContextManager } from "@opentelemetry/context-async-hooks";
 import { OTLPTraceExporter } from "@opentelemetry/exporter-trace-otlp-http";
-import { Logger } from "@graphql-hive/gateway";
 import { HMAC_SECRET, JWT_SECRET } from "~env";
 
 const log = new Logger();
@@ -27,6 +29,9 @@ openTelemetrySetup({
 
 export const gatewayConfig = defineConfig({
   logging: log,
+  pubsub: new NATSPubSub(await connect({ servers: ["localhost:4222"] }), {
+    subjectPrefix: "my-app",
+  }),
   openTelemetry: {
     // enables otel in the gateway
     traces: true,
