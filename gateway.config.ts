@@ -57,8 +57,7 @@ export const gatewayConfig = defineConfig({
   },
   disableIntrospection: {
     // only disables introspection for non-admins
-    disableIf: ({ context }) =>
-      !context.jwt?.payload?.scopes?.includes("admin"),
+    disableIf: ({ context }) => !context.jwt?.payload?.scope?.includes("admin"),
   },
   hmacSignature: {
     // hash secret used to verify the integrity of the gateway request to subgraphs
