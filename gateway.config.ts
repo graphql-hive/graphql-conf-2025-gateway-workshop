@@ -15,9 +15,7 @@ openTelemetrySetup({
   // using a context menager will help bind traces to asyncronous operations
   contextManager: new AsyncLocalStorageContextManager(),
   traces: {
-    // start jaeger with:
-    // docker run --rm -p 4318:4318 -p 16686:16686 -p 4317:4317 -e 'COLLECTOR_OTLP_ENABLED=true' jaegertracing/all-in-one:1.56
-    // app is available at: http://localhost:16686/
+    // docker compose up jaeger
     exporter: new OTLPTraceExporter({ url: "http://localhost:4318/v1/traces" }),
   },
   resource: {
