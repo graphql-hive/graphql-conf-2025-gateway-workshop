@@ -119,16 +119,17 @@ Users Service (GraphQL Yoga):
 - User @key(fields: "id") {
     id,
     name,
-    email @authenticated,
-    role @requiresScopes(scopes: ["admin"])
+    email @authenticated
   }
 
 Posts Service (GraphQL Yoga):
 - Post { id, title, content, authorId }
 - Mutation {
     createPost(input: PostInput!): Post!
-      @requiresScopes(scopes: ["editor"])
+      @requiresScopes(scopes: [["editor"]])
       @rateLimit(max: 5, window: 60)
+    deletePost(id: ID!): Boolean!
+      @requiresScopes(scopes: [["editor"], ["admin"]])
   }
 - User @key(fields: "id") @external { id }
 - Post.author -> User (via federation)
