@@ -19,6 +19,11 @@ hiveTracingSetup({
 });
 
 export const gatewayConfig = defineConfig<JWTAuthContextExtension>({
+  supergraph: {
+    type: "hive",
+    endpoint: hiveConf.cdn.endpoint,
+    key: hiveConf.cdn.key,
+  },
   pubsub: new NATSPubSub(await connect({ servers: ["localhost:4222"] }), {
     // we make sure to use the same prefix for all gateways and publishers
     // think of it as an application identifier
@@ -101,4 +106,12 @@ export const gatewayConfig = defineConfig<JWTAuthContextExtension>({
       },
     } as GatewayPlugin,
   ],
+  additionalTypeDefs: /* GraphQL */ `
+    extend schema {
+      subscription: Subscription
+    }
+    type Subscription {
+      newPost: Post! @resolveTo(pubsubTopic: "newPost")
+    }
+  `,
 });

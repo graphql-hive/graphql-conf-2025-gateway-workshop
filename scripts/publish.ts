@@ -12,6 +12,3 @@ await $`hive schema:publish \
   --url http://localhost:4002/graphql \
   --target ${registry.target} \
   subgraphs/posts/typeDefs.graphql`;
-
-// we need to add the additional type definitions for subscriptions
-await $`bun mesh-compose -o supergraph.graphql`;
