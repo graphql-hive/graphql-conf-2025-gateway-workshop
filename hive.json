@@ -1,6 +1,6 @@
 {
   "registry": {
-    "target": "example/proj/development",
+    "target": "example/example/development",
     "endpoint": "http://localhost:8082/graphql",
     "usageEndpoint": "http://localhost:8081",
     "traceEndpoint": "http://localhost:4318/v1/traces",
@@ -8,7 +8,7 @@
     "accessToken": "hvo1/MmU3YjY1ZTYtNTlkZS00N2MyLTg1YWMtZWQ2NjUzNDg3NDk2OjA5Mzc5ZTg3N2UzNTllOGNjYTdjNDI1NTAyM2Y3NTZlN2UxNDllY2I0YjBiYjhkMDcxOWQyZmY5MDYyOWU1NGI="
   },
   "cdn": {
-    "endpoint": "http://localhost:8082/artifacts/v1/326eb245-daf9-4e42-917b-aebf53e414e9/supergraph",
-    "key": "hv2ZmFjYzdmYjYtODZjYy00MjAwLTljNmMtN2MxMzQ1ZWEwNmMzOjMwZWI1ODU3YmJkZDBkN2NiMzcyYmFjZmVhMDIzYWFlNWNjOTViZWQ="
+    "endpoint": "http://localhost:8082/artifacts/v1/7e038a28-caf4-4946-8d3b-d55e41dc601e/supergraph",
+    "key": "hv2N2Q4ZjY2NTctNmJmMC00YWQ2LTg4ZjctZjljZjljNWY0MTZhOjNiMGUyNmFkNDQ0YTBhMmYyNGQwMTA3MDk5ZmRmOTk3ZDg3ZGVhMWU="
   }
 }
