@@ -3,7 +3,7 @@ import { useHmacSignatureValidation } from "@graphql-hive/gateway";
 import { NATSPubSub } from "@graphql-hive/pubsub/nats";
 import { connect } from "@nats-io/transport-node";
 import { parse } from "graphql";
-import { createYoga } from "graphql-yoga";
+import { createYoga, type YogaInitialContext } from "graphql-yoga";
 import { HMAC_SECRET } from "~env";
 import typeDefs from "./typeDefs.graphql" with { type: "text" };
 
@@ -47,12 +47,18 @@ const yoga = createYoga({
           posts: () => posts,
         },
         Mutation: {
-          createPost: async (_, { title, content }) => {
+          createPost: async (
+            _,
+            { title, content },
+            ctx: YogaInitialContext,
+          ) => {
+            // gateway will do the heavy lifting of authentication and authorization
+            const userId = ctx.request.headers.get("x-user-id")!;
             const newPost = {
               id: `p${posts.length + 1}`,
               title,
               content,
-              author: { id: "u1" }, // TODO: get from token
+              author: { id: userId },
             };
             posts = [...posts, newPost];
             pubsub.publish("newPost", { id: newPost.id });
