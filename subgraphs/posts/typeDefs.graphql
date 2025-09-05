@@ -1,7 +1,7 @@
 extend schema
   @link(
     url: "https://specs.apollo.dev/federation/v2.7"
-    import: ["@key", "@authenticated", "@requiresScopes", "@composeDirective"]
+    import: ["@key", "@requiresScopes", "@composeDirective"]
   )
   @link(
     url: "https://the-guild.dev/graphql/mesh/spec/v1.0"
