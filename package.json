@@ -10,8 +10,8 @@
     "check:format": "prettier --check .",
     "format": "bun check:format --write",
     "check:types": "tsc --noEmit",
-    "compose": "mesh-compose -o supergraph.graphql",
     "subgraphs": "bun -F './subgraphs/*' start",
+    "compose": "bun ./scripts/compose.ts",
     "start": "hive-gateway supergraph",
     "slides": "slidev SLIDES.md",
     "gen-jwt": "bun run ./scripts/gen-jwt.ts"
@@ -21,10 +21,10 @@
     "@graphql-hive/pubsub": "^2.1.0",
     "@graphql-mesh/compose-cli": "^1.4.15",
     "@nats-io/transport-node": "^3.1.0",
-    "@opentelemetry/context-async-hooks": "^2.1.0",
-    "@opentelemetry/exporter-trace-otlp-http": "^0.204.0"
+    "@opentelemetry/context-async-hooks": "^2.1.0"
   },
   "devDependencies": {
+    "@graphql-hive/cli": "^0.50.4",
     "@slidev/cli": "^52.1.0",
     "@slidev/theme-default": "^0.25.0",
     "@types/bun": "latest",

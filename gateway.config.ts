@@ -4,25 +4,18 @@ import {
   type GatewayPlugin,
   type JWTAuthContextExtension,
 } from "@graphql-hive/gateway";
-import { openTelemetrySetup } from "@graphql-hive/gateway/opentelemetry/setup";
+import { hiveTracingSetup } from "@graphql-hive/gateway/opentelemetry/setup";
 import { NATSPubSub } from "@graphql-hive/pubsub/nats";
 import { connect } from "@nats-io/transport-node";
 import { AsyncLocalStorageContextManager } from "@opentelemetry/context-async-hooks";
-import { OTLPTraceExporter } from "@opentelemetry/exporter-trace-otlp-http";
 import { HMAC_SECRET, JWT_SECRET } from "~env";
+import hiveConf from "./hive.json" with { type: "json" };
 
-openTelemetrySetup({
-  // using a context menager will help bind traces to asyncronous operations
+hiveTracingSetup({
   contextManager: new AsyncLocalStorageContextManager(),
-  traces: {
-    // docker compose up jaeger
-    exporter: new OTLPTraceExporter({ url: "http://localhost:4318/v1/traces" }),
-  },
-  resource: {
-    // identify the resource and its version
-    serviceName: "graphql-conf-2025-gateway-workshop",
-    serviceVersion: "0.0.0",
-  },
+  endpoint: hiveConf.registry.traceEndpoint,
+  target: hiveConf.registry.target,
+  accessToken: hiveConf.registry.accessToken,
 });
 
 export const gatewayConfig = defineConfig<JWTAuthContextExtension>({
@@ -83,6 +76,18 @@ export const gatewayConfig = defineConfig<JWTAuthContextExtension>({
   maxDepth: 6,
   // token limiting
   maxTokens: 1000,
+  reporting: {
+    type: "hive",
+    target: hiveConf.registry.target,
+    token: hiveConf.registry.accessToken,
+    selfHosting: {
+      // we're running a selfhosted Hive registry
+      graphqlEndpoint: hiveConf.registry.endpoint,
+      usageEndpoint: hiveConf.registry.usageEndpoint,
+      applicationUrl: hiveConf.registry.applicationUrl,
+    },
+    // TODO: missing client info in hive console insights tab
+  },
   plugins: ({ log }) => [
     {
       // ⚠️ insecure and should not be used in production
