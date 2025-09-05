@@ -34,6 +34,12 @@ export const gatewayConfig = defineConfig<JWTAuthContextExtension>({
     // enables otel in the gateway
     traces: true,
   },
+  propagateHeaders: {
+    // we want to forward the authorization header to the subgraphs
+    fromClientToSubgraphs: ({ context }) => ({
+      "x-user-id": context.jwt?.payload.sub,
+    }),
+  },
   jwt: {
     signingKeyProviders: [
       // verifies the jwt signature locally

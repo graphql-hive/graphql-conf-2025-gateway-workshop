@@ -4,7 +4,8 @@ import { JWT_SECRET } from "~env";
 const secretKey = JWT_SECRET;
 
 const payload = {
-  scope: ["admin"],
+  sub: "u3",
+  scope: ["admin", "editor"],
 };
 
 const token = jwt.sign(payload, secretKey);
