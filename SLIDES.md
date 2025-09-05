@@ -49,8 +49,8 @@ The team behind your GraphQL tooling
 <!--
 - Let me start by introducing ourselves and the company behind the tools you probably use
 - I'm Denis, this is Arda, we're from The Guild
-- We're passionate about federation, gateways and anything GraphQL
-- TODO: improve
+- We build open-source GraphQL tools that power thousands of applications
+- We're passionate about federation, gateways and making GraphQL better for everyone
 -->
 
 ---
@@ -64,28 +64,30 @@ The team behind your GraphQL tooling
 
 <!--
 - Before we dive into the workshop, let me mention some other interesting talks happening during the conference
-- TODO: get a list
-- But for now, let's focus on what we're building together...
+- There are several other sessions that might interest you if you're working with GraphQL
+- But for now, let's focus on what we're building together
 -->
 
 ---
 layout: center
 ---
 
-# Who here knows about Hive Gateway?
+# Who here has _heard_ about Hive Gateway?
 
 <!--
-- QA
+- Perfect! Now I can see who I'm talking to
 -->
 
 ---
 layout: center
 ---
 
-# Who here has worked with Hive Gateway?
+# Who here has _worked_ with Hive Gateway?
 
 <!--
-- QA
+- Great! That gives me a good sense of experience levels in the room
+- Whether you're new to Hive Gateway or have been using it, today will be valuable
+- We're going to build something pretty impressive together
 -->
 
 ---
@@ -143,14 +145,40 @@ High-performance GraphQL gateway that:
 - Hive Gateway is a GraphQL router that can act as a GraphQL Federation gateway,
 - a subgraph or a proxy gateway for any GraphQL API service,
 - solving the federation problem elegantly.
-- But, it's not _just_ a gateway, it's a complete production platform,
+- But, it's not just a gateway, it's a complete production platform,
 - built by teams who run GraphQL at scale.
 - Oh and, It's free, MIT licensed open source with enterprise features included!
 -->
 
 ---
 
-TODO: talk about whats great in hive gateway in general, similar to the "whats new in v2" slide
+# What's Great About Hive Gateway
+
+Production-ready GraphQL federation platform
+
+### Core Strengths
+
+- 🏗️ **Federation Made Easy** - Apollo Federation v2 compatible
+- ⚡ **High Performance** - Built for scale with intelligent optimizations
+- 🔧 **Developer Friendly** - TypeScript-first with excellent DX
+- 🏢 **Enterprise Ready** - Security, monitoring, and reliability built-in
+- 🌐 **Any Runtime** - Node.js, Bun, Cloudflare Workers, Docker
+- 📦 **Plugin Ecosystem** - Extensible architecture for custom needs
+
+### Why Teams Choose Hive Gateway
+
+- Zero vendor lock-in with open source MIT license
+- Battle-tested by companies running GraphQL at scale
+- Comprehensive documentation and active community support
+
+<!--
+- Let me explain why Hive Gateway is special
+- It's not just another GraphQL router - it's a complete federation platform
+- Built for real production workloads with enterprise features included
+- Works anywhere you can run JavaScript - from traditional servers to edge functions
+- The plugin system means you can extend it for your specific needs
+- And being MIT licensed means no vendor lock-in concerns
+-->
 
 ---
 
@@ -164,16 +192,15 @@ Built for production workloads from day one
 - ⚡ Request Deduplication - Automatic performance optimization
 
 <!--
-- Ok, now you know what Hive Gateway is, let's talk about what's exciting in the recently released version 2...
-- [point at slides] These features solve real production problems, it's not just a feature showcase
-- Lets briefly go over each one:
-- Enhanced OpenTelemetry means minimal configuration gets you a complete distributed tracing
+- Now that you understand what makes Hive Gateway special, let's talk about what's exciting in the recently released version 2
+- These features solve real production problems, it's not just a feature showcase
+- Let's briefly go over each one:
+- Enhanced OpenTelemetry means minimal configuration gets you complete distributed tracing
 - Dynamic log level switching without restarts is huge when you're debugging issues at 3am
 - Event-driven subscriptions are new in Hive Gateway and let subscriptions scale horizontally
+- Request deduplication automatically prevents duplicate network calls by reusing the response from identical subgraph requests
 - All of this was built based on feedback from teams running v1 in production
 - We'll see every single one of these features in action today
-
-- TODO: QR code to blogpost
 -->
 
 ---
@@ -195,7 +222,8 @@ layout: intro
 - How to build bulletproof GraphQL infrastructure
 
 <!--
-- ...we're starting with an empty directory and building a production-ready graphql federated gateway
+- Perfect! Now that you know what v2 brings to the table, let me outline what we're going to build
+- We're starting with an empty directory and building a production-ready GraphQL federated gateway
 - You'll see JWT authentication, distributed subscriptions, dynamic log level switching, and much more
 - Everything we build today you can use in production tomorrow!
 -->
@@ -238,9 +266,12 @@ Simple Blog Platform
 - ✍️ Editor: Can create and delete posts
 
 <!--
-- For our demo today, we needed to choose a domain that would showcase all these features effectively,
-- a simple domain that everyone understands,
-- TODO: explain more about the services and relations
+- For our demo today, we needed to choose a domain that would showcase all these features effectively
+- We chose a simple blog platform that everyone understands
+- We'll have two services: one for users with profiles and authentication, and one for posts with real-time features
+- The users service will demonstrate field-level security with email addresses behind authentication
+- The posts service will show off role-based authorization and real-time notifications
+- This domain perfectly demonstrates federation, security, and scalability features
 -->
 
 ---
@@ -268,12 +299,11 @@ What We'll Build Together
 9. OpenTelemetry tracing → Jaeger
 
 <!--
-- Okay, let me walk you through exactly how we're going to structure our time together
+- Alright, let me walk you through exactly how we're going to structure our time together
 - The flow will look like this:
-- First we get the foundation working with basic federation
+- First we get the foundation working with basic federation between our two services
 - Then we add the production features which are the meat of this workshop
 - Finally we polish the gateway with enterprise-grade features
-- TODO: should we migrate to hive console?
 - The timeline is ambitious but totally achievable!
 -->
 
@@ -303,8 +333,12 @@ graph TB
 ```
 
 <!--
-- Here's a visual overview of what we're building
-- TODO: rework the notes here using the mermaid diagram as source of information, but don't go in detail about subscriptions as we'll talk about it later
+- Now let me give you a visual overview of the complete architecture we're building
+- The gateway sits in front of our two GraphQL Yoga subgraphs
+- We'll have federation connecting users to posts across service boundaries
+- NATS will handle our distributed subscriptions for real-time features
+- And Jaeger will collect traces from everything for complete observability
+- This diagram shows how all the pieces fit together in production
 -->
 
 ---
@@ -349,11 +383,11 @@ HMAC Signatures
 - Protection against tampering
 
 <!--
-- Let's start with our multi-layer security.
+- Now that we've seen the overall architecture, let's dive into our security implementation
 - We'll have three layers of security working together here:
-- JWT handles identity and carries role information
+- JWT handles identity and carries role information from the client
 - Subgraph directives enforce permissions at the field level
-- and HMAC signatures secure the internal communication and make sure only the gateway can communicate with the subgraphs
+- And HMAC signatures secure the internal communication and ensure only the gateway can communicate with the subgraphs
 -->
 
 ---
@@ -454,7 +488,7 @@ sequenceDiagram
 
 - Tied to single server instance
 - WebSocket connections don't scale horizontally
-- TODO: mention SSE (server sent events)
+- Server-Sent Events (SSE) have same scaling issues
 - Memory intensive for many concurrent subscriptions
 
 <!--
