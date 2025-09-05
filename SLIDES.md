@@ -39,6 +39,7 @@ Production-Grade GraphQL Federation
 - 📊 Dynamic Structured Logging - Change levels without restarts
 - 🚀 Event-Driven Subscriptions - Horizontally scalable with NATS
 - ⚡ Request Deduplication - Automatic performance optimization
+- 💾 Response Caching - Make less requests
 - 🛡️ Advanced Security - JWT, HMAC, field-level authorization
 
 _Built for production workloads from day one_
@@ -56,13 +57,12 @@ Simple Blog Platform
 ### Users Service
 
 - User profiles with ID, name, email
-- Role-based access control
-- Federation key on user ID
 
 ### Posts Service
 
 - Blog posts with title and content
 - Author relationship via federation
+- Role-based access control
 - Real-time post notifications
 
 ::right::
@@ -77,9 +77,9 @@ Simple Blog Platform
 
 ## User Roles
 
-- 👑 Admin: Can see all user emails
-- ✍️ Editor: Can create/edit posts
-- 👤 User: Basic read access
+- 👤 Authenticated user: can see user emails
+- 👑 Admin: Can delete any post
+- ✍️ Editor: Can create and delete posts
 
 ---
 layout: default
@@ -96,17 +96,16 @@ What We'll Build Together
 
 ### Part 2: Production Features (45 min)
 
-- OpenTelemetry tracing → Jaeger
-- Dynamic structured logging (change levels without restarts!)
 - JWT authentication + field-level authorization
 - HMAC signatures for subgraph security
-- Security hardening (rate limits, depth limits)
 - Event-Driven Federated Subscriptions
+- Dynamic structured logging (change levels without restarts!)
 
 ### Part 3: Production Polish (15 min)
 
+- Security hardening (rate limits, depth limits)
 - Response caching & deduplication
-- Performance monitoring integration
+- OpenTelemetry tracing → Jaeger
 
 ---
 layout: default
@@ -131,49 +130,6 @@ graph TB
     style Users fill:blue
     style Posts fill:blue
 ```
-
----
-layout: two-cols-header
----
-
-# OpenTelemetry Made Simple
-
-Production-Grade Observability
-
-::left::
-
-### What we'll configure
-
-- Gateway tracing with Jaeger integration
-- Automatic span creation for GraphQL operations
-- Proper span hierarchy across federation
-- Contextual data in every trace
-
-::right::
-
-## What you get
-
-- Perfect traces with proper span hierarchy
-- Contextual data in every span
-- GraphQL context, HTTP details, upstream execution info
-- Automatic custom span parenting
-
-### Result
-
-Complete visibility into your federated system 📈
-
----
-
-# Dynamic Logging Revolution
-
-Change Log Levels Without Restarts 🔄
-
-### We'll demonstrate
-
-- Structured logging with request-level metadata
-- Request IDs flowing through entire request lifecycle
-- Dynamic log level switching during live operation
-- Production debugging without downtime
 
 ---
 layout: default
@@ -216,7 +172,7 @@ JWT + Field-Level Authorization + HMAC
 
 - JWT token validation
 - Support for RS256/HS256 algorithms
-- User identity and role extraction
+- User identity and scopes/scopes extraction
 
 ### Authorization Layer
 
@@ -228,24 +184,25 @@ JWT + Field-Level Authorization + HMAC
 
 ## Security Layers
 
-### JWT Authentication
+JWT Authentication
 
 - Validates user identity
 - Carries user roles/scopes
 
-### Authorization Directives
+Authorization Directives
 
 - `@authenticated` - requires any valid user
 - `@requiresScopes` - requires specific roles
 
-### HMAC Signatures
+HMAC Signatures
 
 - Secure subgraph communication
 - Protection against tampering
 
-### Introspection
-
+<!--
+Introspection
 - Available to everyone for development
+-->
 
 ---
 layout: default
@@ -266,10 +223,6 @@ Production-Grade Protection
 - Maximum query depth limits
 - Query complexity analysis
 - Character count restrictions
-
-### Live Demo
-
-We'll try to break our gateway with malicious queries!
 
 ---
 layout: default
@@ -339,6 +292,40 @@ Event-Driven Federated Subscriptions
 Real-time features at enterprise scale 🌐
 
 ---
+layout: two-cols-header
+---
+
+# OpenTelemetry Made Simple
+
+Production-Grade Observability
+
+::left::
+
+### What we'll configure
+
+- Gateway tracing with Jaeger integration
+- Erm, that's it... Everything else Just Works ™️
+
+::right::
+
+## What you get
+
+- Perfect traces with proper span hierarchy
+- Contextual data in every span
+- GraphQL context, HTTP details, upstream execution info
+
+---
+
+# Dynamic Logging Revolution
+
+Change Log Levels Without Restarts 🔄
+
+- Structured logging with request-level metadata
+- Request IDs flowing through entire request lifecycle
+- Dynamic log level switching during live operation
+- Production debugging without downtime
+
+---
 layout: center
 ---
 
@@ -366,13 +353,13 @@ Continue Your Journey
 
 - [Hive Gateway Docs](https://the-guild.dev/graphql/hive/docs/gateway)
 - [Authentication & Authorization](https://the-guild.dev/graphql/hive/docs/gateway/authorization-authentication)
+- [Subscriptions](https://the-guild.dev/graphql/hive/docs/gateway/subscriptions)
 - [HMAC Security](https://the-guild.dev/graphql/hive/docs/gateway/other-features/security/hmac-signature)
-- [EDFS Guide](https://wundergraph.com/blog/distributed_graphql_subscriptions_with_nats_and_event_driven_architecture)
+- [EDFS in Hive Gateway](https://the-guild.dev/graphql/hive/docs/gateway/subscriptions#event-driven-federated-subscriptions-edfs)
 
 ### Get Started
 
 - [GitHub Repository](https://github.com/graphql-hive/gateway)
-- [Community Discord](https://discord.gg/graphql)
 
 ---
 layout: end
