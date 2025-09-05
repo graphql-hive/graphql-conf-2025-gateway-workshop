@@ -8,7 +8,7 @@ import { HMAC_SECRET } from "~env";
 import typeDefs from "./typeDefs.graphql" with { type: "text" };
 
 // we can publish from anywhere, doesnt need to be a subgraph
-const pubsub = new NATSPubSub<{ newPost: { id: string } }>(
+const pubsub = new NATSPubSub<{ postAdded: { id: string } }>(
   await connect({ servers: ["localhost:4222"] }),
   {
     // we make sure to use the same prefix for all gateways and publishers
@@ -61,7 +61,7 @@ const yoga = createYoga({
               author: { id: userId },
             };
             posts = [...posts, newPost];
-            pubsub.publish("newPost", { id: newPost.id });
+            pubsub.publish("postAdded", { id: newPost.id });
             return newPost;
           },
           deletePost: (_, { id }) => {
