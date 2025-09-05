@@ -10,7 +10,6 @@ import { connect } from "@nats-io/transport-node";
 import { AsyncLocalStorageContextManager } from "@opentelemetry/context-async-hooks";
 import { OTLPTraceExporter } from "@opentelemetry/exporter-trace-otlp-http";
 import { HMAC_SECRET, JWT_SECRET } from "~env";
-import { useToggleLogLevel } from "./useToggleLogLevel";
 
 openTelemetrySetup({
   // using a context menager will help bind traces to asyncronous operations
