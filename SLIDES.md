@@ -493,12 +493,14 @@ sequenceDiagram
 
 <!--
 - Before we dive into EDFS, let's take a step back and explain GraphQL subscriptions for those who might be new to them
-- In traditional GraphQL subscriptions world:
-- A client opens a subscription, typically over WebSocket,
-- and the server maintains the connection and pushes updates when data changes.
-- This works great for single instances but has scaling challenges
-- Each connection consumes memory and CPU resources; meaning,
-- you can't easily distribute across multiple server instances
+- In traditional GraphQL subscriptions, a client opens a subscription typically over WebSocket
+- The server maintains the connection and pushes updates when data changes
+- This works great for single instances but has serious scaling challenges
+- WebSockets are stateful - each connection consumes server memory and creates sticky sessions
+- With thousands of users, you're looking at megabytes of memory just for connection overhead
+- Server-Sent Events have similar problems plus HTTP connection limits
+- You can't easily distribute these connections across multiple server instances
+- When your server restarts, all clients have to reconnect at once creating connection storms
 -->
 
 ---
