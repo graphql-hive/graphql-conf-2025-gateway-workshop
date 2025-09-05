@@ -7,6 +7,13 @@ layout: cover
 
 Denis and Arda from The Guild
 
+<!--
+- Welcome everyone to this hands-on workshop
+- I'm Denis, this is Arda, we're from The Guild
+- Today we're building a complete federated GraphQL gateway from scratch
+- This is interactive so feel free to code along or just watch and ask questions
+-->
+
 ---
 layout: intro
 ---
@@ -24,6 +31,13 @@ layout: intro
 - v2's production capabilities
 - Advanced security patterns
 - How to build bulletproof GraphQL infrastructure
+
+<!--
+- We're starting with an empty directory and building a real production-ready system
+- You'll see JWT authentication, distributed subscriptions, dynamic logging, and more
+- Everything we build today you can use in production tomorrow
+- Who here has worked with Hive Gateway before?
+-->
 
 ---
 layout: default
@@ -43,6 +57,18 @@ Production-Grade GraphQL Federation
 - 🛡️ Advanced Security - JWT, HMAC, field-level authorization
 
 _Built for production workloads from day one_
+
+<!--
+- These features solve real production problems, it's not just a feature showcase
+- Enhanced OpenTelemetry means one config change gets you complete distributed tracing
+- Dynamic logging without restarts is huge when you're debugging issues at 3am
+- Event-driven subscriptions are new in Hive Gateway and let subscriptions scale horizontally
+- Request deduplication automatically prevents duplicate network calls to subgraphs (elaborate?)
+- Response caching reduces load on your backend services
+- Advanced security gives you enterprise-grade protection out of the box
+- All of this was built based on feedback from teams running v1 in production
+- We'll see every single one of these features in action today
+-->
 
 ---
 layout: two-cols-header
@@ -81,6 +107,13 @@ Simple Blog Platform
 - 👑 Admin: Can delete any post
 - ✍️ Editor: Can create and delete posts
 
+<!--
+- We chose a simple domain that everyone understands
+- We'll have two services that we'll federate together
+- This is perfect for showing auth patterns with intuitive user roles or scopes
+- The real-time notifications will showcase our new EDFS feature
+-->
+
 ---
 layout: default
 ---
@@ -107,6 +140,14 @@ What We'll Build Together
 - Response caching & deduplication
 - OpenTelemetry tracing → Jaeger
 
+<!--
+- The flow will look like this
+- First we get the foundation working with basic federation
+- Then we add the production features which are the meat of this workshop
+- Finally we polish it with enterprise-grade features
+- The timeline is ambitious but totally achievable
+-->
+
 ---
 layout: default
 zoom: 0.8
@@ -130,6 +171,14 @@ graph TB
     style Users fill:blue
     style Posts fill:blue
 ```
+
+<!--
+- Lets quickly see how the architecture looks
+- The gateway sits in front of our two GraphQL Yoga services
+- Federation connect users to posts across service boundaries
+- NATS handles our distributed subscriptions
+- And Jaeger collects traces about everything from the gateway for observability
+-->
 
 ---
 layout: default
@@ -157,6 +206,14 @@ sequenceDiagram
     Posts-->>Gateway: Posts (if has editor scope)
     Gateway-->>Client: Combined Response
 ```
+
+<!--
+- The security flow is quite straight forward
+- JWT validation happens at the gateway level first
+- Our directives enforce field-level authorization rules
+- The gateway passes user context down to subgraphs
+- Each service enforces its own authorization rules but the gateway handles the restrictions
+-->
 
 ---
 layout: two-cols-header
@@ -204,6 +261,13 @@ Introspection
 - Available to everyone for development
 -->
 
+<!--
+- We'll have three layers of security working together here
+- JWT handles identity and carries role information
+- Our directives enforce permissions at the field level
+- HMAC signatures secure the internal communication and make sure only the gateway can communicate with the subgraps
+-->
+
 ---
 layout: default
 ---
@@ -223,6 +287,13 @@ Production-Grade Protection
 - Maximum query depth limits
 - Query complexity analysis
 - Character count restrictions
+
+<!--
+- Ok, what about the security features
+- Rate limiting prevents abuse at multiple levels of your system
+- Query protection stops malicious deep nested queries (_TODO: elaborate_)
+- These features are essential if you're exposing APIs publicly
+-->
 
 ---
 layout: default
@@ -254,6 +325,14 @@ graph LR
     style NATS fill:green
     style PostService fill:cyan,color:black
 ```
+
+<!--
+- Now the interesting part, EDFS which stands for event driven federated subscriptions
+- Here you can see multiple gateway instances all connected via NATS
+- Any service can publish events to the message broker
+- All connected clients get real-time updates regardless of which gateway they're connected to
+- This scales horizontally unlike traditional WebSocket or SSE subscriptions
+-->
 
 ---
 layout: two-cols-header
@@ -291,6 +370,13 @@ Event-Driven Federated Subscriptions
 
 Real-time features at enterprise scale 🌐
 
+<!--
+- Traditional subscriptions just don't scale well beyond a single instance
+- EDFS solves this by using message brokers like NATS or Redis
+- The built-in adapters make setup incredibly easy
+- This is perfect for real-time features that need to scale to thousands of users
+-->
+
 ---
 layout: two-cols-header
 ---
@@ -314,6 +400,13 @@ Production-Grade Observability
 - Contextual data in every span
 - GraphQL context, HTTP details, upstream execution info
 
+<!--
+- The OpenTelemetry setup is incredibly simple now
+- Literally one configuration change gets you complete distributed tracing
+- Spans are automatically created for all GraphQL operations
+- You can see the entire request flow through your federation
+-->
+
 ---
 
 # Dynamic Logging Revolution
@@ -324,6 +417,13 @@ Change Log Levels Without Restarts 🔄
 - Request IDs flowing through entire request lifecycle
 - Dynamic log level switching during live operation
 - Production debugging without downtime
+
+<!--
+- Request IDs make debugging so much easier in distributed systems
+- And now, logging got even better, you can switch to debug mode without restarting your production gateway!
+- This is absolutely essential for troubleshooting production issues
+- I'll demo changing log levels live during our session
+-->
 
 ---
 layout: center
@@ -343,6 +443,14 @@ We'll start with an empty directory and build:
 
 Let's unleash the power of federation! 🚀
 
+<!--
+- Alright, it's time to start coding
+- Feel free to participate but there's no pressure if you just want to watch
+- We're starting completely from scratch with an empty directory
+- I'll build everything step by step so you can follow along
+- Everyone ready to begin?
+-->
+
 ---
 
 # Resources
@@ -361,6 +469,13 @@ Continue Your Journey
 
 - [GitHub Repository](https://github.com/graphql-hive/gateway)
 
+<!--
+- Here are all the documentation links for your follow-up reading
+- The GitHub repository has examples and starter templates
+- Our community is really active and helpful if you run into issues
+- Keep building on what we learned today
+-->
+
 ---
 layout: end
 ---
@@ -368,3 +483,10 @@ layout: end
 # Thank You!
 
 Questions? 🤔
+
+<!--
+- Thank you all for participating in this workshop
+- Let's open the floor for any questions you might have
+- I encourage you to try this out in your own projects
+- I'll be available for individual questions after we wrap up
+-->
