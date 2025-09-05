@@ -74,5 +74,5 @@ type User @join__type(graph: POSTS, key: "id") @join__type(graph: USERS, key: "i
 }
 
 type Subscription {
-  newPost: Post! @resolveTo(pubsubTopic: "newPost") @additionalField
+  postAdded: Post! @resolveTo(pubsubTopic: "postAdded") @additionalField
 }

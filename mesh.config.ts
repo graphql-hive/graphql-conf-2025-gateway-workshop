@@ -23,7 +23,7 @@ export const composeConfig = defineConfig({
       subscription: Subscription
     }
     type Subscription {
-      newPost: Post! @resolveTo(pubsubTopic: "newPost")
+      postAdded: Post! @resolveTo(pubsubTopic: "postAdded")
     }
   `,
 });
