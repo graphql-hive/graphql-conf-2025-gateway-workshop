@@ -35,9 +35,9 @@ export const gatewayConfig = defineConfig<JWTAuthContextExtension>({
     traces: true,
   },
   propagateHeaders: {
-    // we want to forward the authorization header to the subgraphs
+    // we want to forward the authenticated user to the subgraphs
     fromClientToSubgraphs: ({ context }) => ({
-      "x-user-id": context.jwt?.payload.sub,
+      "x-user-id": context.jwt?.payload?.sub,
     }),
   },
   jwt: {
