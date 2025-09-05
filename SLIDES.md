@@ -12,6 +12,7 @@ Denis and Arda from The Guild
 - I'm Denis, this is Arda, we're from The Guild
 - Today we're building a complete federated GraphQL gateway from scratch
 - This is interactive so feel free to code along or just watch and ask questions
+- TODO: Intro hive, intro console, route, mention other talks
 -->
 
 ---
@@ -38,6 +39,12 @@ layout: intro
 - Everything we build today you can use in production tomorrow
 - Who here has worked with Hive Gateway before?
 -->
+
+---
+
+# TODO: Hive Gateway
+
+Dont assume anything, explain everything about hive gateway
 
 ---
 layout: default
@@ -490,3 +497,18 @@ Questions? 🤔
 - I encourage you to try this out in your own projects
 - I'll be available for individual questions after we wrap up
 -->
+
+<!--  -->
+
+- TODO: visualise how subscriptions itself and how they work
+- TODO: visualise how subscriptions would look like, like an app. doesnt have to be an app, can be a sketch
+
+- TODO: mention mesh and talk about it (Arda?)
+- TODO: mention mesh on how we use in the app
+
+- TODO: summary slide
+- TODO: come to the booth slide and shit
+
+- TODO: show the agenda always
+
+- TODO: have people ask questions, but also ask questions ourselves. have a Q/A in each step?
