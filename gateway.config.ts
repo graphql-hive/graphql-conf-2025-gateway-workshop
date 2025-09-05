@@ -1,7 +1,7 @@
 import {
   createInlineSigningKeyProvider,
   defineConfig,
-  Logger,
+  type JWTAuthContextExtension,
 } from "@graphql-hive/gateway";
 import { openTelemetrySetup } from "@graphql-hive/gateway/opentelemetry/setup";
 import { NATSPubSub } from "@graphql-hive/pubsub/nats";
@@ -10,10 +10,7 @@ import { AsyncLocalStorageContextManager } from "@opentelemetry/context-async-ho
 import { OTLPTraceExporter } from "@opentelemetry/exporter-trace-otlp-http";
 import { HMAC_SECRET, JWT_SECRET } from "~env";
 
-const log = new Logger();
-
 openTelemetrySetup({
-  log,
   // using a context menager will help bind traces to asyncronous operations
   contextManager: new AsyncLocalStorageContextManager(),
   traces: {
@@ -27,8 +24,7 @@ openTelemetrySetup({
   },
 });
 
-export const gatewayConfig = defineConfig({
-  logging: log,
+export const gatewayConfig = defineConfig<JWTAuthContextExtension>({
   pubsub: new NATSPubSub(await connect({ servers: ["localhost:4222"] }), {
     // we make sure to use the same prefix for all gateways and publishers
     // think of it as an application identifier
@@ -73,8 +69,8 @@ export const gatewayConfig = defineConfig({
   responseCaching: {
     session: (req) => req.headers.get("authorization"),
   },
-  // depth limiting is enabled by default with 8 max depth
-  // maxDepth: 8,
-  // token limiting is enabled by default with 1000 tokens
-  // maxLimit: 1000,
+  // depth limiting
+  maxDepth: 6,
+  // token limiting
+  maxTokens: 100,
 });
