@@ -11,6 +11,7 @@
     "format": "bun check:format --write",
     "check:types": "tsc --noEmit",
     "compose": "mesh-compose -o supergraph.graphql",
+    "subgraphs": "bun -F './subgraphs/*' start",
     "start": "hive-gateway supergraph",
     "slides": "slidev SLIDES.md",
     "gen-jwt": "bun run ./scripts/gen-jwt.ts"
