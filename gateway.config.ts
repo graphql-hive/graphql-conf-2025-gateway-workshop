@@ -29,6 +29,7 @@ export const gatewayConfig = defineConfig<JWTAuthContextExtension>({
   pubsub: new NATSPubSub(await connect({ servers: ["localhost:4222"] }), {
     // we make sure to use the same prefix for all gateways and publishers
     // think of it as an application identifier
+    // TODO: the gatway will resolve all missing fields from subgraphs automatically
     subjectPrefix: "my-app",
   }),
   openTelemetry: {
@@ -53,6 +54,7 @@ export const gatewayConfig = defineConfig<JWTAuthContextExtension>({
       invalidToken: false,
     },
   },
+  // TODO: enabling introspection wihtou beingauthenticatd
   genericAuth: {
     // instructs gateway to use the auth directive (like @authenticated, @requiresScopes, @policy)
     mode: "protect-granular",
@@ -64,6 +66,7 @@ export const gatewayConfig = defineConfig<JWTAuthContextExtension>({
   },
   disableIntrospection: {
     // only disables introspection for non-admins
+    // TODO: admins should be able to introspect
     disableIf: ({ context }) => !context.jwt?.payload?.scope?.includes("admin"),
   },
   hmacSignature: {
