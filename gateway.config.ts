@@ -1,6 +1,7 @@
 import {
   createInlineSigningKeyProvider,
   defineConfig,
+  type GatewayPlugin,
   type JWTAuthContextExtension,
 } from "@graphql-hive/gateway";
 import { openTelemetrySetup } from "@graphql-hive/gateway/opentelemetry/setup";
@@ -9,6 +10,7 @@ import { connect } from "@nats-io/transport-node";
 import { AsyncLocalStorageContextManager } from "@opentelemetry/context-async-hooks";
 import { OTLPTraceExporter } from "@opentelemetry/exporter-trace-otlp-http";
 import { HMAC_SECRET, JWT_SECRET } from "~env";
+import { useToggleLogLevel } from "./useToggleLogLevel";
 
 openTelemetrySetup({
   // using a context menager will help bind traces to asyncronous operations
@@ -78,5 +80,18 @@ export const gatewayConfig = defineConfig<JWTAuthContextExtension>({
   // depth limiting
   maxDepth: 6,
   // token limiting
-  maxTokens: 100,
+  maxTokens: 1000,
+  plugins: ({ log }) => [
+    {
+      // ⚠️ insecure and should not be used in production
+      onRequest({ request, endResponse }) {
+        if (request.url.endsWith("/toggle-debug-log-level")) {
+          // we use the (plugin) context logger to make sure all child loggers inherit the change
+          log.setLevel(log.level === "debug" ? "info" : "debug");
+          log.info(`Log level changed to ${log.level}`);
+          endResponse(new Response(`Log level set to ${log.level}`));
+        }
+      },
+    } as GatewayPlugin,
+  ],
 });
