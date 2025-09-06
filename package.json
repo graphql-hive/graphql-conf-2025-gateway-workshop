@@ -13,7 +13,6 @@
     "compose": "mesh-compose -o supergraph.graphql",
     "subgraphs": "bun -F './subgraphs/*' start",
     "start": "hive-gateway supergraph",
-    "slides": "slidev presenter/slides.md",
     "gen-jwt": "bun run ./scripts/gen-jwt.ts"
   },
   "dependencies": {
@@ -25,11 +24,8 @@
     "@opentelemetry/exporter-trace-otlp-http": "^0.204.0"
   },
   "devDependencies": {
-    "@slidev/cli": "^52.1.0",
-    "@slidev/theme-default": "^0.25.0",
     "@types/bun": "latest",
-    "prettier": "^3.6.2",
-    "prettier-plugin-slidev": "^1.0.5"
+    "prettier": "^3.6.2"
   },
   "peerDependencies": {
     "typescript": "^5"
