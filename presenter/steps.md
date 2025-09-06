@@ -301,3 +301,39 @@ bun genjwt.ts
 Use token in gateway url show authenticated
 
 Commit
+
+# set up hmac
+
+Open env.ts
+
+```ts
+export const HMAC_SECRET = "321";
+```
+
+Open subgraphs/users/server.ts
+
+Add to plugins
+
+```ts
+import { useHmacSignatureValidation } from "@graphql-hive/gateway";
+import { HMAC_SECRET } from "../../env";
+[useHmacSignatureValidation({ secret: HMAC_SECRET })];
+```
+
+Do the same in subgraphs/posts/server.ts
+
+Subgraphs are automatically restarted
+
+Try query gateway, internal server error, show subgraph logs
+
+Open gateway.config.ts
+
+```ts
+hmacSignature: {
+  secret: HMAC_SECRET,
+}
+```
+
+Query again, working
+
+Commit
