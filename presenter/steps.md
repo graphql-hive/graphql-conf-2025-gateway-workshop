@@ -978,4 +978,8 @@ And just like that, we're going to get much more detail in the logs.
 
 Do some queries, show also reverting to info.
 
+Note that the performance wont be impacted when toggling the debug level back to info,
+
+all of the debug utilities for extra logs will be unmounted returning the performance back to info level
+
 Commit
