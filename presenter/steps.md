@@ -548,3 +548,5 @@ createPost: (_, { title, content }, ctx: YogaInitialContext) => {
 ```
 
 Execute create post query and require the author field to see that it is being propagated
+
+Commit
