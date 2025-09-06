@@ -13,7 +13,7 @@
     "compose": "mesh-compose -o supergraph.graphql",
     "subgraphs": "bun -F './subgraphs/*' start",
     "start": "hive-gateway supergraph",
-    "slides": "slidev SLIDES.md",
+    "slides": "slidev presenter/slides.md",
     "gen-jwt": "bun run ./scripts/gen-jwt.ts"
   },
   "dependencies": {

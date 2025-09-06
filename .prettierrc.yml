@@ -1,6 +1,6 @@
 overrides:
   - files:
-      - SLIDES.md
+      - slides.md
     options:
       parser: slidev
       plugins:
