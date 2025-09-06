@@ -4,10 +4,6 @@ extend schema
     import: ["@key", "@authenticated"]
   )
 
-type Query {
-  users: [User!]!
-}
-
 type User @key(fields: "id") {
   id: ID!
   name: String!

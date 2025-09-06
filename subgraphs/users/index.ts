@@ -28,9 +28,6 @@ const yoga = createYoga({
     {
       typeDefs: parse(typeDefs),
       resolvers: {
-        Query: {
-          users: () => users,
-        },
         User: {
           __resolveReference: (user) => users.find((u) => u.id === user.id),
         },

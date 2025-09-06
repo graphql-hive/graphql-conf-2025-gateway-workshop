@@ -108,7 +108,6 @@ scalar TransportOptions @join__type(graph: POSTS)  @join__type(graph: USERS)
 
 type Query @join__type(graph: POSTS)  @join__type(graph: USERS)  {
   posts: [Post!]! @join__field(graph: POSTS) 
-  users: [User!]! @join__field(graph: USERS) 
 }
 
 type Mutation @join__type(graph: POSTS)  {
