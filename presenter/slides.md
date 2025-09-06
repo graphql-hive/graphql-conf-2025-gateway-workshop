@@ -709,6 +709,8 @@ layout: center
 
 Follow along or just watch - your choice!
 
+You don't have to code if you do not want to, you can check out the repository and `git pull` after every segment I code so you can see how it all works for you without writing code.
+
 We'll start with an empty directory and build:
 
 1. Two federated GraphQL Yoga subgraphs
