@@ -820,6 +820,8 @@ Create post on other tab
 
 Return to see event
 
+Explain how the gateway resolved the rest of fields by querying subgraphs
+
 Explain that this means you can scale your gateways but not the subgraphs to handle the load of many subscriptions
 
 TODO: explain more?
