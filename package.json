@@ -18,14 +18,17 @@
   "dependencies": {
     "@graphql-hive/gateway": "^2.0.3",
     "@graphql-hive/pubsub": "^2.1.0",
-    "@graphql-mesh/compose-cli": "^1.4.15",
+    "@graphql-mesh/compose-cli": "^1.4.17",
     "@nats-io/transport-node": "^3.1.0",
     "@opentelemetry/context-async-hooks": "^2.1.0",
     "@opentelemetry/exporter-trace-otlp-http": "^0.204.0"
   },
   "devDependencies": {
+    "@slidev/cli": "^52.1.0",
+    "@slidev/theme-default": "^0.25.0",
     "@types/bun": "latest",
-    "prettier": "^3.6.2"
+    "prettier": "^3.6.2",
+    "prettier-plugin-slidev": "^1.0.5"
   },
   "peerDependencies": {
     "typescript": "^5"
