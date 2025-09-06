@@ -765,7 +765,7 @@ and use it as our pubsub in the gateway.config.ts
 
 ```ts
 import { connect } from "@nats-io/transport-node";
-import { NATSPubSub } from "@graphql-hive/pubsub/nats" or "@graphql-hive/gateway";
+import { NATSPubSub } from "@graphql-hive/gateway";
 
 export const gatewayConfig = defineConfig<JWTAuthContextExtension>({
   pubsub: new NATSPubSub(
