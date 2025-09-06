@@ -829,3 +829,118 @@ TODO: explain more?
 TODO: maybe start another gateway and show that?
 
 Commit
+
+# otel
+
+Ok we've come a long way!
+
+It's time to get some insights in what's happening in the gateway
+
+We want to see it resolving queries, how long thing takes, which subrequests are made
+
+and of course, which queries errored out or failed for whatever reason
+
+The best tool for that would be opentelemetry! Let's see how easy it is to set up
+
+Before we begin, we have to prepare a service that will consume the opentelemetry traces,
+
+for that we're going to use the great jaeger: the open source, distributed tracing platform
+
+```yml
+jaeger:
+  image: cr.jaegertracing.io/jaegertracing/jaeger:2.10.0
+  ports:
+    - 16686:16686 # app
+    - 4318:4318 # tracing over http
+```
+
+```sh
+docker compose up
+```
+
+Load up http://localhost:16686/ to show it's running
+
+Now, to set up hive gateway
+
+First we have to install the opentelemetry toolset from their official sdk
+
+```sh
+bun add @opentelemetry/context-async-hooks @opentelemetry/exporter-trace-otlp-http
+```
+
+Open gateway.config.ts
+
+```ts
+import { openTelemetrySetup } from "@graphql-hive/gateway/opentelemetry/setup";
+import { AsyncLocalStorageContextManager } from "@opentelemetry/context-async-hooks";
+import { OTLPTraceExporter } from "@opentelemetry/exporter-trace-otlp-http";
+
+openTelemetrySetup({
+  contextManager: new AsyncLocalStorageContextManager(),
+  traces: {
+    exporter: new OTLPTraceExporter({ url: "http://localhost:4318/v1/traces" }),
+  },
+  resource: {
+    // identify the resource and its version
+    serviceName: "federation",
+    serviceVersion: "0.0.0",
+  },
+});
+
+export const gatewayConfig = defineConfig({
+  openTelemetry: {
+    traces: true,
+  },
+});
+```
+
+AAAnd, thats it! Lets see how this all works
+
+Do some requests and check jaeger (create a nested query to show off everything)
+
+Wow that was easy! Right?
+
+But, maybe you want to add some custom attributes to opentelemetry's traces
+
+For example the authenticated user id?
+
+Like with the official otel javascript sdk, we're going to import the trace from the opentelemetry api and add an attribute to it in gateway.config.ts
+
+```ts
+import { trace } from "@graphql-hive/gateway/opentelemetry/api";
+genericAuth: {
+    resolveUserFn: (ctx) => {
+      const user = ctx.jwt?.payload;
+      const span = trace.getActiveSpan();
+      span!.setAttribute("user.id", user?.sub || "anonymous");
+      return user;
+    },
+}
+```
+
+Simple as that! Now lets go back to our jaeger app and look at the traces again
+
+(Remember to use "Find traces" button to refrehs, not a browser reload)
+
+Look at the "graphql.context" attribute
+
+Wow that's great, we have the attribute set in graphql's context. But
+
+the attribute seems to be far too deep.
+
+Thats's because we set the attribute only on that specific active span,
+
+let's try to to set it on a root span, like for the whole request!
+
+```ts
+import { hive, trace } from "@graphql-hive/gateway/opentelemetry/api";
+
+const otelCtx = hive.getHttpContext(ctx.request);
+const span = trace.getSpan(otelCtx);
+```
+
+Nice, now look at the root http span and we'll see the user id appear!
+
+TODO: confirm after Valentin fix
+
+Commit
