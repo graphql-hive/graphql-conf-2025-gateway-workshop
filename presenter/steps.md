@@ -347,3 +347,54 @@ hmacSignature: {
 Query again, working
 
 Commit
+
+# add @authenticated
+
+Open gateway.config.ts
+
+```ts
+defineConfig<JWTAuthContextExtension>
+
+genericAuth: {
+  mode: "protect-granular",
+  resolveUserFn: (ctx) => ctx.jwt?.payload,
+},
+```
+
+Open subgraphs/users/typeDefs.graphql
+
+We need to upgrade federation version
+
+```gql
+extend schema
+  @link(
+    url: "https://specs.apollo.dev/federation/v2.7"
+    import: ["@key", "@authenticated"]
+  )
+```
+
+Add @authenticated to email field
+
+Compose
+
+Show email unauthenticated graphql query
+
+Whole request fails, add to gateway.config.ts
+
+```ts
+reject: {
+  missingToken: false,
+},
+```
+
+Request goes through but whole subgraph request fails, add to gateway.config.ts
+
+```ts
+genericAuth: {
+  rejectUnauthenticated: false,
+},
+```
+
+Show email unauthenticated graphql query, only field is null
+
+Commit
