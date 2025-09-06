@@ -977,3 +977,5 @@ Open gateway.config.ts
 And just like that, we're going to get much more detail in the logs.
 
 Do some queries, show also reverting to info.
+
+Commit
