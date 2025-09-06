@@ -213,3 +213,36 @@ bun compose
 .prettierignore supergraph.graphql
 
 Commit
+
+# set up gateway
+
+```sh
+bun add @graphql-hive/gateway
+```
+
+Add "start" to package.json
+
+```sh
+hive-gateway supergraph
+```
+
+```sh
+bun start
+```
+
+Visit gateway url
+
+```gql
+{
+  posts {
+    title
+    author {
+      name
+    }
+  }
+}
+```
+
+Open new terminal tab
+
+Commit
