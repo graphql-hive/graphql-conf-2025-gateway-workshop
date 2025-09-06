@@ -711,6 +711,9 @@ Follow along or just watch - your choice!
 
 You don't have to code if you do not want to, you can check out the repository and `git pull` after every segment I code so you can see how it all works for you without writing code.
 
+TODO: check out repository
+TODO: repo will have readme with install bun, docker and other things to help user follow along
+
 We'll start with an empty directory and build:
 
 1. Two federated GraphQL Yoga subgraphs
