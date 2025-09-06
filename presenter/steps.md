@@ -826,4 +826,6 @@ Explain that this means you can scale your gateways but not the subgraphs to han
 
 TODO: explain more?
 
+TODO: maybe start another gateway and show that?
+
 Commit
