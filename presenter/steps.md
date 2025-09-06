@@ -400,3 +400,151 @@ Show email unauthenticated graphql query, only field is null
 Add bearer token and show success
 
 Commit
+
+# add @requiresScopes
+
+Open subgraphs/posts/typeDefs.graphql
+
+We need to upgrade federation version
+
+```gql
+extend schema
+  @link(
+    url: "https://specs.apollo.dev/federation/v2.7"
+    import: ["@key", "@requiresScopes"]
+  )
+```
+
+Add @requiresScope editor to email field
+
+Compose
+
+Try creating new post in url authenticated, unauthorized
+
+We need to define and pass the scope
+
+Open genjwt.ts and add `scope: ['editor']`
+
+Explain that the gateway will automatically pull from scope field
+
+User can change where scope field is by defining `genericAuth.extractScopes`
+
+Try creating new post again, internal server error, need to implement the resolver
+
+Open subgraphs/posts/server.ts
+
+```ts
+Mutation: {
+  createPost: (_, { title, content }) => {
+    posts.push({
+      id: `p${posts.length + 1}`,
+      title,
+      content,
+      author: {
+        // TODO:
+      },
+    });
+  },
+},
+```
+
+Explain that we can forward the JWT token to the subgraphs in gateway.config.ts
+
+```ts
+  jwt: {
+    forward: {
+      payload: true,
+    },
+  },
+```
+
+Which will include the jwt in the graphql query extensions field when making subgraph request
+
+To extract in subgraph define plugin in subgraphs/posts/server.ts
+
+```ts
+import { useForwardedJWT } from "@graphql-hive/gateway";
+useForwardedJWT();
+```
+
+Payload will now be in yoga context
+
+Console log the payload inside the createPost mutation but throw a TODO error
+
+```ts
+createPost: (_, { title, content }, ctx: JWTAuthContextExtension) => {
+  console.log(ctx.jwt);
+  throw "todo";
+  posts.push({
+}
+```
+
+Execute createPost in graphiql
+
+See logs, token does not have user id
+
+Got to genjwt and add `sub: "u2"` field, run genjwt
+
+Use new header and execute create post
+
+Show sub in console logs
+
+Implement the resolver
+
+```ts
+createPost: (_, { title, content }, ctx: JWTAuthContextExtension) => {
+  const userId = ctx.jwt?.payload.sub;
+  if (!userId) {
+    throw new Error("Unauthorized");
+  }
+  const newPost = {
+    id: `p${posts.length + 1}`,
+    title,
+    content,
+    author: {
+      id: userId,
+    },
+  };
+  posts.push(newPost);
+  return newPost;
+},
+```
+
+Execute create post works
+
+Query posts show author and post fields too
+
+Commit
+
+# propagate headers
+
+This might put the burden of understanding the jwt structure and making sure it exists
+
+Instead we can extract the user id and forward it to the subgraph
+
+Open gateway.config.ts
+
+```diff
++  propagateHeaders: {
++    fromClientToSubgraphs: ({ context }) => ({
++      "x-user-id": context.jwt?.payload.sub,
++    }),
++  },
+  jwt: {
+-   forward: {
+-     payload: true,
+-   },
+  },
+```
+
+Open subgraphs/posts/server.ts
+
+```ts
+createPost: (_, { title, content }, ctx: YogaInitialContext) => {
+  const userId = ctx.request.headers.get("x-user-id");
+  if (!userId) {
+    throw new Error("Missing user id header");
+  }
+```
+
+Execute create post query and require the author field to see that it is being propagated
