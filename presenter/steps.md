@@ -397,4 +397,6 @@ genericAuth: {
 
 Show email unauthenticated graphql query, only field is null
 
+Add bearer token and show success
+
 Commit
