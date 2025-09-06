@@ -8,6 +8,8 @@
   "scripts": {
     "format": "prettier --check --write .",
     "compose": "mesh-compose -o supergraph.graphql",
+    "check:format": "prettier --check .",
+    "check:types": "tsc --noEmit",
     "start": "bun run --watch node_modules/.bin/hive-gateway supergraph"
   },
   "devDependencies": {
