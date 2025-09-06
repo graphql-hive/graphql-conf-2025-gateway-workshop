@@ -798,7 +798,7 @@ Open subgraphs/posts/server.ts
 import { NATSPubSub } from "@graphql-hive/pubsub/nats";
 import { connect } from "@nats-io/transport-node";
 
-const pubsub = new NATSPubSub<{ createPost: { id: string } }>(
+const pubsub = new NATSPubSub<{ postAdded: { id: string } }>(
   await connect({ servers: ["nats://localhost:4222"] }),
   {
     // same as gateway
@@ -808,7 +808,7 @@ const pubsub = new NATSPubSub<{ createPost: { id: string } }>(
 
 createPost: () => {
   //
-  pubsub.publish("createPost", { id: newPost.id });
+  pubsub.publish("postAdded", { id: newPost.id });
 };
 ```
 
