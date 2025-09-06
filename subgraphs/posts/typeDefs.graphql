@@ -5,10 +5,9 @@ extend schema
   )
   @link(
     url: "https://the-guild.dev/graphql/mesh/spec/v1.0"
-    import: ["@rateLimit", "@pubsubOperation"]
+    import: ["@rateLimit", "@pubsubOperation", "@pubsubPublish"]
   )
   @composeDirective(name: "@rateLimit")
-  @composeDirective(name: "@pubsubOperation")
 
 directive @rateLimit(
   max: Int
@@ -16,11 +15,9 @@ directive @rateLimit(
   message: String
 ) on FIELD_DEFINITION
 
-directive @pubsubOperation(
-  pubsubTopic: String!
-  filterBy: String
-  result: String
-) on FIELD_DEFINITION
+directive @pubsubOperation(pubsubTopic: String!) on FIELD_DEFINITION
+
+directive @pubsubPublish(pubsubTopic: String!) on FIELD_DEFINITION
 
 type Query {
   posts: [Post!]!
@@ -28,13 +25,13 @@ type Query {
 
 type Mutation {
   createPost(title: String!, content: String!): Post!
+    @requiresScopes(scopes: [["editor"]])
     @rateLimit(
       max: 5
-      window: "60s"
-      message: "You can only create 5 posts per minute"
+      window: "1m"
+      message: "Too many posts created, please try again later."
     )
-    @requiresScopes(scopes: [["editor"]])
-  deletePost(id: ID!): Post @requiresScopes(scopes: [["editor"], ["admin"]])
+    @pubsubPublish(pubsubTopic: "postAdded")
 }
 
 type Subscription {

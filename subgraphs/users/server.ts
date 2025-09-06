@@ -2,46 +2,50 @@ import { buildSubgraphSchema } from "@apollo/subgraph";
 import { useHmacSignatureValidation } from "@graphql-hive/gateway";
 import { parse } from "graphql";
 import { createYoga } from "graphql-yoga";
-import { HMAC_SECRET } from "~env";
+// @ts-expect-error
 import typeDefs from "./typeDefs.graphql" with { type: "text" };
+import { HMAC_SECRET } from "../../env";
 
 const users = [
   {
     id: "u1",
     name: "Alice",
     email: "alice@example.com",
+    liked: [{ id: "p1" }, { id: "p3" }],
   },
   {
     id: "u2",
     name: "Bob",
     email: "bob@example.com",
+    liked: [{ id: "p2" }],
   },
   {
     id: "u3",
     name: "Charlie",
     email: "charlie@example.com",
+    liked: [],
   },
 ];
 
-const yoga = createYoga({
-  schema: buildSubgraphSchema([
-    {
-      typeDefs: parse(typeDefs),
-      resolvers: {
-        User: {
-          __resolveReference: (user) => users.find((u) => u.id === user.id),
-        },
+const schema = buildSubgraphSchema([
+  {
+    typeDefs: parse(typeDefs),
+    resolvers: {
+      User: {
+        __resolveReference: (user) => users.find((u) => u.id === user.id),
       },
     },
-  ]),
+  },
+]);
+
+const yoga = createYoga({
+  schema,
   plugins: [useHmacSignatureValidation({ secret: HMAC_SECRET })],
 });
 
-const server = Bun.serve({
+Bun.serve({
   port: 4001,
   fetch: yoga,
 });
 
-console.log(
-  `Products subgraph running at http://localhost:${server.port}/graphql`,
-);
+console.log("Users subgraph running on http://localhost:4001/graphql");

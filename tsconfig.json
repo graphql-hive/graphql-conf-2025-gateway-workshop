@@ -24,11 +24,6 @@
     // Some stricter flags (disabled by default)
     "noUnusedLocals": false,
     "noUnusedParameters": false,
-    "noPropertyAccessFromIndexSignature": false,
-
-    // Convenience paths
-    "paths": {
-      "~env": ["./env.ts"]
-    }
+    "noPropertyAccessFromIndexSignature": false
   }
 }

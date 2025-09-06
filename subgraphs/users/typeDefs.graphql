@@ -8,4 +8,9 @@ type User @key(fields: "id") {
   id: ID!
   name: String!
   email: String! @authenticated
+  liked: [Post!]!
+}
+
+type Post @key(fields: "id") {
+  id: ID!
 }

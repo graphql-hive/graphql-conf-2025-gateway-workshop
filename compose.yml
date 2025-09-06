@@ -1,10 +1,10 @@
 services:
+  nats:
+    image: nats
+    ports:
+      - 4222:4222
   jaeger:
-    image: jaegertracing/all-in-one:1.73.0
+    image: cr.jaegertracing.io/jaegertracing/jaeger:2.10.0
     ports:
       - 16686:16686 # app
       - 4318:4318 # tracing over http
-  nats:
-    image: nats:2.11
-    ports:
-      - 4222:4222

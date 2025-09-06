@@ -1,27 +1,14 @@
 {
   "name": "graphql-conf-2025-gateway-workshop",
-  "module": "index.ts",
   "type": "module",
   "private": true,
   "workspaces": [
     "subgraphs/*"
   ],
   "scripts": {
-    "check:format": "prettier --check .",
-    "format": "bun check:format --write",
-    "check:types": "tsc --noEmit",
+    "format": "prettier --check --write .",
     "compose": "mesh-compose -o supergraph.graphql",
-    "subgraphs": "bun -F './subgraphs/*' start",
-    "start": "hive-gateway supergraph",
-    "gen-jwt": "bun run ./scripts/gen-jwt.ts"
-  },
-  "dependencies": {
-    "@graphql-hive/gateway": "^2.0.3",
-    "@graphql-hive/pubsub": "^2.1.0",
-    "@graphql-mesh/compose-cli": "^1.4.17",
-    "@nats-io/transport-node": "^3.1.0",
-    "@opentelemetry/context-async-hooks": "^2.1.0",
-    "@opentelemetry/exporter-trace-otlp-http": "^0.204.0"
+    "start": "bun run --watch node_modules/.bin/hive-gateway supergraph"
   },
   "devDependencies": {
     "@slidev/cli": "^52.1.0",
@@ -32,5 +19,16 @@
   },
   "peerDependencies": {
     "typescript": "^5"
+  },
+  "dependencies": {
+    "@apollo/subgraph": "^2.11.2",
+    "@graphql-hive/gateway": "^2.1.0",
+    "@graphql-mesh/compose-cli": "^1.4.17",
+    "@nats-io/transport-node": "^3.1.0",
+    "@opentelemetry/context-async-hooks": "^2.1.0",
+    "@opentelemetry/exporter-trace-otlp-http": "^0.204.0",
+    "graphql": "^16.11.0",
+    "graphql-yoga": "^5.15.2",
+    "jsonwebtoken": "^9.0.2"
   }
 }
