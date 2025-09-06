@@ -672,3 +672,57 @@ Show it works.
 Much better now!
 
 Commit
+
+# rate limiting
+
+Ok we got some common attacks covered
+
+But these _still_ dont protect us against abuse
+
+People can still try sending a lot of queries to the gateway to overwhelm it
+
+Or to polute the database with jibberish
+
+For example, if you spam the create post mutation - you can create a LOT of posts real fast
+
+Let's protect that field by rate limiting it
+
+Open subgraphs/posts/typeDefs.graphql
+
+```gql
+extend schema
+  @link(
+    url: "https://specs.apollo.dev/federation/v2.7"
+    import: ["@key", "@requiresScopes", "@composeDirective"]
+  )
+  @link(
+    url: "https://the-guild.dev/graphql/mesh/spec/v1.0"
+    import: ["@rateLimit", "@pubsubOperation"]
+  )
+  @composeDirective(name: "@rateLimit")
+
+directive @rateLimit(
+  max: Int
+  window: String
+  message: String
+) on FIELD_DEFINITION
+
+type Mutation {
+  createPost: Post
+    @rateLimit(
+      max: 5
+      window: "1m"
+      message: "Too many posts created, please try again later."
+    )
+}
+```
+
+Compose
+
+Then enable rate limit in gateway.config.ts
+
+Abuse `createPost` mutation and show how it fails
+
+TODO: explain that if you would like to rate limit the whole gateway it would be best to use nginx, proxy, cloudflare, load balancer or anything in front of the gateway
+
+Commit
