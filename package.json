@@ -16,7 +16,7 @@
     "gen-jwt": "bun run ./scripts/gen-jwt.ts"
   },
   "dependencies": {
-    "@graphql-hive/gateway": "2.0.3-alpha-02235eb306d87f05e985fd3f137ed5d14a7c23cb",
+    "@graphql-hive/gateway": "^2.0.3",
     "@graphql-hive/pubsub": "^2.1.0",
     "@graphql-mesh/compose-cli": "^1.4.15",
     "@nats-io/transport-node": "^3.1.0",
@@ -29,5 +29,6 @@
   },
   "peerDependencies": {
     "typescript": "^5"
-  }
+  },
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }

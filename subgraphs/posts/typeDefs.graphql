@@ -5,14 +5,21 @@ extend schema
   )
   @link(
     url: "https://the-guild.dev/graphql/mesh/spec/v1.0"
-    import: ["@rateLimit"]
+    import: ["@rateLimit", "@pubsubOperation"]
   )
   @composeDirective(name: "@rateLimit")
+  @composeDirective(name: "@pubsubOperation")
 
 directive @rateLimit(
   max: Int
   window: String
   message: String
+) on FIELD_DEFINITION
+
+directive @pubsubOperation(
+  pubsubTopic: String!
+  filterBy: String
+  result: String
 ) on FIELD_DEFINITION
 
 type Query {
@@ -28,6 +35,10 @@ type Mutation {
     )
     @requiresScopes(scopes: [["editor"]])
   deletePost(id: ID!): Post @requiresScopes(scopes: [["editor"], ["admin"]])
+}
+
+type Subscription {
+  postCreated: Post! @pubsubOperation(pubsubTopic: "postAdded")
 }
 
 type Post @key(fields: "id") {

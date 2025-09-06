@@ -18,12 +18,4 @@ export const composeConfig = defineConfig({
       }),
     },
   ],
-  additionalTypeDefs: /* GraphQL */ `
-    extend schema {
-      subscription: Subscription
-    }
-    type Subscription {
-      postAdded: Post! @resolveTo(pubsubTopic: "postAdded")
-    }
-  `,
 });
