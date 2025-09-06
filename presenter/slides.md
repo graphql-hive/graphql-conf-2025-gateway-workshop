@@ -1,5 +1,6 @@
 ---
 theme: default
+transition: none
 layout: cover
 ---
 
