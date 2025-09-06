@@ -1,4 +1,5 @@
-TODO: introspection without auth
+TODO: introspection without auth (not necessary, we're good)
+TODO: note that users only need to pull the latest commit and `bun i`, if already have started
 
 # bun init
 
