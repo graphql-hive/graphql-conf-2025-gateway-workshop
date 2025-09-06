@@ -829,6 +829,8 @@ TODO: explain more?
 
 TODO: maybe start another gateway and show that?
 
+TODO: explain with edfs there's no downtime issues, connection will persist
+
 TODO: use the new pubsubPublish directive and show much better
 
 Commit
