@@ -444,7 +444,7 @@ Mutation: {
       title,
       content,
       author: {
-        // TODO:
+        // continue explaining
       },
     });
   },
@@ -472,7 +472,7 @@ useForwardedJWT();
 
 Payload will now be in yoga context
 
-Console log the payload inside the createPost mutation but throw a TODO error
+Console log the payload inside the createPost mutation but throw a todo error
 
 ```ts
 createPost: (_, { title, content }, ctx: JWTAuthContextExtension) => {
@@ -971,8 +971,6 @@ const span = trace.getSpan(otelCtx);
 ```
 
 Nice, now look at the root http span and we'll see the user id appear!
-
-TODO: confirm after Valentin fix
 
 Commit
 
