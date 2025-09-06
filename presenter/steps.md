@@ -246,3 +246,58 @@ Visit gateway url
 Open new terminal tab
 
 Commit
+
+# set up jwt
+
+Create env.ts
+
+```ts
+export const JWT_SECRET = "123";
+```
+
+Create gateway.config.ts
+
+```ts
+import {
+  createInlineSigningKeyProvider,
+  defineConfig,
+} from "@graphql-hive/gateway";
+import { JWT_SECRET } from "./env";
+
+export const gatewayConfig = defineConfig({
+  jwt: {
+    signingKeyProviders: [createInlineSigningKeyProvider(JWT_SECRET)],
+  },
+});
+```
+
+Restart gateway
+
+Visit gateway url and graphql, show unauthenticated
+
+Empty terminal tab
+
+```sh
+bun add jsonwebtoken
+```
+
+Create genjwt.ts
+
+```ts
+import jwt from "jsonwebtoken";
+import { JWT_SECRET } from "./env";
+
+const payload = {};
+
+const token = jwt.sign(payload, JWT_SECRET);
+
+console.log(JSON.stringify({ Authorization: `Bearer ${token}` }));
+```
+
+```sh
+bun genjwt.ts
+```
+
+Use token in gateway url show authenticated
+
+Commit
