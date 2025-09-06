@@ -697,7 +697,7 @@ extend schema
   )
   @link(
     url: "https://the-guild.dev/graphql/mesh/spec/v1.0"
-    import: ["@rateLimit", "@pubsubOperation"]
+    import: ["@rateLimit"]
   )
   @composeDirective(name: "@rateLimit")
 
@@ -724,5 +724,104 @@ Then enable rate limit in gateway.config.ts
 Abuse `createPost` mutation and show how it fails
 
 TODO: explain that if you would like to rate limit the whole gateway it would be best to use nginx, proxy, cloudflare, load balancer or anything in front of the gateway
+
+Commit
+
+# edfs
+
+Enough about security, I'd like to get to something interesting
+
+EDFS, event driven federated subscriptions
+
+We will be using NATS as our message broker for this, lets set it up with docker
+
+Create compose.yml
+
+```yml
+services:
+  nats:
+    image: nats
+    ports:
+      - 4222:4222
+```
+
+New terminal tab and
+
+```sh
+docker compose up
+```
+
+look at and it's running
+
+Now lets install our the nats transport for node, which is also compatible with bun
+
+```sh
+bun i @nats-io/transport-node
+```
+
+and use it as our pubsub in the gateway.config.ts
+
+(explain subject prefix)
+
+```ts
+import { connect } from "@nats-io/transport-node";
+import { NATSPubSub } from "@graphql-hive/pubsub/nats" or "@graphql-hive/gateway";
+
+export const gatewayConfig = defineConfig<JWTAuthContextExtension>({
+  pubsub: new NATSPubSub(
+    await connect({ servers: ["nats://localhost:4222"] }),
+    {
+      subjectPrefix: "federation",
+    }
+  ),
+```
+
+Ok great! Now lets set up publishing with our handy pubsubOperation directive
+
+Open subgraphs/posts/typeDefs.graphql
+
+(make sure to add "@pubsubOperation" to mesh link imports in gql)
+
+```gql
+directive @pubsubOperation(pubsubTopic: String!) on FIELD_DEFINITION
+
+type Subscription {
+  postCreated: Post! @pubsubOperation(pubsubTopic: "postAdded")
+}
+```
+
+Explain that this will indicate to the gateway to subscribe to the "postAdded" event for subscriptions
+
+Open subgraphs/posts/server.ts
+
+```ts
+import { NATSPubSub } from "@graphql-hive/pubsub/nats";
+import { connect } from "@nats-io/transport-node";
+
+const pubsub = new NATSPubSub<{ createPost: { id: string } }>(
+  await connect({ servers: ["nats://localhost:4222"] }),
+  {
+    // same as gateway
+    subjectPrefix: "federation",
+  },
+);
+
+createPost: () => {
+  //
+  pubsub.publish("createPost", { id: newPost.id });
+};
+```
+
+Subscribe to postcreated on one browser tab
+
+Create post on other tab
+
+(beware of [Bun.serve]: request timed out after 10 seconds. Pass `idleTimeout` to configure.)
+
+Return to see event
+
+Explain that this means you can scale your gateways but not the subgraphs to handle the load of many subscriptions
+
+TODO: explain more?
 
 Commit
