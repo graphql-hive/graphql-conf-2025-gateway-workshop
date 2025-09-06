@@ -63,6 +63,8 @@ Create subgraphs/users/server.ts
 import { buildSubgraphSchema } from "@apollo/subgraph";
 import { parse } from "graphql";
 import { createYoga } from "graphql-yoga";
+// @ts-expect-error
+import typeDefs from "./typeDefs.graphql" with { type: "text" };
 
 const users = [
   {
@@ -81,8 +83,6 @@ const users = [
     email: "charlie@example.com",
   },
 ];
-
-const typeDefs = await Bun.file("typeDefs.graphql").text();
 
 const schema = buildSubgraphSchema([
   {
