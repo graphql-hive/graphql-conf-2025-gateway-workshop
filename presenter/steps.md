@@ -120,7 +120,9 @@ Add "start" with --watch script to package.json
 bun start
 ```
 
-Open new terminal tab
+Show reload on file change
+
+Stop process
 
 ```sh
 ../posts
@@ -157,12 +159,13 @@ Change resolvers
 
 Change port and log
 
-```sh
-bun i
-bun start
-```
+Go to root, install and run all subgraphs
 
-Open new terminal tab
+```sh
+../
+bun i
+bun -F "*" start
+```
 
 Commit
 
