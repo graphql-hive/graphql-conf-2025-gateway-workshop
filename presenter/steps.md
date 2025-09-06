@@ -550,3 +550,125 @@ createPost: (_, { title, content }, ctx: YogaInitialContext) => {
 Execute create post query and require the author field to see that it is being propagated
 
 Commit
+
+# depth tokeb limit
+
+Ok the system is pretty secure now
+
+But we want to add more security features to prevent potential abuse and attacks
+
+Common attacks on graphql endpoinds include constructing malicious queries
+
+Like queries with nested depths or queries with crazy amount of tokens
+
+Lets refine our subgraphs to showcase a common scenario of recursive releationships
+
+Open subgraphs/users/typeDefs.graphql
+
+```gql
+type User {
+  liked: [Post!]!
+}
+
+type Post @key(fields: "id") {
+  id: ID!
+}
+```
+
+Open subgraphs/users/server.ts
+
+Add some liked posts
+
+Compose
+
+Show nested query with relation `posts.author.liked.author.liked`
+
+Explain that it's not only an issue of putting stress on the subgraphs and the gateway with nested resolvers
+
+But attacker can also construct a huge response really fast, clogging the bandwith and gateway resources
+
+Lets protect ourselves
+
+Open gateway.config.ts
+
+```ts
+maxDepth: 5;
+```
+
+Try execute, see query fail.
+
+Another potential atack is not abusing the recirsive nature of graphql,
+
+but requesting a large, but valid, query with many tokens
+
+Show
+
+```gql
+{
+  posts {
+    a: content
+    a: content
+    a: content
+    ...
+  }
+}
+```
+
+It is valid, but the query contains a lot of tokens here
+
+To protect ourselves, we can limit the token size
+
+Open gateway.config.ts
+
+```ts
+maxToken: 10;
+// then increase to 1000 to allow introspection and things
+```
+
+There's even more ways to exploit a graphql schema that has common semantics
+
+Let's say you disabled schema introspection
+
+Open gateway.config.ts
+
+```ts
+disableIntrospection: {
+  disableIf: () => true,
+},
+```
+
+Refresh graphiql, show no types or documentation.
+
+Explain that you can enable introspection for auth users and how
+
+Refresh again, show types when header is set with jwt
+
+We're safer now...
+
+Nope there's more!
+
+Execute query
+
+```gql
+{
+  posts {
+    contenta
+  }
+}
+```
+
+The error contains a suggestion on which field you were missing "you meant 'content'?"
+
+Using a sophisticated attack, like "clairvoyance graphql", you can figure out the schema using only the validation suggestions! Even when introspection is blocked!
+
+To protect, do
+
+```ts
+blockFieldSuggestions: true;
+```
+
+Show it works.
+
+Much better now!
+
+Commit
