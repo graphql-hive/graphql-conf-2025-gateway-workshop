@@ -810,7 +810,6 @@ const pubsub = new NATSPubSub<{ postAdded: { id: string } }>(
 );
 
 createPost: () => {
-  //
   pubsub.publish("postAdded", { id: newPost.id });
 };
 ```
@@ -824,6 +823,31 @@ Create post on other tab
 Return to see event
 
 Explain how the gateway resolved the rest of fields by querying subgraphs
+
+Let's make it even simpler with our brand new `@pubsubPublish` directive
+
+It publishes the return type directly to the pubsub
+
+Open subgraphs/posts/typeDefs.graphql
+
+```gql
+extend schema
+  # ...
+  @link(
+    url: "https://the-guild.dev/graphql/mesh/spec/v1.0"
+    import: ["@rateLimit", "@pubsubOperation", "@pubsubPublish"]
+  )
+
+type Mutation {
+  createPost: Post! @pubsubPublish(pubsubTopic: "postAdded")
+}
+```
+
+Open subgraphs/posts/server.ts and remove all traces of NATS and pubsub
+
+Compose
+
+Showcase subscriptions again
 
 Explain that this means you can scale your gateways but not the subgraphs to handle the load of many subscriptions
 
