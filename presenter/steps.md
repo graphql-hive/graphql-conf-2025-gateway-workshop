@@ -43,6 +43,13 @@ Define "workspaces" in package.json
 bun i
 ```
 
+In root install deps
+
+```sh
+cd subgraphs/users
+bun add graphql @apollo/subgraph graphql-yoga
+```
+
 Create subgraphs/users/typeDefs.graphql
 
 ```gql
@@ -51,11 +58,6 @@ type User @key(fields: "id") {
   name: String!
   email: String!
 }
-```
-
-```sh
-cd subgraphs/users
-bun add graphql @apollo/subgraph graphql-yoga
 ```
 
 Create subgraphs/users/server.ts
@@ -147,10 +149,6 @@ Copy package.json from users to posts
 
 Change "name" to posts
 
-```sh
-bun i
-```
-
 Copy server.ts from users to posts
 
 Change data to posts
@@ -160,6 +158,7 @@ Change resolvers
 Change port and log
 
 ```sh
+bun i
 bun start
 ```
 
