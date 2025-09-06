@@ -159,13 +159,20 @@ Change resolvers
 
 Change port and log
 
-Go to root, install and run all subgraphs
+Go to root, install
 
 ```sh
 ../
 bun i
-bun -F "*" start
 ```
+
+Create new script "subgraphs"
+
+```sh
+bun -F "./subgraphs/*" start
+```
+
+and run all subgraphs
 
 Commit
 
