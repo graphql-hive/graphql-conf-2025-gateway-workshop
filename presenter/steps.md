@@ -243,6 +243,16 @@ Visit gateway url
 }
 ```
 
+Make gateway auto-restart, change "start" script
+
+```sh
+bun run --watch node_modules/.bin/hive-gateway supergraph
+```
+
+```sh
+bun start
+```
+
 Open new terminal tab
 
 Commit
@@ -271,7 +281,7 @@ export const gatewayConfig = defineConfig({
 });
 ```
 
-Restart gateway
+Gateway is automatically restarted
 
 Visit gateway url and graphql, show unauthenticated
 
