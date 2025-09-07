@@ -868,9 +868,49 @@ TODO: use the new pubsubPublish directive and show much better
 
 Commit
 
+# dynamic log level switching
+
+Okay, lets continue
+
+For all those on-call people, this one is for you.
+
+Dynamic log level switching.
+
+Our new Hive Logger supports that out of the box and will make you life easy!
+
+There is many ways you can instruct a service to change to debug-mode, from process signals to notifications,
+
+but we're going to set up something really simple just to show the functionality:
+
+Open gateway.config.ts
+
+```ts
+  plugins: ({ log }) => [
+    {
+      onRequest({ request, endResponse }) {
+        if (request.url.endsWith("/toggle-debug")) {
+          log.setLevel(log.level === "debug" ? "info" : "debug");
+          log.info(`Changed log level to ${log.level}`);
+          endResponse(new Response(`Log level is now ${log.level}`));
+        }
+      },
+    } as GatewayPlugin,
+  ],
+```
+
+And just like that, we're going to get much more detail in the logs.
+
+Do some queries, show also reverting to info.
+
+Note that the performance wont be impacted when toggling the debug level back to info,
+
+all of the debug utilities for extra logs will be unmounted returning the performance back to info level
+
+Commit
+
 # otel
 
-Ok we've come a long way!
+We've come a long way!
 
 It's time to get some insights in what's happening in the gateway
 
@@ -981,40 +1021,8 @@ Nice, now look at the root http span and we'll see the user id appear!
 
 Commit
 
-# dynamic log level switching
+# (if time allows it) switch to console
 
-Great, for all those on-call people, this one is for you.
+Wow, that was a long one. But now, I have something exciting to introduce.
 
-Dynamic log level switching.
-
-Our new Hive Logger supports that out of the box and will make you life easy!
-
-There is many ways you can instruct a service to change to debug-mode, from process signals to notifications,
-
-but we're going to set up something really simple just to show the functionality:
-
-Open gateway.config.ts
-
-```ts
-  plugins: ({ log }) => [
-    {
-      onRequest({ request, endResponse }) {
-        if (request.url.endsWith("/toggle-debug")) {
-          log.setLevel(log.level === "debug" ? "info" : "debug");
-          log.info(`Changed log level to ${log.level}`);
-          endResponse(new Response(`Log level is now ${log.level}`));
-        }
-      },
-    } as GatewayPlugin,
-  ],
-```
-
-And just like that, we're going to get much more detail in the logs.
-
-Do some queries, show also reverting to info.
-
-Note that the performance wont be impacted when toggling the debug level back to info,
-
-all of the debug utilities for extra logs will be unmounted returning the performance back to info level
-
-Commit
+Hive Console is working on a brand new feature - tracing!
