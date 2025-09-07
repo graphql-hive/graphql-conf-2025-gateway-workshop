@@ -924,12 +924,14 @@ Before we begin, we have to prepare a service that will consume the opentelemetr
 
 for that we're going to use the great jaeger: the open source, distributed tracing platform
 
+We will use a different binding port because I have a service running on jaegers port
+
 ```yml
 jaeger:
   image: cr.jaegertracing.io/jaegertracing/jaeger:2.10.0
   ports:
     - 16686:16686 # app
-    - 4318:4318 # tracing over http
+    - 54318:4318 # tracing over http
 ```
 
 ```sh
@@ -956,7 +958,9 @@ import { OTLPTraceExporter } from "@opentelemetry/exporter-trace-otlp-http";
 openTelemetrySetup({
   contextManager: new AsyncLocalStorageContextManager(),
   traces: {
-    exporter: new OTLPTraceExporter({ url: "http://localhost:4318/v1/traces" }),
+    exporter: new OTLPTraceExporter({
+      url: "http://localhost:54318/v1/traces",
+    }),
   },
   resource: {
     // identify the resource and its version
@@ -1023,6 +1027,18 @@ Commit
 
 # (if time allows it) switch to console
 
-Wow, that was a long one. But now, I have something exciting to introduce.
+But this is not all, I have something exciting to introduce.
 
 Hive Console is working on a brand new feature - tracing!
+
+TODO: talk a bit more about it
+
+With everything we've built, lets see how we can migrate to Hive Console,
+
+and continue leveraging all of the great features we built,
+
+plus everything Hive Console has to offer.
+
+I have a self-hosted instance of Hive Console already running and an organization already set up
+
+Let's set up a new project and publish our subgraphs!
