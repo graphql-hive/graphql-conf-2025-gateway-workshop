@@ -12,7 +12,7 @@ Denis and Arda from The Guild
 
 <!--
 - Welcome everyone to this hands-on workshop
-- Today we're building a federated GraphQL gateway from scratch
+- Today we're building a federated GraphQL system from scratch
 - This is interactive so feel free to code along or just watch and ask questions
 -->
 
@@ -32,20 +32,13 @@ The team behind your GraphQL tooling
 - [Experience placeholder]
 - [Fun fact placeholder]
 
+::right::
+
 ## Arda [Placeholder]
 
 - [Role/Background placeholder]
 - [Experience placeholder]
 - [Fun fact placeholder]
-
-::right::
-
-## The Guild's Open Source GraphQL Tools
-
-- **GraphQL Yoga** - Production-ready GraphQL server
-- **GraphQL Code Generator** - Generate anything from GraphQL schemas
-- **GraphQL Mesh** - Query any API with GraphQL
-- **GraphQL Hive** - Complete GraphQL platform with gateway, registry & observability
 
 <!--
 - Let me start by introducing ourselves and the company behind the tools you probably use
@@ -53,6 +46,13 @@ The team behind your GraphQL tooling
 - We build open-source GraphQL tools that power thousands of applications
 - We're passionate about federation, gateways and making GraphQL better for everyone
 -->
+
+---
+
+TODO: **GraphQL Yoga** - Production-ready GraphQL server
+TODO: **GraphQL Code Generator** - Generate anything from GraphQL schemas
+TODO: **GraphQL Mesh** - Query any API with GraphQL
+TODO: **GraphQL Hive** - Complete GraphQL platform with gateway, registry & observability
 
 ---
 
@@ -76,6 +76,7 @@ layout: center
 # Who here has _heard_ about Hive Gateway?
 
 <!--
+- Who here has heard about Hive Gateway? Can I see a raise of hands?
 - Perfect! Now I can see who I'm talking to
 -->
 
@@ -86,7 +87,8 @@ layout: center
 # Who here has _worked_ with Hive Gateway?
 
 <!--
-- Great! That gives me a good sense of experience levels in the room
+- Who here has worked with Hive Gateway? Can I see a raise of hands?
+- That gives me a good sense of experience levels in the room
 - Whether you're new to Hive Gateway or have been using it, today will be valuable
 - We're going to build something pretty impressive together
 -->
@@ -97,90 +99,99 @@ layout: two-cols-header
 
 # What is Hive Gateway?
 
-Open-source GraphQL federation gateway
+Production-ready GraphQL federation gateway
 
 ::left::
 
-## The Problem
+## Drop-in Replacement
 
-- Multiple GraphQL services scattered across teams
-- Each has its own API endpoint and schema
-- Clients need to know about all services
-- No unified security or monitoring
+- **Apollo Router compatible** - Use existing `supergraph.graphql`
+- **Zero migration effort** - Seamless integration
+- **Full Federation v2** support with Apollo spec compliance
 
-## The Solution
+## Cloud-Native Ready
 
-A unified GraphQL layer that:
-
-- Combines multiple schemas into one
-- Routes queries to appropriate services
-- Handles federation complexity automatically
-- Provides single endpoint for clients
+- **Serverless optimized** - AWS Lambda, Cloudflare Workers, GCP, Azure
+- **JavaScript native** - No binary dependencies
+- **Horizontal scaling** - Built for modern cloud architectures
 
 ::right::
 
-## How It Works
+## Core Capabilities
 
-### Federation Router
+### Federation Features
 
-- Composes supergraph from subgraph schemas
-- Plans query execution across services
-- Merges responses transparently
+- Query planning and execution across subgraphs
+- Automatic schema composition and validation
+- Entity resolution and type merging
 
-### Proxy Gateway
+### Built-in Security
 
-- Can proxy any existing GraphQL API
-- No schema changes required
-- Add security and monitoring instantly
+- JWT authentication with configurable algorithms
+- HMAC signature validation for subgraphs
+- Query depth limits and rate limiting
 
-### Subgraph Support
+### Observability Ready
 
-- Can act as a federated subgraph itself
-- Integrates with existing federation
+- OpenTelemetry integration out-of-box
+- Structured logging with request correlation
+- Prometheus, StatsD, and custom metrics
 
 <!--
 - For those of you who might not be familiar with Hive Gateway yet, let me explain what it is first
-- Think of it as solving the "microservices for GraphQL" problem
-- Instead of clients calling multiple GraphQL APIs, they call one gateway
-- The gateway handles all the complexity of routing, federation, and composition
-- It can work as a federation router, a simple proxy, or even as a subgraph itself
-- This eliminates the client-side complexity of managing multiple endpoints
+- It's a GraphQL Federation gateway,
+- a drop-in replacement for Apollo Gateway and Router that uses your existing supergraph
+- But being JavaScript-native means it runs anywhere JavaScript does - perfect for serverless
+- All the enterprise features you'd expect are included and open-source
+- No licensing restrictions or paywalls, free forever!
 -->
 
+---
+layout: two-cols-header
 ---
 
 # What's Great About Hive Gateway
 
 Why teams choose it over alternatives
 
-### Production-First Design
+::left::
 
-- 🛡️ **Enterprise Security** - JWT, HMAC, rate limiting, query depth protection
-- 📈 **Built to Scale** - Horizontal scaling, load balancing, zero-downtime deployments
-- 🔍 **Complete Observability** - OpenTelemetry, structured logging, performance metrics
-- ⚡ **Intelligent Optimizations** - Request deduplication, response caching, query planning
+### Production Excellence
+
+- 🏢 **Battle-tested at Scale** - Powers applications serving millions of requests daily
+- 🚀 **Performance Optimized** - Sub-millisecond query planning with intelligent caching
+- 🔄 **Zero-downtime Deployments** - Hot-swap configurations without service interruption
+- 📊 **Real-world Benchmarks** - Consistently outperforms alternatives in latency tests
 
 ### Developer Experience
 
-- 🔧 **TypeScript-First** - Full type safety and excellent IDE support
-- 📦 **Extensible** - Rich plugin ecosystem for custom requirements
-- 🌐 **Runtime Agnostic** - Node.js, Bun, Cloudflare Workers, Docker
-- 📚 **Well Documented** - Comprehensive guides and active community
+- 💡 **Smart Defaults** - Production-ready configuration out of the box
+- 🔍 **Debugging Made Easy** - Built-in GraphQL Playground and detailed error messages
+- 🔧 **TypeScript-first** - Full type safety and excellent IDE support
+- 📦 **Simple Installation** - Standard npm/yarn package with semantic versioning
 
-### Zero Vendor Lock-in
+::right::
 
-- MIT licensed open source - use anywhere, modify freely
-- No proprietary extensions or cloud dependencies
-- Battle-tested by companies at scale
+### Ecosystem & Community
+
+- 🔌 **Rich Plugin System** - Authentication, caching, monitoring, and custom logic
+- 🛠️ **Tool Chain Integration** - Works seamlessly with existing GraphQL tooling
+- 🌍 **Active Community** - Discord support and regular contributor meetings
+- 📈 **Comprehensive Metrics** - Request success rates, latency percentiles, error tracking
+
+### Zero Lock-in Promise
+
+- 🆓 **MIT Licensed** - Free forever, modify as needed
+- 🛡️ **Security Hardened** - Regular audits and vulnerability patching
+- 🏗️ **Extensible Architecture** - GraphQL Mesh integration and plugin ecosystem
+- 🌐 **Deploy Anywhere** - From traditional servers to edge functions
 
 <!--
-- Now let me explain why Hive Gateway stands out from other GraphQL gateway solutions
-- It's designed with production workloads in mind from day one
-- Security isn't an afterthought - it's built into every layer
-- The observability features help you understand what's happening in production
-- TypeScript support means fewer runtime errors and better developer productivity
-- And being MIT licensed means you're never locked into a vendor
-- You can run it anywhere JavaScript runs - from traditional servers to edge functions
+- These are the benefits teams discover after implementing Hive Gateway in production
+- The performance gains are measurable - we're talking real improvements between gateways in the JavaScript world
+- Smart defaults mean less configuration headaches and faster time to deployment
+- The ecosystem support means you're not starting from scratch with plugins and integrations,
+- the operational benefits become clear when you're managing this in production
 -->
 
 ---
@@ -192,7 +203,7 @@ Built for production workloads from day one
 - 🔍 Enhanced OpenTelemetry - Perfect traces with easy setup
 - 📊 Dynamic Structured Logging - Change levels without restarts
 - 🚀 Event-Driven Subscriptions - Horizontally scalable with NATS
-- ⚡ Request Deduplication - Automatic performance optimization
+- ⚡ Inflight Request Deduplication - Automatic performance optimization
 
 <!--
 - Now that you understand what makes Hive Gateway special, let's talk about what's exciting in the recently released version 2
@@ -201,34 +212,62 @@ Built for production workloads from day one
 - Enhanced OpenTelemetry means minimal configuration gets you complete distributed tracing
 - Dynamic log level switching without restarts is huge when you're debugging issues at 3am
 - Event-driven subscriptions are new in Hive Gateway and let subscriptions scale horizontally
-- Request deduplication automatically prevents duplicate network calls by reusing the response from identical subgraph requests
+- Inflight Request deduplication automatically detects when multiple in-flight requests target the same subgraph with identical parameters
+- Instead of making duplicate network calls, the gateway waits for the first request to complete and shares the result with all waiting requests
 - All of this was built based on feedback from teams running v1 in production
-- We'll see every single one of these features in action today
+- We'll see these features in action today
 -->
 
 ---
-layout: intro
+layout: two-cols-header
 ---
 
 # Workshop Overview
 
+::left::
+
 ## What we'll build together
 
-- Federated GraphQL gateway from scratch
-- Production-ready features in 90 minutes
-- Real-time subscriptions that scale
+- Complete federated GraphQL system with production features
+- Two GraphQL Yoga subgraphs with federation
+- Security layers: JWT auth, HMAC signatures, field-level authorization
+- Real-time subscriptions with NATS and EDFS
+- Full observability with OpenTelemetry and Jaeger
+
+::right::
 
 ## You'll learn
 
-- v2's production capabilities
-- Advanced security patterns
-- How to build bulletproof GraphQL infrastructure
+### Foundation
+
+- Monorepo setup with Bun workspaces
+- GraphQL Yoga subgraphs with Apollo Federation
+- Schema composition with GraphQL Mesh
+- Hive Gateway v2 configuration
+
+### Security
+
+- JWT authentication with `@authenticated` directives
+- HMAC signature validation between gateway and subgraphs
+- Role-based authorization with `@requiresScopes`
+- Attack prevention: depth limits, rate limiting, introspection control
+
+### Real-time & Observability
+
+- Event-driven subscriptions with NATS message broker
+- Dynamic log level switching without restarts
+- Complete distributed tracing with OpenTelemetry and Jaeger
 
 <!--
-- Perfect! Let me outline what we're going to build
-- We're starting with an empty directory and building a production-ready GraphQL federated gateway
-- You'll see JWT authentication, distributed subscriptions, dynamic log level switching, and much more
-- Everything we build today you can use in production tomorrow!
+- Let me outline the specific 11 steps we'll work through today
+- We start with basic monorepo setup using Bun and build two federated subgraphs
+- Then we compose them with GraphQL Mesh and set up the Hive Gateway
+- The security section covers multi-layer protection: JWT for authentication, HMAC for subgraph communication, and field-level authorization with Federation directives
+- We'll also implement common GraphQL attack prevention like query depth limits and rate limiting
+- The final section adds real-time capabilities with NATS-powered subscriptions that scale horizontally
+- We finish with production-grade observability using dynamic logging and OpenTelemetry tracing
+- Each step includes a git commit so you can follow along or jump to any specific point
+- By the end you'll have a complete production-ready federated system
 -->
 
 ---
@@ -275,45 +314,6 @@ Simple Blog Platform
 - The users service will demonstrate field-level security by placing email addresses behind authentication,
 - while the posts service will show off role-based authorization and real-time notifications.
 - This domain perfectly demonstrates federation, security, and scalability features
--->
-
----
-
-# Workshop Flow
-
-What We'll Build Together
-
-### Foundation
-
-1. **Setup Monorepo** - Bun init, workspaces, Prettier
-2. **Create Subgraphs** - Users & Posts with GraphQL Yoga
-3. **Compose Supergraph** - Using GraphQL Mesh
-4. **Bootstrap Gateway** - Hive Gateway v2 with auto-reload
-
-### Production
-
-5. **JWT Authentication** - Token validation + field-level auth
-6. **HMAC Security** - Secure subgraph communication
-7. **Authorization Directives** - `@authenticated` & `@requiresScopes`
-8. **Security Hardening** - Depth limits, rate limiting, introspection control
-9. **EDFS with NATS** - Scalable real-time subscriptions
-
-### Observability
-
-10. **Dynamic Logging** - Runtime log level switching
-11. **OpenTelemetry** - Distributed tracing with Jaeger
-
-<!--
-- The flow will look like this and I'll commit after each major step so you can follow along:
-- First we set up a proper monorepo structure with Bun and workspaces
-- Then we create our GraphQL Yoga subgraphs and use GraphQL Mesh to compose the supergraph
-- We'll bootstrap Hive Gateway with auto-reload for a smooth development experience
-- Then we layer on JWT authentication with proper field-level authorization directives
-- We'll secure subgraph communication with HMAC signatures
-- Add comprehensive security hardening against common GraphQL attacks
-- Build scalable real-time subscriptions with EDFS and NATS
-- Finally we'll add dynamic logging and complete observability with OpenTelemetry
-- Each step builds on the previous one and you can git checkout any step to follow along
 -->
 
 ---
@@ -401,12 +401,12 @@ HMAC Signatures
 -->
 
 ---
-zoom: 0.7
+zoom: 0.55
 ---
 
 # Security Flow
 
-Multi-Layer Security
+Multi-Layer Security with Early Blocking
 
 ```mermaid
 sequenceDiagram
@@ -419,21 +419,29 @@ sequenceDiagram
     Client->>Gateway: Query with JWT
     Gateway->>Auth: Validate JWT
     Auth-->>Gateway: User + Scopes
-    Gateway->>Users: Query user.email (@authenticated)
-    Gateway->>Posts: Query posts (@requiresScopes: editor)
-    Users-->>Gateway: Email (if authenticated)
-    Posts-->>Gateway: Posts (if has editor scope)
-    Gateway-->>Client: Combined Response
+
+    Note over Gateway: Check @authenticated & @requiresScopes
+    alt Authorization Failed
+        Gateway-->>Client: Authorization Error (401/403)
+    else Authorization Passed
+        Gateway->>Users: Query user.email (authorized)
+        Gateway->>Posts: Query posts (authorized)
+        Users-->>Gateway: Email data
+        Posts-->>Gateway: Posts data
+        Gateway-->>Client: Combined Response
+    end
 ```
 
 <!--
-- This is how the security flow works in our implementation
-- JWT validation happens at the gateway level first
-- The directives enforce field-level authorization rules
-- We'll show two approaches: forwarding JWT payload directly to subgraphs, and extracting user ID to propagate as headers
-- Each service enforces its own authorization rules but the gateway handles the restrictions
-- Important note: if the JWT doesn't have the necessary permissions defined by the directives, the request won't even reach the users or posts services - the gateway blocks it early
-- We'll demonstrate this with both authenticated fields and scope-based mutations
+- This diagram shows the critical security feature: early authorization blocking at the gateway level
+- The gateway validates the JWT first to extract user identity and scopes
+- Then it checks all @authenticated and @requiresScopes directives in the query plan
+- If any field requires authentication or scopes the user doesn't have, the gateway immediately returns an authorization error
+- The subgraphs never receive unauthorized requests - this protects your backend services from unnecessary load
+- Only when all authorization checks pass does the gateway make requests to the subgraphs
+- This approach is much more efficient and secure than letting unauthorized requests reach your services
+- It also provides consistent error messages and prevents information leakage about your internal service architecture
+- The HMAC signatures we'll add later provide an additional layer ensuring only the gateway can communicate with subgraphs
 -->
 
 ---
@@ -456,12 +464,12 @@ Security Features
 
 <!--
 - But there's more security beyond authentication and authorization!
-- Beyond authentication and authorization, we need to protect against abuse
+- We need to also protect against abuse
 - Rate limiting prevents abuse at multiple levels of your system
 - The `@rateLimit` directive lets you protect specific heavy fields - for example, you could rate limit an expensive search operation while allowing normal queries to flow freely
 - Query protection stops malicious deep nested queries that could overwhelm your servers
 - For example, someone could write a query that goes 50 levels deep and crashes your API
-- We have many more query protection features available like complexity analysis and alias limits, but we'll showcase these two to get you started with secure defaults
+- We have many more query protection features available like complexity analysis and alias limits, but we'll showcase only a few to get you started with secure defaults
 - These features are essential if you're exposing APIs publicly
 -->
 
@@ -625,6 +633,60 @@ graph LR
 -->
 
 ---
+
+# Hive Logger
+
+Modern logging for GraphQL applications
+
+### Key Features
+
+- 🏷️ **Structured Logging** - JSON output with consistent metadata
+- 🔗 **Request Correlation** - Automatic request ID propagation
+- 📊 **Context Inheritance** - Child loggers inherit parent metadata
+- 🔄 **Dynamic Log Levels** - Change verbosity without restarts
+- 🔌 **Pluggable Writers** - Pino, Winston, or custom integrations
+
+### Perfect for Production
+
+- Filter logs by request ID to trace entire request lifecycle
+- Structured data makes log aggregation and searching easier
+- Performance optimized with lazy evaluation
+- Cross-platform compatibility (Node.js, Bun, edge runtimes)
+
+<!--
+- Before we talk about dynamic logging, let me introduce Hive Logger
+- It's our modern logging solution designed to run everywhere JavaScript does
+- No more lock-in to Node or any other platform.
+- The key improvement the logger carries to Hive Gateway version 2, is that
+- every log entry automatically gets tagged with the request ID.
+- This means you can filter your logs by a specific request and see its entire journey
+- Child loggers inherit metadata from parents, so context flows naturally through your application
+- It's built for performance with lazy evaluation of log messages
+- And you can plug in your favorite logging library like Pino or Winston as the underlying writer!
+- Or JSON? Or you can simply write to a file - it's up to you.
+-->
+
+---
+
+# Dynamic Logging Revolution
+
+Change Log Levels Without Restarts 🔄
+
+- Structured logging with request-level metadata
+- Request IDs flowing through entire request lifecycle
+- Dynamic log level switching during live operation
+- Production debugging without downtime
+
+<!--
+- Now let's see Hive Logger in action with its most impressive feature
+- You can switch to debug mode without restarting your production gateway!
+- This is absolutely essential for troubleshooting production issues
+- Imagine it's 3am, something's wrong in production, and you need more verbose logging
+- Instead of restarting services and potentially making things worse, you just change the log level
+- I'll demo changing log levels live during our session
+-->
+
+---
 layout: two-cols-header
 ---
 
@@ -655,58 +717,6 @@ Production-Grade Observability
 - Hive Gateway will pick up the rest.
 - Spans are automatically created for all GraphQL operations allowing you
 - to see the entire request flow through your federation!
--->
-
----
-
-# Hive Logger
-
-Modern logging for GraphQL applications
-
-### Key Features
-
-- 🏷️ **Structured Logging** - JSON output with consistent metadata
-- 🔗 **Request Correlation** - Automatic request ID propagation
-- 📊 **Context Inheritance** - Child loggers inherit parent metadata
-- 🔄 **Dynamic Log Levels** - Change verbosity without restarts
-- 🔌 **Pluggable Writers** - Pino, Winston, or custom integrations
-
-### Perfect for Production
-
-- Filter logs by request ID to trace entire request lifecycle
-- Structured data makes log aggregation and searching easier
-- Performance optimized with lazy evaluation
-- Cross-platform compatibility (Node.js, Bun, edge runtimes)
-
-<!--
-- Before we talk about dynamic logging, let me introduce Hive Logger
-- It's our modern logging solution designed specifically for GraphQL applications
-- The key innovation is request correlation - every log entry automatically gets tagged with the request ID
-- This means you can filter your logs by a specific request and see its entire journey
-- Child loggers inherit metadata from parents, so context flows naturally through your application
-- It's built for performance with lazy evaluation of log messages
-- And you can plug in your favorite logging library like Pino or Winston as the underlying writer
--->
-
----
-
-# Dynamic Logging Revolution
-
-Change Log Levels Without Restarts 🔄
-
-- Structured logging with request-level metadata
-- Request IDs flowing through entire request lifecycle
-- Dynamic log level switching during live operation
-- Production debugging without downtime
-
-<!--
-- Now let's see Hive Logger in action with its most impressive feature
-- Request IDs make debugging so much easier in distributed systems
-- And here's the real game changer: you can switch to debug mode without restarting your production gateway!
-- This is absolutely essential for troubleshooting production issues
-- Imagine it's 3am, something's wrong in production, and you need more verbose logging
-- Instead of restarting services and potentially making things worse, you just change the log level
-- I'll demo changing log levels live during our session
 -->
 
 ---
