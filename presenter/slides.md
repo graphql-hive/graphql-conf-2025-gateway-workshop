@@ -715,27 +715,35 @@ layout: center
 
 # Let's Build! 🛠️
 
-Follow along or just watch - your choice!
+Three ways to participate - your choice!
 
-You don't have to code if you do not want to, you can check out the repository and `git checkout` the step you want to see.
+**Repository:** https://github.com/graphql-hive/graphql-conf-2025-gateway-workshop
 
-**Repository:** [workshop-repo-url]
+## 🔨 Code Together
 
-We'll start with an empty directory and build:
+Prerequisites: [Bun](https://bun.sh) + [Docker](https://docker.com)
+Follow along as we build from scratch!
 
-1. Two federated GraphQL Yoga subgraphs
-2. Production-ready gateway with Mesh composition
-3. Multi-layer security (JWT + HMAC + field-level auth)
-4. Real-time subscriptions with EDFS
-5. Full observability stack with Jaeger
+## 👀 Follow Along
+
+Clone and pull latest changes:
+
+```sh
+git clone git@github.com:graphql-hive/graphql-conf-2025-gateway-workshop.git
+git pull # as we progress
+```
+
+## 🚀 Join Whenever
+
+If suddenly you have the urge to join, just clone the repo and read its README.md.
 
 Let's unleash the power of federation! 🚀
 
 <!--
 - Alright, enough talking - it's time to start building this thing!
-- Feel free to participate but there's no pressure if you just want to watch
+- Three different ways to participate based on your preference
 - We're starting completely from scratch with an empty directory
-- I'll build everything step by step so you can follow along
+- I'll build everything step by step and commit as we go
 - Everyone ready to begin?
 -->
 
