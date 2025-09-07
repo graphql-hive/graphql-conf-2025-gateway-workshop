@@ -285,28 +285,35 @@ What We'll Build Together
 
 ### Foundation
 
-1. Create Users & Posts subgraphs (GraphQL Yoga)
-2. Bootstrap Hive Gateway v2
+1. **Setup Monorepo** - Bun init, workspaces, Prettier
+2. **Create Subgraphs** - Users & Posts with GraphQL Yoga
+3. **Compose Supergraph** - Using GraphQL Mesh
+4. **Bootstrap Gateway** - Hive Gateway v2 with auto-reload
 
-### Production Features
+### Production
 
-3. JWT authentication + field-level authorization
-4. HMAC signatures for subgraph security
-5. Event-Driven Federated Subscriptions
-6. Dynamic structured logging (change levels without restarts!)
+5. **JWT Authentication** - Token validation + field-level auth
+6. **HMAC Security** - Secure subgraph communication
+7. **Authorization Directives** - `@authenticated` & `@requiresScopes`
+8. **Security Hardening** - Depth limits, rate limiting, introspection control
+9. **EDFS with NATS** - Scalable real-time subscriptions
 
-### Production Polish
+### Observability
 
-7. Security hardening (rate limits, depth limits)
-8. Response caching & deduplication
-9. OpenTelemetry tracing → Jaeger
+10. **Dynamic Logging** - Runtime log level switching
+11. **OpenTelemetry** - Distributed tracing with Jaeger
 
 <!--
-- The flow will look like this:
-- First we get the foundation working with basic federation between our two services
-- Then we add the production features which are the meat of this workshop
-- Finally we polish the gateway with enterprise-grade features
-- The timeline is ambitious but totally achievable!
+- The flow will look like this and I'll commit after each major step so you can follow along:
+- First we set up a proper monorepo structure with Bun and workspaces
+- Then we create our GraphQL Yoga subgraphs and use GraphQL Mesh to compose the supergraph
+- We'll bootstrap Hive Gateway with auto-reload for a smooth development experience
+- Then we layer on JWT authentication with proper field-level authorization directives
+- We'll secure subgraph communication with HMAC signatures
+- Add comprehensive security hardening against common GraphQL attacks
+- Build scalable real-time subscriptions with EDFS and NATS
+- Finally we'll add dynamic logging and complete observability with OpenTelemetry
+- Each step builds on the previous one and you can git checkout any step to follow along
 -->
 
 ---
@@ -337,10 +344,11 @@ graph TB
 <!--
 - Let me give you a visual overview of the complete architecture we're building
 - The gateway sits in front of our two GraphQL Yoga subgraphs
-- We'll have federation connecting users to posts across service boundaries
+- We'll use GraphQL Mesh to compose our supergraph from the individual schemas
+- Federation connects users to posts across service boundaries
 - NATS will handle our distributed subscriptions for real-time features
 - And Jaeger will collect traces from everything for complete observability
-- This diagram shows how all the pieces fit together
+- This diagram shows how all the pieces fit together in our production setup
 -->
 
 ---
@@ -419,13 +427,13 @@ sequenceDiagram
 ```
 
 <!--
-- This is how that flow looks like
-- It is quite straightforward:
+- This is how the security flow works in our implementation
 - JWT validation happens at the gateway level first
 - The directives enforce field-level authorization rules
-- The gateway passes user context down to subgraphs
+- We'll show two approaches: forwarding JWT payload directly to subgraphs, and extracting user ID to propagate as headers
 - Each service enforces its own authorization rules but the gateway handles the restrictions
 - Important note: if the JWT doesn't have the necessary permissions defined by the directives, the request won't even reach the users or posts services - the gateway blocks it early
+- We'll demonstrate this with both authenticated fields and scope-based mutations
 -->
 
 ---
@@ -709,15 +717,14 @@ layout: center
 
 Follow along or just watch - your choice!
 
-You don't have to code if you do not want to, you can check out the repository and `git pull` after every segment I code so you can see how it all works for you without writing code.
+You don't have to code if you do not want to, you can check out the repository and `git checkout` the step you want to see.
 
-TODO: check out repository
-TODO: repo will have readme with install bun, docker and other things to help user follow along
+**Repository:** [workshop-repo-url]
 
 We'll start with an empty directory and build:
 
 1. Two federated GraphQL Yoga subgraphs
-2. Production-ready gateway
+2. Production-ready gateway with Mesh composition
 3. Multi-layer security (JWT + HMAC + field-level auth)
 4. Real-time subscriptions with EDFS
 5. Full observability stack with Jaeger
@@ -810,17 +817,24 @@ Come chat with us about your GraphQL challenges
 
 Continue Your Journey
 
-### Documentation 📚
+### Workshop Materials 📚
+
+- **[Workshop Repository](https://github.com/graphql-hive/graphql-conf-2025-gateway-workshop)** - Complete code and step-by-step commits
+- **[This Workshop](https://graphql.org/conf/2025/schedule/6fbc71a3ad13189339d753cb078ec781/)** - GraphQL Conf 2025 session
+
+### Documentation & Guides
 
 - [Hive Gateway Docs](https://the-guild.dev/graphql/hive/docs/gateway)
 - [Authentication & Authorization](https://the-guild.dev/graphql/hive/docs/gateway/authorization-authentication)
-- [Subscriptions](https://the-guild.dev/graphql/hive/docs/gateway/subscriptions)
-- [HMAC Security](https://the-guild.dev/graphql/hive/docs/gateway/other-features/security/hmac-signature)
-- [EDFS in Hive Gateway](https://the-guild.dev/graphql/hive/docs/gateway/subscriptions#event-driven-federated-subscriptions-edfs)
+- [EDFS Guide](https://wundergraph.com/blog/distributed_graphql_subscriptions_with_nats_and_event_driven_architecture)
+- [GraphQL Mesh Compose](https://the-guild.dev/graphql/mesh)
+- [GraphQL Yoga](https://the-guild.dev/graphql/yoga-server)
 
-### Get Started
+### Tools & Platforms
 
-- [GitHub Repository](https://github.com/graphql-hive/gateway)
+- [Hive Console](https://the-guild.dev/graphql/hive) - Complete GraphQL platform
+- [Self-hosting Hive](https://the-guild.dev/graphql/hive/docs/self-hosting/get-started)
+- [The Guild](https://the-guild.dev) - Open source GraphQL tools
 
 <!--
 - For those who want to dive deeper after today's session
