@@ -1042,3 +1042,101 @@ plus everything Hive Console has to offer.
 I have a self-hosted instance of Hive Console already running and an organization already set up
 
 Let's set up a new project and publish our subgraphs!
+
+(Called project "proj")
+
+In order to publish, we have to set up an access token with perms:
+
+- tracing
+- usage
+- publish
+
+Then we are going to store the token into our `hive.json` file
+
+(because we're self hosting, also endpoint)
+
+```json
+{
+  "registry": {
+    "endpoint": "http://localhost:8082/graphql",
+    "accessToken": ""
+  }
+}
+```
+
+Now we install the handy Hive Console CLI
+
+```sh
+bun add @graphql-hive/cli
+```
+
+and follow the publish instruction of project (see website)
+
+```sh
+bun hive schema:publish --service users --url "http://localhost:4001/graphql"  --target "graphql-conf-2025/proj/development" subgraphs/users/typeDefs.graphql
+```
+
+The subgraphs schemas are published now!
+
+Hive Console has this great feature where it composes the supergraph for us, so we can get rid of Mesh Compose and pull the supergraph directly from the Hive Console CDN
+
+```sh
+bun remove @graphql-mesh/compose-cli
+```
+
+Remove mesh.config.ts
+
+Remove supergraph.graphlq
+
+Update gateway.config.ts to use cdn
+
+(After writing 'type: hive' go to website and use "connect to cdn")
+
+```ts
+supergraph: {
+  type: "hive",
+  endpoint:
+    "http://localhost:8082/artifacts/v1/087a8089-c368-4f40-a117-24c266407e69/supergraph",
+  key: "",
+},
+```
+
+Ok this is looking fine, lets see the status of our gateway
+
+Great, it's pulling from the CDN!
+
+Before we show off the awesome tracing feature, lets first show how to set up usage reporting.
+
+```ts
+import hiveConf from "./hive.json";
+
+reporting: {
+  type: "hive",
+  target: "graphql-conf-2025/proj/development",
+  token: hiveConf.registry.accessToken,
+  selfHosting: {
+    graphqlEndpoint: hiveConf.registry.endpoint,
+    usageEndpoint: "http://localhost:8081",
+    applicationUrl: "http://localhost:8080",
+  },
+},
+```
+
+Lets execute a query and give it a sec in hive console app
+
+Okay here it is, that is looking great!
+
+And finally, lets see we set up the upcoming tracing feature
+
+Import "hiveTracingSetup" and replace "openTelemetrySetup"
+
+Remove everything except for contextManager
+
+```ts
+hiveTracingSetup({
+  contextManager: new AsyncLocalStorageContextManager(),
+  target: "graphql-conf-2025/proj/development",
+  accessToken: hiveConf.registry.accessToken,
+  endpoint: "http://localhost:4318/v1/traces",
+});
+```
