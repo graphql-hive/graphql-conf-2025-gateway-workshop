@@ -50,8 +50,11 @@ The team behind your GraphQL tooling
 ---
 
 TODO: **GraphQL Yoga** - Production-ready GraphQL server
+
 TODO: **GraphQL Code Generator** - Generate anything from GraphQL schemas
+
 TODO: **GraphQL Mesh** - Query any API with GraphQL
+
 TODO: **GraphQL Hive** - Complete GraphQL platform with gateway, registry & observability
 
 ---
@@ -148,6 +151,7 @@ Production-ready GraphQL federation gateway
 
 ---
 layout: two-cols-header
+zoom: 0.8
 ---
 
 # What's Great About Hive Gateway
@@ -195,31 +199,48 @@ Why teams choose it over alternatives
 -->
 
 ---
+layout: two-cols-header
+zoom: 0.8
+---
 
 # What's New in v2
 
 Built for production workloads from day one
 
-- 🔍 Enhanced OpenTelemetry - Perfect traces with easy setup
-- 📊 Dynamic Structured Logging - Change levels without restarts
-- 🚀 Event-Driven Subscriptions - Horizontally scalable with NATS
-- ⚡ Inflight Request Deduplication - Automatic performance optimization
+### Enhanced OpenTelemetry & Observability
+
+- 🔍 **Enhanced OpenTelemetry** - Perfect traces with easy setup
+- 📊 **Dynamic Structured Logging** - Change levels without restarts
+- 🎨 **Refreshed Landing Page** - Cleaner, slimmer gateway startup interface
+- ✨ **Updated GraphiQL** - Latest version with Monaco code editor integration
+
+### Event-Driven Architecture & Performance
+
+- 🚀 **Event-Driven Federated Subscriptions** - Horizontally scalable with NATS/Kafka/Redis
+- 🔧 **Enhanced PubSub** - Asynchronous calls enabling EDFS functionality
+- ⚡ **Inflight Request Deduplication** - Automatic performance optimization
+- 📦 **Performance Improvements** - Optimized code structure and dependencies
+
+### Developer Experience & Security
+
+- 🔧 **Enhanced TypeScript** - Stricter type checking and better plugin context propagation
+- 🛡️ **Security Hardening** - Multipart disabled by default, integrated protection
+- 🔍 **Built-in Query Protection** - Use max tokens, max depth, blocked field suggestions
+- 📡 **Modern Node.js Support** - Requires Node.js v20+ (dropped v18 support)
 
 <!--
-- Now that you understand what makes Hive Gateway special, let's talk about what's exciting in the recently released version 2
-- These features solve real production problems, it's not just a feature showcase
-- Let's briefly go over each one:
+- Version 2 represents major improvements in both developer experience and production capabilities
 - Enhanced OpenTelemetry means minimal configuration gets you complete distributed tracing
 - Dynamic log level switching without restarts is huge when you're debugging issues at 3am
 - Event-driven subscriptions are new in Hive Gateway and let subscriptions scale horizontally
 - Inflight Request deduplication automatically detects when multiple in-flight requests target the same subgraph with identical parameters
 - Instead of making duplicate network calls, the gateway waits for the first request to complete and shares the result with all waiting requests
+- The TypeScript improvements provide better type safety and plugin development experience
+- Security is now hardened by default with common GraphQL attack protections built-in
 - All of this was built based on feedback from teams running v1 in production
-- We'll see these features in action today
+- We'll see some of these features in action today!
 -->
 
----
-layout: two-cols-header
 ---
 
 # Workshop Overview
