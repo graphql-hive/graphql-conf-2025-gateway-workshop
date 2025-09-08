@@ -429,7 +429,7 @@ zoom: 1
 Multi-Layer Security with Federation Directives
 
 <div class="grid grid-cols-[60%_40%] gap-4">
-  <div>
+<div>
 
 ```mermaid
 sequenceDiagram
@@ -455,22 +455,18 @@ sequenceDiagram
     end
 ```
 
-  </div>
-  <div>
+</div>
+<div>
 
-<h3>
-Built-in Protection Features
-</h3>
+### Built-in Protection Features
 
-<ul>
-    <li><b>Rate Limiting</b> - Global gateway limits + per-field <code>@rateLimit</code> directive</li>
-    <li><b>Query Depth Limits</b> - Prevent deep nested attacks that overwhelm servers</li>
-    <li><b>Token Count Limits</b> - Block queries with excessive field aliases</li>
-    <li><b>Field Suggestion Blocking</b> - Prevent schema discovery via error messages</li>
-    <li><b>Introspection Control</b> - Disable schema introspection in production</li>
-</ul>
+- **Rate Limiting** - Global gateway limits + per-field `@rateLimit` directive
+- **Query Depth Limits** - Prevent deep nested attacks that overwhelm servers
+- **Token Count Limits** - Block queries with excessive field aliases
+- **Field Suggestion Blocking** - Prevent schema discovery via error messages
+- **Introspection Control** - Disable schema introspection in production
 
-  </div>
+</div>
 </div>
 
 <!--
@@ -494,7 +490,7 @@ zoom: 0.7
 How real-time updates work
 
 <div class="grid grid-cols-[60%_40%] gap-4">
-  <div>
+<div>
 
 ```mermaid
 sequenceDiagram
@@ -514,30 +510,26 @@ sequenceDiagram
     Gateway->>Client: Real-time update
 ```
 
-  </div>
-  <div>
+</div>
+<div>
 
 ## Scaling Challenges
 
 ### WebSocket Limitations
 
-<ul>
-  <li><b>Stateful connections</b> - Each client holds open connection consuming server memory</li>
-  <li><b>Sticky sessions</b> - Clients must reconnect to same server instance</li>
-  <li><b>Vertical scaling only</b> - Can't distribute connections across instances</li>
-  <li><b>Connection storms</b> - Mass reconnections during server restarts</li>
-</ul>
+- **Stateful connections** - Each client holds open connection consuming server memory
+- **Sticky sessions** - Clients must reconnect to same server instance
+- **Vertical scaling only** - Can't distribute connections across instances
+- **Connection storms** - Mass reconnections during server restarts
 
 ### Server-Sent Events (SSE) Issues
 
-<ul>
-  <li><b>Same memory problems</b> - Each connection consumes server resources</li>
-  <li><b>HTTP/1.1 connection limits</b> - Browsers limit concurrent connections per domain</li>
-  <li><b>No bidirectional communication</b> - Server can only push, not receive</li>
-  <li><b>Connection management complexity</b> - Handling disconnects and reconnects</li>
-</ul>
+- **Same memory problems** - Each connection consumes server resources
+- **HTTP/1.1 connection limits** - Browsers limit concurrent connections per domain
+- **No bidirectional communication** - Server can only push, not receive
+- **Connection management complexity** - Handling disconnects and reconnects
 
-  </div>
+</div>
 </div>
 
 <!--
