@@ -242,12 +242,15 @@ Built for production workloads from day one
 -->
 
 ---
+layout: two-cols-header
+zoom: 0.9
+---
 
 # Workshop Overview
 
 ::left::
 
-## What we'll build together
+## What we'll build
 
 - Complete federated GraphQL system with production features
 - Two GraphQL Yoga subgraphs with federation
