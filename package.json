@@ -17,7 +17,8 @@
     "@slidev/theme-default": "^0.25.0",
     "@types/bun": "latest",
     "prettier": "^3.6.2",
-    "prettier-plugin-slidev": "^1.0.5"
+    "prettier-plugin-slidev": "^1.0.5",
+    "slidev-addon-qrcode": "^1.0.2"
   },
   "peerDependencies": {
     "typescript": "^5"

@@ -2,6 +2,8 @@
 theme: default
 transition: none
 layout: cover
+addons:
+  - slidev-addon-qrcode
 ---
 
 # Unleash the Power of Federation with Hive Gateway v2 🚀
@@ -842,13 +844,15 @@ Come chat with us about your GraphQL challenges
 
 ---
 layout: two-cols-header
+zoom: 0.95
 ---
 
 # Resources
 
 Continue Your Journey
 
-::left::
+<div class="grid grid-cols-[70%_30%] gap-4">
+<div>
 
 ### Workshop Materials 📚
 
@@ -869,9 +873,20 @@ Continue Your Journey
 - [Self-hosting Hive](https://the-guild.dev/graphql/hive/docs/self-hosting/get-started)
 - [The Guild](https://the-guild.dev) - Open source GraphQL tools
 
-::right::
+</div>
+<div>
 
-TODO: qr code
+<QRCode
+  :width="300"
+  :height="300"
+  type="svg"
+  data="https://github.com/graphql-hive/graphql-conf-2025-gateway-workshop"
+  :dotsOptions="{ color: '#121212' }"
+  :backgroundOptions="{ color: 'white' }"
+/>
+
+</div>
+</div>
 
 <!--
 - For those who want to dive deeper after today's session
