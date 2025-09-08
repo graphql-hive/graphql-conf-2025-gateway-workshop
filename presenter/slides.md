@@ -98,6 +98,7 @@ layout: center
 
 ---
 layout: two-cols-header
+zoom: 0.9
 ---
 
 # What is Hive Gateway?
@@ -108,7 +109,7 @@ Production-ready GraphQL federation gateway
 
 ## Drop-in Replacement
 
-- **Apollo Router compatible** - Use existing `supergraph.graphql`
+- **Apollo Router compatible** - Use existing supergraph
 - **Zero migration effort** - Seamless integration
 - **Full Federation v2** support with Apollo spec compliance
 
@@ -128,24 +129,19 @@ Production-ready GraphQL federation gateway
 - Automatic schema composition and validation
 - Entity resolution and type merging
 
-### Built-in Security
+### Architecture
 
-- JWT authentication with configurable algorithms
-- HMAC signature validation for subgraphs
-- Query depth limits and rate limiting
-
-### Observability Ready
-
-- OpenTelemetry integration out-of-box
-- Structured logging with request correlation
-- Prometheus, StatsD, and custom metrics
+- MIT licensed open source
+- TypeScript-first with full type safety
+- Plugin ecosystem for extensibility
+- GraphQL Mesh integration
 
 <!--
 - For those of you who might not be familiar with Hive Gateway yet, let me explain what it is first
 - It's a GraphQL Federation gateway,
 - a drop-in replacement for Apollo Gateway and Router that uses your existing supergraph
 - But being JavaScript-native means it runs anywhere JavaScript does - perfect for serverless
-- All the enterprise features you'd expect are included and open-source
+- All the core features you'd expect are included and open-source
 - No licensing restrictions or paywalls, free forever!
 -->
 
@@ -171,23 +167,22 @@ Why teams choose it over alternatives
 
 - 💡 **Smart Defaults** - Production-ready configuration out of the box
 - 🔍 **Debugging Made Easy** - Built-in GraphQL Playground and detailed error messages
-- 🔧 **TypeScript-first** - Full type safety and excellent IDE support
 - 📦 **Simple Installation** - Standard npm/yarn package with semantic versioning
 
 ::right::
+
+### Enterprise Security & Observability
+
+- 🛡️ **Multi-layer Security** - JWT authentication, HMAC signatures, query protection
+- 📈 **Comprehensive Metrics** - Request success rates, latency percentiles, error tracking
+- 🔍 **OpenTelemetry Integration** - Complete distributed tracing out-of-box
+- 📊 **Structured Logging** - Request correlation and dynamic log levels
 
 ### Ecosystem & Community
 
 - 🔌 **Rich Plugin System** - Authentication, caching, monitoring, and custom logic
 - 🛠️ **Tool Chain Integration** - Works seamlessly with existing GraphQL tooling
 - 🌍 **Active Community** - Discord support and regular contributor meetings
-- 📈 **Comprehensive Metrics** - Request success rates, latency percentiles, error tracking
-
-### Zero Lock-in Promise
-
-- 🆓 **MIT Licensed** - Free forever, modify as needed
-- 🛡️ **Security Hardened** - Regular audits and vulnerability patching
-- 🏗️ **Extensible Architecture** - GraphQL Mesh integration and plugin ecosystem
 - 🌐 **Deploy Anywhere** - From traditional servers to edge functions
 
 <!--
@@ -200,7 +195,7 @@ Why teams choose it over alternatives
 
 ---
 layout: two-cols-header
-zoom: 0.8
+zoom: 0.85
 ---
 
 # What's New in v2
@@ -218,7 +213,7 @@ Built for production workloads from day one
 
 - 🚀 **Event-Driven Federated Subscriptions** - Horizontally scalable with NATS/Kafka/Redis
 - 🔧 **Enhanced PubSub** - Asynchronous calls enabling EDFS functionality
-- ⚡ **Inflight Request Deduplication** - Automatic performance optimization
+- ⚡ **Inflight Request Deduplication** - Shares results for simultaneous identical subgraph requests
 - 📦 **Performance Improvements** - Optimized code structure and dependencies
 
 ### Developer Experience & Security
@@ -233,7 +228,7 @@ Built for production workloads from day one
 - Enhanced OpenTelemetry means minimal configuration gets you complete distributed tracing
 - Dynamic log level switching without restarts is huge when you're debugging issues at 3am
 - Event-driven subscriptions are new in Hive Gateway and let subscriptions scale horizontally
-- Inflight Request deduplication automatically detects when multiple in-flight requests target the same subgraph with identical parameters
+- Inflight Request deduplication detects when multiple simultaneous requests target the same subgraph with identical parameters
 - Instead of making duplicate network calls, the gateway waits for the first request to complete and shares the result with all waiting requests
 - The TypeScript improvements provide better type safety and plugin development experience
 - Security is now hardened by default with common GraphQL attack protections built-in
@@ -243,7 +238,7 @@ Built for production workloads from day one
 
 ---
 layout: two-cols-header
-zoom: 0.9
+zoom: 0.85
 ---
 
 # Workshop Overview
@@ -283,7 +278,7 @@ zoom: 0.9
 - Complete distributed tracing with OpenTelemetry and Jaeger
 
 <!--
-- Let me outline the specific 11 steps we'll work through today
+- We'll work through building a complete federated system step by step
 - We start with basic monorepo setup using Bun and build two federated subgraphs
 - Then we compose them with GraphQL Mesh and set up the Hive Gateway
 - The security section covers multi-layer protection: JWT for authentication, HMAC for subgraph communication, and field-level authorization with Federation directives
@@ -425,12 +420,15 @@ HMAC Signatures
 -->
 
 ---
-zoom: 0.55
+zoom: 1
 ---
 
-# Security Flow
+# Security Flow & Protection
 
-Multi-Layer Security with Early Blocking
+Multi-Layer Security with Federation Directives
+
+<div class="grid grid-cols-[60%_40%] gap-4">
+  <div>
 
 ```mermaid
 sequenceDiagram
@@ -444,7 +442,7 @@ sequenceDiagram
     Gateway->>Auth: Validate JWT
     Auth-->>Gateway: User + Scopes
 
-    Note over Gateway: Check @authenticated & @requiresScopes
+    Note over Gateway: Check @authenticated & @requiresScopes directives
     alt Authorization Failed
         Gateway-->>Client: Authorization Error (401/403)
     else Authorization Passed
@@ -456,57 +454,47 @@ sequenceDiagram
     end
 ```
 
+  </div>
+  <div>
+
+<h3>
+Built-in Protection Features
+</h3>
+
+<ul>
+    <li><b>Rate Limiting</b> - Global gateway limits + per-field <code>@rateLimit</code> directive</li>
+    <li><b>Query Depth Limits</b> - Prevent deep nested attacks that overwhelm servers</li>
+    <li><b>Token Count Limits</b> - Block queries with excessive field aliases</li>
+    <li><b>Field Suggestion Blocking</b> - Prevent schema discovery via error messages</li>
+    <li><b>Introspection Control</b> - Disable schema introspection in production</li>
+</ul>
+
+  </div>
+</div>
+
 <!--
-- This diagram shows the critical security feature: early authorization blocking at the gateway level
-- The gateway validates the JWT first to extract user identity and scopes
+- This shows our complete security architecture with federation directive-based authorization
+- The gateway validates JWT first to extract user identity and scopes
 - Then it checks all @authenticated and @requiresScopes directives in the query plan
 - If any field requires authentication or scopes the user doesn't have, the gateway immediately returns an authorization error
 - The subgraphs never receive unauthorized requests - this protects your backend services from unnecessary load
 - Only when all authorization checks pass does the gateway make requests to the subgraphs
-- This approach is much more efficient and secure than letting unauthorized requests reach your services
-- It also provides consistent error messages and prevents information leakage about your internal service architecture
-- The HMAC signatures we'll add later provide an additional layer ensuring only the gateway can communicate with subgraphs
--->
-
----
-
-# Production-Grade Protection
-
-Security Features
-
-### Rate Limiting 🚦
-
-- Global gateway rate limits
-- Per-field rate limiting with `@rateLimit` directive
-- Prevent abuse and DoS attacks
-
-### Query Protection 🛡️
-
-- Maximum query depth limits
-- Character count restrictions
-- _And much more..._
-
-<!--
-- But there's more security beyond authentication and authorization!
-- We need to also protect against abuse
-- Rate limiting prevents abuse at multiple levels of your system
-- The `@rateLimit` directive lets you protect specific heavy fields - for example, you could rate limit an expensive search operation while allowing normal queries to flow freely
-- Query protection stops malicious deep nested queries that could overwhelm your servers
-- For example, someone could write a query that goes 50 levels deep and crashes your API
-- We have many more query protection features available like complexity analysis and alias limits, but we'll showcase only a few to get you started with secure defaults
-- These features are essential if you're exposing APIs publicly
+- Beyond authorization, we protect against common GraphQL attacks
+- Rate limiting prevents abuse at multiple levels, query protection stops malicious deep nested queries
+- Field suggestion blocking prevents schema discovery attacks even when introspection is disabled
+- The HMAC signatures we'll add provide an additional layer ensuring only the gateway can communicate with subgraphs
 -->
 
 ---
 zoom: 0.7
-layout: two-cols-header
 ---
 
 # Traditional GraphQL Subscriptions
 
 How real-time updates work
 
-::left::
+<div class="grid grid-cols-[60%_40%] gap-4">
+  <div>
 
 ```mermaid
 sequenceDiagram
@@ -526,29 +514,31 @@ sequenceDiagram
     Gateway->>Client: Real-time update
 ```
 
-::right::
+  </div>
+  <div>
 
 ## Scaling Challenges
 
 ### WebSocket Limitations
 
-- **Stateful connections** - Each client holds open connection consuming server memory
-- **Sticky sessions** - Clients must reconnect to same server instance
-- **Vertical scaling only** - Can't distribute connections across instances
-- **Connection storms** - Mass reconnections during server restarts
+<ul>
+  <li><b>Stateful connections</b> - Each client holds open connection consuming server memory</li>
+  <li><b>Sticky sessions</b> - Clients must reconnect to same server instance</li>
+  <li><b>Vertical scaling only</b> - Can't distribute connections across instances</li>
+  <li><b>Connection storms</b> - Mass reconnections during server restarts</li>
+</ul>
 
 ### Server-Sent Events (SSE) Issues
 
-- **Same memory problems** - Each connection consumes server resources
-- **HTTP/1.1 connection limits** - Browsers limit concurrent connections per domain
-- **No bidirectional communication** - Server can only push, not receive
-- **Connection management complexity** - Handling disconnects and reconnects
+<ul>
+  <li><b>Same memory problems</b> - Each connection consumes server resources</li>
+  <li><b>HTTP/1.1 connection limits</b> - Browsers limit concurrent connections per domain</li>
+  <li><b>No bidirectional communication</b> - Server can only push, not receive</li>
+  <li><b>Connection management complexity</b> - Handling disconnects and reconnects</li>
+</ul>
 
-### Resource Consumption
-
-- **Memory per connection** - 2-8KB per WebSocket, multiplied by thousands of users
-- **Event loop blocking** - Too many connections can overwhelm Node.js event loop
-- **Network overhead** - Keeping connections alive requires constant heartbeats
+  </div>
+</div>
 
 <!--
 - Let's talk subscriptions now
@@ -711,21 +701,16 @@ Change Log Levels Without Restarts 🔄
 -->
 
 ---
-layout: two-cols-header
----
 
 # OpenTelemetry Made Simple
 
 Production-Grade Observability
 
-::left::
-
 ### What we'll configure
 
-- Gateway tracing with Jaeger integration
+- Set up with the official OpenTelemetry SDK
+- Configure tracing and Jaeger integration
 - Erm, that's it... Everything else Just Works ™️
-
-::right::
 
 ## What you get
 
@@ -751,14 +736,15 @@ layout: center
 
 Three ways to participate - your choice!
 
-**Repository:** https://github.com/graphql-hive/graphql-conf-2025-gateway-workshop
+**Repository:** [graphql-hive/graphql-conf-2025-gateway-workshop](https://github.com/graphql-hive/graphql-conf-2025-gateway-workshop)
 
-## 🔨 Code Together
+### 🔨 Code Together
 
 Prerequisites: [Bun](https://bun.sh) + [Docker](https://docker.com)
-Follow along as we build from scratch!
 
-## 👀 Follow Along
+Join us in build from scratch!
+
+### 👀 Follow Along
 
 Clone and pull latest changes:
 
@@ -767,7 +753,7 @@ git clone git@github.com:graphql-hive/graphql-conf-2025-gateway-workshop.git
 git pull # as we progress
 ```
 
-## 🚀 Join Whenever
+### 🚀 Join Whenever
 
 If suddenly you have the urge to join, just clone the repo and read its README.md.
 
@@ -782,10 +768,15 @@ Let's unleash the power of federation! 🚀
 -->
 
 ---
+layout: two-cols-header
+zoom: 0.9
+---
 
 # Workshop Summary
 
 What we built together today
+
+::left::
 
 ### Foundation
 
@@ -804,6 +795,8 @@ What we built together today
 - Security hardening (rate limits, query protection)
 - Response caching and request deduplication
 - Complete observability with OpenTelemetry and Jaeger
+
+::right::
 
 ### Key Takeaways
 
@@ -840,9 +833,6 @@ Come chat with us about your GraphQL challenges
 - Migration strategies
 - Performance optimization
 - Custom tooling needs
-
-**Booth Location:** [Placeholder - booth number/location]
-**Booth Hours:** [Placeholder - hours]
 
 <!--
 - I hope this workshop was valuable, but our conversation doesn't have to end here
