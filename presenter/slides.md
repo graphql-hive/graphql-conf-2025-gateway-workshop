@@ -11,7 +11,7 @@ Denis and Arda from The Guild
 <PoweredBySlidev />
 
 <!--
-- Welcome everyone to this hands-on workshop
+- Welcome everyone to this workshop
 - Today we're building a federated GraphQL system from scratch
 - This is interactive so feel free to code along or just watch and ask questions
 -->
@@ -44,7 +44,7 @@ The team behind your GraphQL tooling
 - Let me start by introducing ourselves and the company behind the tools you probably use
 - I'm Denis, this is Arda, we're from The Guild
 - We build open-source GraphQL tools that power thousands of applications
-- We're passionate about federation, gateways and making GraphQL better for everyone
+- We're passionate about federation, gateways and making GraphQL better for everyone!
 -->
 
 ---
@@ -91,7 +91,7 @@ layout: center
 
 <!--
 - Who here has worked with Hive Gateway? Can I see a raise of hands?
-- That gives me a good sense of experience levels in the room
+- Ok, that gives me a good sense of experience levels in the room
 - Whether you're new to Hive Gateway or have been using it, today will be valuable
 - We're going to build something pretty impressive together
 -->
@@ -139,9 +139,9 @@ Production-ready GraphQL federation gateway
 <!--
 - For those of you who might not be familiar with Hive Gateway yet, let me explain what it is first
 - It's a GraphQL Federation gateway,
-- a drop-in replacement for Apollo Gateway and Router that uses your existing supergraph
+- a drop-in replacement for Apollo Router that uses your existing supergraph
 - But being JavaScript-native means it runs anywhere JavaScript does - perfect for serverless
-- All the core features you'd expect are included and open-source
+- All the features the gateway has to offer are included and open-source
 - No licensing restrictions or paywalls, free forever!
 -->
 
@@ -224,14 +224,14 @@ Built for production workloads from day one
 - 📡 **Modern Node.js Support** - Requires Node.js v20+ (dropped v18 support)
 
 <!--
-- Version 2 represents major improvements in both developer experience and production capabilities
+- Version 2 represents major improvements in both developer experience and production capabilities, some of the ones listed are:
 - Enhanced OpenTelemetry means minimal configuration gets you complete distributed tracing
 - Dynamic log level switching without restarts is huge when you're debugging issues at 3am
-- Event-driven subscriptions are new in Hive Gateway and let subscriptions scale horizontally
+- Event-Driven Federated Subscriptions are new in Hive Gateway and let subscriptions scale horizontally
 - Inflight Request deduplication detects when multiple simultaneous requests target the same subgraph with identical parameters
 - Instead of making duplicate network calls, the gateway waits for the first request to complete and shares the result with all waiting requests
 - The TypeScript improvements provide better type safety and plugin development experience
-- Security is now hardened by default with common GraphQL attack protections built-in
+- Security is now hardened with common GraphQL attack protections built-in
 - All of this was built based on feedback from teams running v1 in production
 - We'll see some of these features in action today!
 -->
@@ -278,12 +278,12 @@ zoom: 0.85
 - Complete distributed tracing with OpenTelemetry and Jaeger
 
 <!--
-- We'll work through building a complete federated system step by step
+- Let's work through building a complete federated system step by step
 - We start with basic monorepo setup using Bun and build two federated subgraphs
 - Then we compose them with GraphQL Mesh and set up the Hive Gateway
 - The security section covers multi-layer protection: JWT for authentication, HMAC for subgraph communication, and field-level authorization with Federation directives
 - We'll also implement common GraphQL attack prevention like query depth limits and rate limiting
-- The final section adds real-time capabilities with NATS-powered subscriptions that scale horizontally
+- The real-time section adds real-time capabilities with NATS-powered subscriptions that scale horizontally
 - We finish with production-grade observability using dynamic logging and OpenTelemetry tracing
 - Each step includes a git commit so you can follow along or jump to any specific point
 - By the end you'll have a complete production-ready federated system
@@ -332,7 +332,7 @@ Simple Blog Platform
 - We'll have two services: one for users with profiles and authentication, and one for posts with real-time features
 - The users service will demonstrate field-level security by placing email addresses behind authentication,
 - while the posts service will show off role-based authorization and real-time notifications.
-- This domain perfectly demonstrates federation, security, and scalability features
+- This domain will serve us great to demonstrate federation, security, and the scalability features
 -->
 
 ---
@@ -361,13 +361,12 @@ graph TB
 ```
 
 <!--
-- Let me give you a visual overview of the complete architecture we're building
+- This is a visual overview of the complete architecture we're building
 - The gateway sits in front of our two GraphQL Yoga subgraphs
 - We'll use GraphQL Mesh to compose our supergraph from the individual schemas
 - Federation connects users to posts across service boundaries
 - NATS will handle our distributed subscriptions for real-time features
 - And Jaeger will collect traces from everything for complete observability
-- This diagram shows how all the pieces fit together in our production setup
 -->
 
 ---
@@ -416,7 +415,7 @@ HMAC Signatures
 - We'll have three layers of security working together here:
 - JWT handles authentication, identity and carries role information from the client
 - Subgraph directives enforce permissions at the field level
-- And HMAC signatures secure the internal communication and ensure only the gateway can communicate with the subgraphs
+- And finally HMAC signatures secure the internal communication and ensure only the gateway can communicate with the subgraphs
 -->
 
 ---
@@ -473,7 +472,7 @@ Built-in Protection Features
 </div>
 
 <!--
-- This shows our complete security architecture with federation directive-based authorization
+- This diagram shows our complete security architecture with federation directive-based authorization
 - The gateway validates JWT first to extract user identity and scopes
 - Then it checks all @authenticated and @requiresScopes directives in the query plan
 - If any field requires authentication or scopes the user doesn't have, the gateway immediately returns an authorization error
@@ -482,7 +481,6 @@ Built-in Protection Features
 - Beyond authorization, we protect against common GraphQL attacks
 - Rate limiting prevents abuse at multiple levels, query protection stops malicious deep nested queries
 - Field suggestion blocking prevents schema discovery attacks even when introspection is disabled
-- The HMAC signatures we'll add provide an additional layer ensuring only the gateway can communicate with subgraphs
 -->
 
 ---
@@ -545,7 +543,7 @@ sequenceDiagram
 - I mentioned EDFS, but first let us take a step back and explain GraphQL subscriptions for those who might be new to them
 - In traditional GraphQL subscriptions, a client opens a subscription typically over a WebSocket connection
 - The server maintains the connection and pushes updates when data changes
-- This works great for single instances but has serious scaling challenges
+- This works great on paper but has serious scaling challenges
 - WebSockets are stateful - each connection consumes server memory and creates sticky sessions
 - With thousands of users, you're looking at megabytes of memory just for connection overhead
 - Server-Sent Events have similar problems plus HTTP connection limits
@@ -594,13 +592,11 @@ Real-time features at enterprise scale 🌐
 
 <!--
 - EDFS to the rescue!
-- Why are Event-Driven Federated Subscriptions such a game changer for real-time features?
-- Well, traditional subscriptions simply don't scale well beyond a single instance
-- EDFS solves this by using message brokers like NATS, Kafka, or Redis
+- It solves all of the traditional issues we talked about by using message brokers like NATS, Kafka, or Redis
 - Starting v2, Hive Gateway's pubsub has built-in adapters making setup with any of these message brokers easy
 - Perfect for real-time features that need to scale to thousands of users!
 - Here's a cool feature: with EDFS, you can emit only the keys of a type and the gateway will resolve the rest of the fields
-- For example, our Post type has an "id" key - you can publish a message to NATS "postAdded" subject containing only the "id" field, but request more fields in the subscription query
+- For example, our Post type has an "id" key - you can publish a message to NATS "postAdded" subject containing only the "id" field, but request more fields in the GraphQL subscription query
 - The gateway will intelligently resolve any other fields provided in the GraphQL subscription query, fetching data from the appropriate subgraphs as needed
 -->
 
@@ -637,12 +633,14 @@ graph LR
 - EDFS in practice looks something like this
 - Here you can see multiple gateway instances all connected via NATS
 - where any service can publish events to the message broker
+- They dont even have to be subgraphs!
 - All connected clients get real-time updates regardless of which gateway they're connected to
 - This scales horizontally unlike traditional WebSocket or SSE subscriptions
 - The beauty of EDFS is that it decouples the subscription source from the subscription consumers
 - Services can publish events to NATS without knowing which gateways or clients are listening
 - Gateways can scale independently because they're not holding stateful connections to subgraphs
 - If one gateway goes down, clients can reconnect to another gateway and still receive all the same real-time updates
+- Same goes for the subgraphs, they can go down without disturbing the gateway or the clients
 - The message broker handles the distribution, making the whole system fault-tolerant and highly available
 -->
 
@@ -668,16 +666,15 @@ Modern logging for GraphQL applications
 - Cross-platform compatibility (Node.js, Bun, edge runtimes)
 
 <!--
-- Before we talk about dynamic logging, let me introduce Hive Logger
+- Before we talk about logging, let me introduce Hive Logger
 - It's our modern logging solution designed to run everywhere JavaScript does
 - No more lock-in to Node or any other platform.
 - The key improvement the logger carries to Hive Gateway version 2, is that
 - every log entry automatically gets tagged with the request ID.
 - This means you can filter your logs by a specific request and see its entire journey
-- Child loggers inherit metadata from parents, so context flows naturally through your application
 - It's built for performance with lazy evaluation of log messages
-- And you can plug in your favorite logging library like Pino or Winston as the underlying writer!
-- Or JSON? Or you can simply write to a file - it's up to you.
+- Oh and, you can cusotomize the underlying writer plug in your favorite logging library like Pino or Winston,
+- Or output JSON? Or you can simply write to a file - it's up to you.
 -->
 
 ---
@@ -692,7 +689,7 @@ Change Log Levels Without Restarts 🔄
 - Production debugging without downtime
 
 <!--
-- Now let's see Hive Logger in action with its most impressive feature
+- Now let's see Hive Logger in action with its most interesting feature for Hive Gateway
 - You can switch to debug mode without restarting your production gateway!
 - This is absolutely essential for troubleshooting production issues
 - Imagine it's 3am, something's wrong in production, and you need more verbose logging
@@ -805,7 +802,7 @@ What we built together today
 - EDFS enables true horizontal scaling for real-time features
 
 <!--
-- Before we wrap up, let me recap what we accomplished in just 90 minutes
+- Before we wrap up, let me recap what we just accomplished
 - We built a complete production-ready federated system
 - Every feature we added solves real production challenges
 - The key is that v2 makes enterprise features accessible to everyone
@@ -816,7 +813,7 @@ What we built together today
 layout: center
 ---
 
-# Visit The Guild Booth! 🏪
+# Visit The Guild Booth!
 
 Come chat with us about your GraphQL challenges
 
@@ -844,10 +841,14 @@ Come chat with us about your GraphQL challenges
 -->
 
 ---
+layout: two-cols-header
+---
 
 # Resources
 
 Continue Your Journey
+
+::left::
 
 ### Workshop Materials 📚
 
@@ -867,6 +868,10 @@ Continue Your Journey
 - [Hive Console](https://the-guild.dev/graphql/hive) - Complete GraphQL platform
 - [Self-hosting Hive](https://the-guild.dev/graphql/hive/docs/self-hosting/get-started)
 - [The Guild](https://the-guild.dev) - Open source GraphQL tools
+
+::right::
+
+TODO: qr code
 
 <!--
 - For those who want to dive deeper after today's session
