@@ -1,25 +1,25 @@
 schema
     @link(url: "https://specs.apollo.dev/link/v1.0")
-    @link(url: "https://specs.apollo.dev/join/v0.3", for: EXECUTION)
-
-
-
-
-
-
-
+    @link(url: "https://specs.apollo.dev/join/v0.4", for: EXECUTION)
+    
+    
+    
+    
+    
+    @link(url: "https://specs.apollo.dev/authenticated/v0.1", for: SECURITY)
+    
   {
     query: Query
-
-
+    
+    
   }
 
-
+  
     directive @join__enumValue(graph: join__Graph!) repeatable on ENUM_VALUE
 
     directive @join__graph(name: String!, url: String!) on ENUM_VALUE
 
-
+    
       directive @join__field(
         graph: join__Graph
         requires: join__FieldSet
@@ -28,11 +28,11 @@ schema
         external: Boolean
         override: String
         usedOverridden: Boolean
-
-
+        overrideLabel: String
+        
       ) repeatable on FIELD_DEFINITION | INPUT_FIELD_DEFINITION
-
-
+    
+    
 
     directive @join__implements(
       graph: join__Graph!
@@ -53,9 +53,9 @@ schema
     ) repeatable on UNION
 
     scalar join__FieldSet
-
-
-
+    
+  
+  
   directive @link(
     url: String
     as: String
@@ -77,22 +77,24 @@ schema
     EXECUTION
   }
 
+  
+  
+  
+  
+  
+  
+  directive @authenticated on FIELD_DEFINITION | OBJECT | INTERFACE | SCALAR | ENUM
 
-
-
-
-
-
-
+  
 enum join__Graph {
-  POSTS @join__graph(name: "posts", url: "http://localhost:4002/graphql")
-  USERS @join__graph(name: "users", url: "http://localhost:4001/graphql")
+  POSTS @join__graph(name: "posts", url: "http://localhost:4002/graphql") 
+  USERS @join__graph(name: "users", url: "http://localhost:4001/graphql") 
 }
 
-scalar TransportOptions @join__type(graph: POSTS)  @join__type(graph: USERS)
+scalar TransportOptions @join__type(graph: POSTS)  @join__type(graph: USERS) 
 
 type Query @join__type(graph: POSTS)  @join__type(graph: USERS)  {
-  posts: [Post!]! @join__field(graph: POSTS)
+  posts: [Post!]! @join__field(graph: POSTS) 
 }
 
 type Post @join__type(graph: POSTS, key: "id")  {
@@ -104,6 +106,6 @@ type Post @join__type(graph: POSTS, key: "id")  {
 
 type User @join__type(graph: POSTS, key: "id")  @join__type(graph: USERS, key: "id")  {
   id: ID!
-  name: String! @join__field(graph: USERS)
-  email: String! @join__field(graph: USERS)
+  name: String! @join__field(graph: USERS) 
+  email: String! @join__field(graph: USERS)  @authenticated
 }
