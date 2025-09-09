@@ -1,0 +1,6 @@
+{
+  "name": "posts",
+  "scripts": {
+    "start": "bun run --watch server.ts"
+  }
+}
