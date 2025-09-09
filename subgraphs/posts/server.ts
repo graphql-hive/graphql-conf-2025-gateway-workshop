@@ -54,7 +54,7 @@ const schema = buildSubgraphSchema({
         return newPost;
       },
     },
-    Posts: {
+    Post: {
       __resolveReference(post) {
         return posts.find((p) => p.id === post.id);
       },

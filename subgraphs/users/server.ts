@@ -8,9 +8,14 @@ import { useHmacSignatureValidation } from "@graphql-hive/gateway";
 import { HMAC_SECRET } from "../../env";
 
 const users = [
-  { id: "u1", name: "Alice", email: "alice@example.com" },
-  { id: "u2", name: "Bob", email: "bob@example.com" },
-  { id: "u3", name: "Charlie", email: "charlie@example.com" },
+  {
+    id: "u1",
+    name: "Alice",
+    email: "alice@example.com",
+    liked: [{ id: "p1" }, { id: "p3" }],
+  },
+  { id: "u2", name: "Bob", email: "bob@example.com", liked: [{ id: "p2" }] },
+  { id: "u3", name: "Charlie", email: "charlie@example.com", liked: [] },
 ];
 
 const schema = buildSubgraphSchema({
