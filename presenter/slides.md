@@ -246,7 +246,7 @@ Built for production workloads from day one
 
 ---
 layout: two-cols-header
-zoom: 0.85
+zoom: 0.75
 ---
 
 # Workshop Overview
@@ -295,7 +295,7 @@ zoom: 0.85
 - And the safest thing you can do for your gateway: trusted documents, aka persisted ops
 - The real-time section adds real-time capabilities with NATS-powered subscriptions that scale horizontally
 - We finish with production-grade observability using dynamic logging and OpenTelemetry tracing
-- Each step includes a git commit so you can follow along or jump to any specific point
+- Each step will have a git commit so you can follow along or jump to any specific point
 - By the end you'll have a complete production-ready federated system
 -->
 
@@ -339,7 +339,7 @@ Simple Blog Platform
 <!--
 - For our demo today, we needed to choose a domain that would showcase all these features effectively:
 - A simple blog platform that everyone understands
-- We'll have two services: one for users with profiles and authentication, and one for posts with real-time features
+- We'll have two services: users and posts
 - The users service will demonstrate field-level security by placing email addresses behind authentication,
 - while the posts service will show off role-based authorization and real-time notifications.
 - This domain will serve us great to demonstrate federation, security, and the scalability features
@@ -480,13 +480,14 @@ sequenceDiagram
 <!--
 - This diagram shows our complete security architecture with federation directive-based authorization
 - The gateway validates JWT first to extract user identity and scopes
-- Then it checks all @authenticated and @requiresScopes directives in the query plan
+- Then it checks all authentication directives in the query plan
 - If any field requires authentication or scopes the user doesn't have, the gateway immediately returns an authorization error
 - The subgraphs never receive unauthorized requests - this protects your backend services from unnecessary load
 - Only when all authorization checks pass does the gateway make requests to the subgraphs
 - Beyond authorization, we protect against common GraphQL attacks
-- Rate limiting prevents abuse at multiple levels, query protection stops malicious deep nested queries
-- Field suggestion blocking prevents schema discovery attacks even when introspection is disabled
+- Rate limiting prevents abuse at multiple levels,
+- query protection stops malicious deep nested queries,
+- field suggestion blocking prevents schema discovery attacks even when introspection is disabled
 -->
 
 ---
@@ -602,13 +603,13 @@ sequenceDiagram
 
 <!--
 - Let's talk subscriptions now
-- I mentioned EDFS, but first let us take a step back and explain GraphQL subscriptions for those who might be new to them
+- I'll explain GraphQL subscriptions for those who might be new to them
 - In traditional GraphQL subscriptions, a client opens a subscription typically over a WebSocket connection
 - The server maintains the connection and pushes updates when data changes
 - This works great on paper but has serious scaling challenges
 - WebSockets are stateful - each connection consumes server memory and creates sticky sessions
 - With thousands of users, you're looking at megabytes of memory just for connection overhead
-- Server-Sent Events have similar problems plus HTTP connection limits
+- Server-Sent Events have similar problems when dealing with HTTP/1
 - You can't easily distribute these connections across multiple server instances
 - In federated structures, gateways connect to subgraphs for subscriptions, putting pressure on both gateways and subgraphs
 - This creates bottlenecks because subgraphs become single points of failure for subscription data
@@ -654,11 +655,12 @@ Real-time features at enterprise scale 🌐
 
 <!--
 - EDFS to the rescue!
+- Also known as Event-Driven Federated Subscriptions
 - It solves all of the traditional issues we talked about by using message brokers like NATS, Kafka, or Redis
 - Starting v2, Hive Gateway's pubsub has built-in adapters making setup with any of these message brokers easy
 - Perfect for real-time features that need to scale to thousands of users!
-- Here's a cool feature: with EDFS, you can emit only the keys of a type and the gateway will resolve the rest of the fields
-- For example, our Post type has an "id" key - you can publish a message to NATS "postAdded" subject containing only the "id" field, but request more fields in the GraphQL subscription query
+- Here's a cool feature: with EDFS, you can emit only the keys of a GraphQL type and the gateway will resolve the rest of the fields
+- For example, our Post type has an "id" key - you can publish a message to NATS containing only the "id" field, but request more fields in the GraphQL subscription query
 - The gateway will intelligently resolve any other fields provided in the GraphQL subscription query, fetching data from the appropriate subgraphs as needed
 -->
 
@@ -692,12 +694,12 @@ graph LR
 ```
 
 <!--
-- EDFS in practice looks something like this
+- In practice it looks something like this
 - Here you can see multiple gateway instances all connected via NATS
 - where any service can publish events to the message broker
 - They dont even have to be subgraphs!
 - All connected clients get real-time updates regardless of which gateway they're connected to
-- This scales horizontally unlike traditional WebSocket or SSE subscriptions
+- This scales horizontally unlike traditional WebSocket or SSE subscriptions to subgraphs
 - The beauty of EDFS is that it decouples the subscription source from the subscription consumers
 - Services can publish events to NATS without knowing which gateways or clients are listening
 - Gateways can scale independently because they're not holding stateful connections to subgraphs
@@ -729,13 +731,14 @@ Modern logging for GraphQL applications
 
 <!--
 - Before we talk about logging, let me introduce Hive Logger
-- It's our modern logging solution designed to run everywhere JavaScript does
+- It's our modern logging solution designed to run everywhere JavaScript does,
 - No more lock-in to Node or any other platform.
+- Built for performance with lazy evaluation of log messages,
 - The key improvement the logger carries to Hive Gateway version 2, is that
 - every log entry automatically gets tagged with the request ID.
 - This means you can filter your logs by a specific request and see its entire journey
-- It's built for performance with lazy evaluation of log messages
-- Oh and, you can cusotomize the underlying writer plug in your favorite logging library like Pino or Winston,
+- Oh and, you can cusotomize the underlying writer
+- plug in your favorite logging library like Pino or Winston,
 - Or output JSON? Or you can simply write to a file - it's up to you.
 -->
 
