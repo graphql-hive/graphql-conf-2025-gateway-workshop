@@ -2,6 +2,7 @@ import {
   createInlineSigningKeyProvider,
   defineConfig,
   NATSPubSub,
+  type GatewayPlugin,
   type JWTAuthContextExtension,
 } from "@graphql-hive/gateway";
 import { HMAC_SECRET, JWT_SECRET } from "./env";
@@ -48,4 +49,15 @@ export const gatewayConfig = defineConfig<JWTAuthContextExtension>({
       subjectPrefix: "gw",
     }
   ),
+  plugins: ({ log }) => [
+    {
+      onRequest({ request, endResponse }) {
+        if (request.url.endsWith("/toggle-debug")) {
+          log.setLevel(log.level === "debug" ? "info" : "debug");
+          log.info(`Toggled log level to ${log.level}`);
+          endResponse(new Response(`Toggled log level to ${log.level}`));
+        }
+      },
+    } as GatewayPlugin,
+  ],
 });
