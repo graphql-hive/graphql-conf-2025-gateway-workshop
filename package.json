@@ -9,7 +9,7 @@
     "format": "prettier --check --write .",
     "subgraphs": "bun -F './subgraphs/*' start",
     "compose": "mesh-compose -o supergraph.graphql",
-    "start": "hive-gateway supergraph"
+    "start": "bun run --watch node_modules/.bin/hive-gateway supergraph"
   },
   "devDependencies": {
     "@types/bun": "latest"
@@ -23,6 +23,7 @@
     "@graphql-mesh/compose-cli": "^1.4.17",
     "graphql": "^16.11.0",
     "graphql-yoga": "^5.15.2",
+    "jsonwebtoken": "^9.0.2",
     "prettier": "^3.6.2"
   }
 }
