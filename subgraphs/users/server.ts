@@ -4,6 +4,8 @@ import { createYoga } from "graphql-yoga";
 
 // @ts-expect-error
 import typeDefs from "./typeDefs.graphql" with { type: "text" };
+import { useHmacSignatureValidation } from "@graphql-hive/gateway";
+import { HMAC_SECRET } from "../../env";
 
 const users = [
   { id: "u1", name: "Alice", email: "alice@example.com" },
@@ -22,7 +24,10 @@ const schema = buildSubgraphSchema({
   },
 });
 
-const yoga = createYoga({ schema });
+const yoga = createYoga({
+  schema,
+  plugins: [useHmacSignatureValidation({ secret: HMAC_SECRET })],
+});
 
 Bun.serve({
   port: 4001,
