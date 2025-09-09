@@ -200,13 +200,16 @@ Why teams choose it over alternatives
 -->
 
 ---
-layout: two-cols-header
 zoom: 0.85
 ---
 
 # What's New in v2
 
 Built for production workloads from day one
+
+<div class="grid grid-cols-[70%_30%] gap-4">
+
+<div>
 
 ### Enhanced OpenTelemetry & Observability
 
@@ -228,6 +231,21 @@ Built for production workloads from day one
 - 🛡️ **Security Hardening** - Multipart disabled by default, integrated protection
 - 🔍 **Built-in Query Protection** - Use max tokens, max depth, blocked field suggestions
 - 📡 **Modern Node.js Support** - Requires Node.js v20+ (dropped v18 support)
+
+</div>
+
+<div>
+<QRCode
+    :width="300"
+    :height="300"
+    type="svg"
+    data="https://the-guild.dev/graphql/hive/blog/hive-gateway-v2"
+    :dotsOptions="{ color: '#121212' }"
+    :backgroundOptions="{ color: 'white' }"
+/>
+</div>
+
+</div>
 
 <!--
 - Version 2 represents major improvements in both developer experience and production capabilities, some of the ones listed are:
@@ -712,6 +730,10 @@ graph LR
 
 Modern logging for GraphQL applications
 
+<div class="grid grid-cols-[70%_30%]">
+
+<div>
+
 ### Key Features
 
 - 🏷️ **Structured Logging** - JSON output with consistent metadata
@@ -726,6 +748,21 @@ Modern logging for GraphQL applications
 - Structured data makes log aggregation and searching easier
 - Performance optimized with lazy evaluation
 - Cross-platform compatibility (Node.js, Bun, edge runtimes)
+
+</div>
+
+<div>
+<QRCode
+    :width="300"
+    :height="300"
+    type="svg"
+    data="https://the-guild.dev/graphql/hive/docs/logger"
+    :dotsOptions="{ color: '#121212' }"
+    :backgroundOptions="{ color: 'white' }"
+/>
+</div>
+
+</div>
 
 <!--
 - Before we talk about logging, let me introduce Hive Logger
@@ -766,6 +803,10 @@ Change Log Levels Without Restarts 🔄
 
 Production-Grade Observability
 
+<div class="grid grid-cols-[70%_30%]">
+
+<div>
+
 ### What we'll configure
 
 - Set up with the official OpenTelemetry SDK
@@ -777,6 +818,21 @@ Production-Grade Observability
 - Perfect traces with proper span hierarchy
 - Contextual data in every span
 - GraphQL context, HTTP details, upstream execution info
+
+</div>
+
+<div>
+<QRCode
+    :width="300"
+    :height="300"
+    type="svg"
+    data="https://the-guild.dev/graphql/hive/docs/gateway/monitoring-tracing#opentelemetry-traces"
+    :dotsOptions="{ color: '#121212' }"
+    :backgroundOptions="{ color: 'white' }"
+/>
+</div>
+
+</div>
 
 <!--
 - One thing I love about v2 is how simple observability has become
@@ -795,6 +851,10 @@ zoom: 0.9
 # Let's Build! 🛠️
 
 Three ways to participate - your choice!
+
+<div class="grid grid-cols-[70%_30%] gap-2">
+
+<div>
 
 **Repository:** [graphql-hive/graphql-conf-2025-gateway-workshop](https://github.com/graphql-hive/graphql-conf-2025-gateway-workshop)
 
@@ -818,6 +878,21 @@ git pull # as we progress
 If suddenly you have the urge to join, just clone the repo and read its README.md.
 
 Let's unleash the power of federation! 🚀
+
+</div>
+
+<div>
+<QRCode
+    :width="300"
+    :height="300"
+    type="svg"
+    data="https://github.com/graphql-hive/graphql-conf-2025-gateway-workshop"
+    :dotsOptions="{ color: '#121212' }"
+    :backgroundOptions="{ color: 'white' }"
+/>
+</div>
+
+</div>
 
 <!--
 - Alright, enough talking - it's time to start building this thing!
@@ -863,6 +938,15 @@ What we built together today
 - v2 makes production-grade federation accessible
 - Security and observability are built-in, not add-ons
 - EDFS enables true horizontal scaling for real-time features
+
+<QRCode
+    :width="300"
+    :height="300"
+    type="svg"
+    data="https://github.com/graphql-hive/graphql-conf-2025-gateway-workshop"
+    :dotsOptions="{ color: '#121212' }"
+    :backgroundOptions="{ color: 'white' }"
+/>
 
 <!--
 - Before we wrap up, let me recap what we just accomplished
