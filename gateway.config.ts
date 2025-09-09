@@ -32,4 +32,11 @@ export const gatewayConfig = defineConfig<JWTAuthContextExtension>({
   },
   blockFieldSuggestions: true,
   rateLimiting: true,
+  persistedDocuments: {
+    async getPersistedOperation(key) {
+      const docs = await Bun.file("./doc.json").json();
+      return docs[key];
+    },
+    allowArbitraryDocuments: true,
+  },
 });
