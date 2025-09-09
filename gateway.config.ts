@@ -39,4 +39,5 @@ export const gatewayConfig = defineConfig<JWTAuthContextExtension>({
     },
     allowArbitraryDocuments: true,
   },
+  // graphiql: false,
 });
