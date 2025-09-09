@@ -58,10 +58,6 @@ bun i
 In root install deps
 
 ```sh
-cd subgraphs/users
-```
-
-```sh
 bun add graphql @apollo/subgraph graphql-yoga
 ```
 
