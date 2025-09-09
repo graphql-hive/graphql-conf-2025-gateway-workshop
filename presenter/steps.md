@@ -676,6 +676,12 @@ Refresh graphiql, show no types or documentation.
 
 Explain that you can enable introspection for auth users and how
 
+```ts
+disableIntrospection: {
+  disableIf: ({ context }) => !context.jwt?.payload,
+},
+```
+
 Refresh again, show types when header is set with jwt
 
 We're safer now...
