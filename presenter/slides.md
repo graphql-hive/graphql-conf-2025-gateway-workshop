@@ -271,6 +271,7 @@ zoom: 0.85
 - JWT authentication with `@authenticated` directives
 - HMAC signature validation between gateway and subgraphs
 - Role-based authorization with `@requiresScopes`
+- Trusted Documents (previusly known as GraphQL Persisted Operations/Documents)
 - Attack prevention: depth limits, rate limiting, introspection control
 
 ### Real-time & Observability
@@ -285,6 +286,7 @@ zoom: 0.85
 - Then we compose them with GraphQL Mesh and set up the Hive Gateway
 - The security section covers multi-layer protection: JWT for authentication, HMAC for subgraph communication, and field-level authorization with Federation directives
 - We'll also implement common GraphQL attack prevention like query depth limits and rate limiting
+- And the safest thing you can do for your gateway: trusted documents, aka persisted ops
 - The real-time section adds real-time capabilities with NATS-powered subscriptions that scale horizontally
 - We finish with production-grade observability using dynamic logging and OpenTelemetry tracing
 - Each step includes a git commit so you can follow along or jump to any specific point
@@ -479,6 +481,66 @@ sequenceDiagram
 - Beyond authorization, we protect against common GraphQL attacks
 - Rate limiting prevents abuse at multiple levels, query protection stops malicious deep nested queries
 - Field suggestion blocking prevents schema discovery attacks even when introspection is disabled
+-->
+
+---
+layout: two-cols-header
+zoom: 0.7
+---
+
+# Trusted Documents
+
+Maximum Security with GraphQL Persisted Operations
+
+::left::
+
+### What are Trusted Documents?
+
+- **Pre-approved Operations** - Only allow execution of pre-registered GraphQL queries
+- **Document Hash Mapping** - Client sends hash instead of full query string
+- **Zero Runtime Parsing** - Gateway validates hash and executes cached operation
+- **Complete Query Control** - Block all ad-hoc queries from reaching your API
+
+### Security Benefits
+
+- **Prevents Query Injection** - Malicious queries cannot be executed
+- **Schema Privacy** - No query introspection or discovery possible
+- **Resource Protection** - Only vetted, optimized queries run in production
+- **Compliance Ready** - Perfect for regulated industries requiring strict API control
+
+### Production Benefits
+
+- **Performance Boost** - Skip query parsing and validation
+- **Bandwidth Savings** - Send tiny hashes instead of large queries
+- **Attack Surface Reduction** - Eliminate entire classes of GraphQL attacks
+- **Monitoring Clarity** - Track specific operations instead of dynamic queries
+
+::right::
+
+```mermaid
+sequenceDiagram
+    participant Build as Frontend Build
+    participant Gateway as Hive Gateway
+    participant Client
+
+    Note over Build: Compile-time: extract operations
+    Build->>Gateway: Load trusted documents on startup
+    Gateway->>Gateway: Cache document hashes & operations
+
+    Note over Client: Runtime: use document hash
+    Client->>Gateway: POST { "documentId": "abc123" }
+    Gateway->>Gateway: Lookup operation by hash
+    Gateway->>Gateway: Execute trusted operation
+    Gateway-->>Client: Response
+```
+
+<!--
+- Trusted Documents represent the ultimate security layer for GraphQL APIs
+- Instead of accepting arbitrary queries, you pre-register all allowed operations at build time
+- Clients send a document hash instead of the full query, which the gateway looks up and executes
+- This eliminates query injection attacks, schema discovery, and gives you complete control over what can run
+- The performance benefits are substantial too - no parsing or validation overhead in production
+- We'll implement this as part of our security hardening to show how easy it is to set up
 -->
 
 ---
