@@ -1,5 +1,16 @@
+extend schema
+  @link(
+    url: "https://specs.apollo.dev/federation/v2.7"
+    import: ["@key", "@requiresScopes"]
+  )
+
 type Query {
   posts: [Post!]!
+}
+
+type Mutation {
+  createPost(title: String!, content: String!): Post!
+    @requiresScopes(scopes: [["editor"]])
 }
 
 type Post @key(fields: "id") {

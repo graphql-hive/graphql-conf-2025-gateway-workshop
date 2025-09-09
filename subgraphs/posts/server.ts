@@ -4,7 +4,11 @@ import { createYoga } from "graphql-yoga";
 
 // @ts-expect-error
 import typeDefs from "./typeDefs.graphql" with { type: "text" };
-import { useHmacSignatureValidation } from "@graphql-hive/gateway";
+import {
+  useForwardedJWT,
+  useHmacSignatureValidation,
+  type JWTAuthContextExtension,
+} from "@graphql-hive/gateway";
 import { HMAC_SECRET } from "../../env";
 
 const posts = [
@@ -34,6 +38,20 @@ const schema = buildSubgraphSchema({
     Query: {
       posts: () => posts,
     },
+    Mutation: {
+      createPost: (_, { title, content }, ctx) => {
+        const newPost = {
+          id: `p${posts.length + 1}`,
+          title,
+          content,
+          author: {
+            id: ctx.jwt?.payload.sub,
+          },
+        };
+        posts.push(newPost);
+        return newPost;
+      },
+    },
     Posts: {
       __resolveReference(post) {
         return posts.find((p) => p.id === post.id);
@@ -44,7 +62,10 @@ const schema = buildSubgraphSchema({
 
 const yoga = createYoga({
   schema,
-  plugins: [useHmacSignatureValidation({ secret: HMAC_SECRET })],
+  plugins: [
+    useHmacSignatureValidation({ secret: HMAC_SECRET }),
+    useForwardedJWT(),
+  ],
 });
 
 Bun.serve({

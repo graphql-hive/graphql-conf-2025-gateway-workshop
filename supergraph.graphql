@@ -5,12 +5,12 @@ schema
     
     
     
-    
+    @link(url: "https://specs.apollo.dev/requiresScopes/v0.1", for: SECURITY)
     @link(url: "https://specs.apollo.dev/authenticated/v0.1", for: SECURITY)
     
   {
     query: Query
-    
+    mutation: Mutation
     
   }
 
@@ -82,6 +82,12 @@ schema
   
   
   
+  directive @requiresScopes(
+    scopes: [[requiresScopes__Scope!]!]!
+  ) on FIELD_DEFINITION | OBJECT | INTERFACE | SCALAR | ENUM
+
+  scalar requiresScopes__Scope
+
   
   directive @authenticated on FIELD_DEFINITION | OBJECT | INTERFACE | SCALAR | ENUM
 
@@ -95,6 +101,10 @@ scalar TransportOptions @join__type(graph: POSTS)  @join__type(graph: USERS)
 
 type Query @join__type(graph: POSTS)  @join__type(graph: USERS)  {
   posts: [Post!]! @join__field(graph: POSTS) 
+}
+
+type Mutation @join__type(graph: POSTS)  {
+  createPost(title: String!, content: String!) : Post! @requiresScopes(scopes: [["editor"]]) 
 }
 
 type Post @join__type(graph: POSTS, key: "id")  {
