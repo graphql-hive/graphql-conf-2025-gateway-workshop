@@ -11,6 +11,9 @@ export const gatewayConfig = defineConfig<JWTAuthContextExtension>({
     reject: {
       missingToken: false,
     },
+    forward: {
+      payload: true,
+    },
   },
   hmacSignature: {
     secret: HMAC_SECRET,
