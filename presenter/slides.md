@@ -66,17 +66,15 @@ TODO: **GraphQL Mesh** - Query any API with GraphQL
 TODO: **GraphQL Hive** - Complete GraphQL platform with gateway, registry & observability
 
 ---
-
-# Also Interesting to See Conference
-
-- [Time] - [Talk Title Placeholder]
-- [Time] - [Talk Title Placeholder]
-- [Time] - Our Workshop (You are here!)
-- [Time] - [Talk Title Placeholder]
+layout: image
+image: "./assets/jeff.png"
+---
 
 <!--
-- Before we dive into the workshop, let me mention some other interesting talks happening during the conference
-- There are several other sessions that might interest you if you're working with GraphQL
+- Before we dive into the workshop, let me mention Jeff's upcoming talk
+- where he'll share what he's learned about schema design: proven design philosophies,
+- designing for forward compatibility, exposing errors through types,
+- and tips for how to avoid ambiguous or misleading type names.
 - But for now, let's focus on what we're building together
 -->
 
