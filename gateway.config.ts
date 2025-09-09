@@ -31,4 +31,5 @@ export const gatewayConfig = defineConfig<JWTAuthContextExtension>({
     disableIf: ({ context }) => !context.jwt?.payload,
   },
   blockFieldSuggestions: true,
+  rateLimiting: true,
 });
