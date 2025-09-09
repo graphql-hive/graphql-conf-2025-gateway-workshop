@@ -9,7 +9,9 @@ chrome://flags/#unsafely-treat-insecure-origin-as-secure
 
 # bun init
 
-After installing bun, initialise the repository with `bun init`. Some files have been removed for brevity.
+After installing bun, initialise the repository with `bun init`.
+
+Remove some files for brevity
 
 Commit
 
@@ -22,6 +24,10 @@ bun add prettier
 ```
 
 Add "format" script to package.json.
+
+Try it
+
+Commit
 
 # create subgraphs
 
@@ -53,6 +59,9 @@ In root install deps
 
 ```sh
 cd subgraphs/users
+```
+
+```sh
 bun add graphql @apollo/subgraph graphql-yoga
 ```
 
@@ -1123,7 +1132,11 @@ bun add @graphql-hive/cli
 and follow the publish instruction of project (see website)
 
 ```sh
-bun hive schema:publish --service users --url "http://localhost:4001/graphql"  --target "graphql-conf-2025/proj/development" subgraphs/users/typeDefs.graphql
+bun hive schema:publish \
+  --service users \
+  --url "http://localhost:4001/graphql" \
+  --target "graphql-conf-2025/proj/development" \
+  subgraphs/users/typeDefs.graphql
 ```
 
 The subgraphs schemas are published now!
