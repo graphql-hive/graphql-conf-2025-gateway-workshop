@@ -1,16 +1,16 @@
 ---
-theme: default
+theme: ./theme
 transition: none
 layout: cover
 addons:
   - slidev-addon-qrcode
 ---
 
-# Unleash the Power of Federation with Hive Gateway v2 🚀
+<h1 style="margin-top: 200px; font-size: 3rem">
+Unleash the Power of Federation with Hive Gateway
+</h1>
 
-Denis and Arda from The Guild
-
-<PoweredBySlidev />
+Denis and Arda from <b>The Guild</b>
 
 <!--
 - Welcome everyone to this workshop
@@ -366,8 +366,8 @@ graph TB
     Posts -.->|Publishes| NATS
 
     style Gateway fill:orange,color:black
-    style Users fill:blue
-    style Posts fill:blue
+    style Users fill:lightblue
+    style Posts fill:lightblue
 ```
 
 <!--
@@ -687,7 +687,7 @@ graph LR
     style Gateway1 fill:orange,color:black
     style Gateway2 fill:orange,color:black
     style Gateway3 fill:orange,color:black
-    style NATS fill:green
+    style NATS fill:lightgreen
     style PostService fill:cyan,color:black
 ```
 
@@ -788,7 +788,7 @@ Production-Grade Observability
 -->
 
 ---
-layout: center
+zoom: 0.9
 ---
 
 # Let's Build! 🛠️
@@ -797,13 +797,13 @@ Three ways to participate - your choice!
 
 **Repository:** [graphql-hive/graphql-conf-2025-gateway-workshop](https://github.com/graphql-hive/graphql-conf-2025-gateway-workshop)
 
-### 🔨 Code Together
+### Code Together
 
 Prerequisites: [Bun](https://bun.sh) + [Docker](https://docker.com)
 
 Join us in build from scratch!
 
-### 👀 Follow Along
+### Follow Along
 
 Clone and pull latest changes:
 
@@ -812,7 +812,7 @@ git clone git@github.com:graphql-hive/graphql-conf-2025-gateway-workshop.git
 git pull # as we progress
 ```
 
-### 🚀 Join Whenever
+### Join Whenever
 
 If suddenly you have the urge to join, just clone the repo and read its README.md.
 
