@@ -4,32 +4,34 @@ import { createYoga } from "graphql-yoga";
 
 // @ts-expect-error
 import typeDefs from "./typeDefs.graphql" with { type: "text" };
-import { idText } from "typescript";
 
 const posts = [
   {
-    id: "post-1",
+    id: "p1",
     title: "Post 1",
     content: "Content 1",
-    authorId: { id: "u1" },
+    author: { id: "u1" },
   },
   {
-    id: "post-2",
+    id: "p2",
     title: "Post 2",
     content: "Content 2",
-    authorId: { id: "u2" },
+    author: { id: "u2" },
   },
   {
-    id: "post-3",
+    id: "p3",
     title: "Post 3",
     content: "Content 3",
-    authorId: { id: "u1" },
+    author: { id: "u1" },
   },
 ];
 
 const schema = buildSubgraphSchema({
   typeDefs: parse(typeDefs),
   resolvers: {
+    Query: {
+      posts: () => posts,
+    },
     Posts: {
       __resolveReference(post) {
         return posts.find((p) => p.id === post.id);
