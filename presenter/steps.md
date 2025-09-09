@@ -1,4 +1,13 @@
-TODO: what about inflight request deduplication
+<!-- TODO: what about inflight request deduplication -->
+
+<!--
+http://ec2-52-28-73-22.eu-central-1.compute.amazonaws.com:8080
+-->
+
+<!--
+NOTE: for enabling clipboard on non-https
+chrome://flags/#unsafely-treat-insecure-origin-as-secure
+-->
 
 # bun init
 
@@ -736,6 +745,49 @@ TODO: explain that if you would like to rate limit the whole gateway it would be
 
 Commit
 
+# persisted docuemnts
+
+However, the best way to protect yourself is to use trusted documents
+
+also known as persisted documents or operations
+
+lets set that up, first we create a list of allowed queries
+
+```json
+{
+  "q1": "{ posts { title content author { name liked { title } } } }"
+}
+```
+
+then we set up the gateway.config.ts
+
+```ts
+persistedDocuments: {
+  getPersistedOperation: async (key) => {
+    const docs = await Bun.file("./docs.json").json();
+    return docs[key];
+  },
+}
+```
+
+now we allow only queries from the whitelist file
+
+show in graphiql
+
+then do
+
+```sh
+curl "http://localhost:4000/graphql?documentId=q1" | jq
+```
+
+for the sake of the remaining workshop examples
+
+I'll allow arbitrary ops
+
+```ts
+allowArbitraryOperations: true;
+```
+
 # edfs
 
 Enough about security, I'd like to get to something interesting
@@ -1049,6 +1101,7 @@ In order to publish, we have to set up an access token with perms:
 - tracing
 - usage
 - publish
+- app deploys
 
 Then we are going to store the token into our `hive.json` file
 
@@ -1103,6 +1156,47 @@ supergraph: {
 Ok this is looking fine, lets see the status of our gateway
 
 Great, it's pulling from the CDN!
+
+Let's also use app deplyoments and move our trusted documents
+
+to hive console as well!
+
+We need to deploy the app and activate it
+
+```sh
+bun hive app:create \
+  --target "graphql-conf-2025/proj/development" \
+  --name "conf" \
+  --version "1.0.0" \
+  docs.json
+```
+
+```sh
+bun hive app:publish \
+  --target "graphql-conf-2025/proj/development" \
+  --name "conf" \
+  --version "1.0.0"
+```
+
+and then set it up in gateway.config.ts
+
+```ts
+persistedDocuments: {
+  // allowArbitraryOperations: true,
+  allowArbitraryDocuments: true,
+  type: "hive",
+  endpoint: "",
+  token: "",
+}
+```
+
+great, lets try it
+
+```sh
+curl "http://localhost:4000/graphql?documentId=q1" | jq
+```
+
+Works!
 
 Before we show off the awesome tracing feature, lets first show how to set up usage reporting.
 
