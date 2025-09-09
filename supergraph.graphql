@@ -7,11 +7,14 @@ schema
     
     @link(url: "https://specs.apollo.dev/requiresScopes/v0.1", for: SECURITY)
     @link(url: "https://specs.apollo.dev/authenticated/v0.1", for: SECURITY)
-    @link(url: "https://the-guild.dev/graphql/mesh/spec/v1.0", import: ["@rateLimit"]) 
+    @link(
+  url: "https://the-guild.dev/graphql/mesh/spec/v1.0"
+  import: ["@rateLimit", "@pubsubPublish", "@pubsubOperation"]
+)
   {
     query: Query
     mutation: Mutation
-    
+    subscription: Subscription
   }
 
   
@@ -99,6 +102,10 @@ enum join__Graph {
 
 directive @rateLimit(max: Int!, window: String!, message: String)  on FIELD_DEFINITION
 
+directive @pubsubPublish(pubsubTopic: String!)  on FIELD_DEFINITION
+
+directive @pubsubOperation(pubsubTopic: String!)  on FIELD_DEFINITION
+
 scalar TransportOptions @join__type(graph: POSTS)  @join__type(graph: USERS) 
 
 type Query @join__type(graph: POSTS)  @join__type(graph: USERS)  {
@@ -110,7 +117,11 @@ type Mutation @join__type(graph: POSTS)  {
     max: 5
     window: "1m"
     message: "Too many createPost requests, please try again later."
-  ) @requiresScopes(scopes: [["editor"]]) 
+  ) @pubsubPublish(pubsubTopic: "postAdded")  @requiresScopes(scopes: [["editor"]]) 
+}
+
+type Subscription @join__type(graph: POSTS)  {
+  postCreated: Post! @pubsubOperation(pubsubTopic: "postAdded") 
 }
 
 type Post @join__type(graph: POSTS, key: "id")  @join__type(graph: USERS, key: "id")  {

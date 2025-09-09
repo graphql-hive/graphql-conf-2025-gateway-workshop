@@ -10,6 +10,7 @@ import {
   type JWTAuthContextExtension,
 } from "@graphql-hive/gateway";
 import { HMAC_SECRET } from "../../env";
+import { connect } from "@nats-io/transport-node";
 
 const posts = [
   {
