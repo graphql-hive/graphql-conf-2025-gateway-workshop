@@ -901,6 +901,8 @@ createPost: () => {
 };
 ```
 
+Compose
+
 Subscribe to postcreated on one browser tab
 
 Create post on other tab
