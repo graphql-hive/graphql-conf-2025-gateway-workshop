@@ -2,8 +2,12 @@
   "name": "graphql-conf-2025-gateway-workshop",
   "type": "module",
   "private": true,
+  "workspaces": [
+    "subgraphs/*"
+  ],
   "scripts": {
-    "format": "prettier --check --write ."
+    "format": "prettier --check --write .",
+    "subgraphs": "bun -F './subgraphs/*' start"
   },
   "devDependencies": {
     "@types/bun": "latest"
@@ -12,6 +16,9 @@
     "typescript": "^5"
   },
   "dependencies": {
+    "@apollo/subgraph": "^2.11.2",
+    "graphql": "^16.11.0",
+    "graphql-yoga": "^5.15.2",
     "prettier": "^3.6.2"
   }
 }
