@@ -5,10 +5,7 @@ import { createYoga } from "graphql-yoga";
 // @ts-expect-error
 import typeDefs from "./typeDefs.graphql" with { type: "text" };
 import { HMAC_SECRET } from "../../env";
-import {
-  useForwardedJWT,
-  useHmacSignatureValidation,
-} from "@graphql-hive/gateway";
+import { useHmacSignatureValidation } from "@graphql-hive/gateway";
 
 const posts = [
   {
@@ -45,7 +42,7 @@ const schema = buildSubgraphSchema([
             title,
             content,
             author: {
-              id: ctx.jwt?.payload.sub,
+              id: ctx.request.headers.get("x-user-id"),
             },
           };
           posts.push(newPost);
@@ -63,10 +60,7 @@ const schema = buildSubgraphSchema([
 
 const yoga = createYoga({
   schema,
-  plugins: [
-    useHmacSignatureValidation({ secret: HMAC_SECRET }),
-    useForwardedJWT(),
-  ],
+  plugins: [useHmacSignatureValidation({ secret: HMAC_SECRET })],
 });
 
 Bun.serve({
