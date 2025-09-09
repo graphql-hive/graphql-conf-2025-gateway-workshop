@@ -7,7 +7,7 @@ schema
     
     @link(url: "https://specs.apollo.dev/requiresScopes/v0.1", for: SECURITY)
     @link(url: "https://specs.apollo.dev/authenticated/v0.1", for: SECURITY)
-    
+    @link(url: "https://the-guild.dev/graphql/mesh/spec/v1.0", import: ["@rateLimit"]) 
   {
     query: Query
     mutation: Mutation
@@ -97,6 +97,8 @@ enum join__Graph {
   USERS @join__graph(name: "users", url: "http://localhost:4001/graphql") 
 }
 
+directive @rateLimit(max: Int!, window: String!, message: String)  on FIELD_DEFINITION
+
 scalar TransportOptions @join__type(graph: POSTS)  @join__type(graph: USERS) 
 
 type Query @join__type(graph: POSTS)  @join__type(graph: USERS)  {
@@ -104,7 +106,11 @@ type Query @join__type(graph: POSTS)  @join__type(graph: USERS)  {
 }
 
 type Mutation @join__type(graph: POSTS)  {
-  createPost(title: String!, content: String!) : Post! @requiresScopes(scopes: [["editor"]]) 
+  createPost(title: String!, content: String!) : Post! @rateLimit(
+    max: 5
+    window: "1m"
+    message: "Too many createPost requests, please try again later."
+  ) @requiresScopes(scopes: [["editor"]]) 
 }
 
 type Post @join__type(graph: POSTS, key: "id")  @join__type(graph: USERS, key: "id")  {

@@ -1,8 +1,19 @@
 extend schema
   @link(
     url: "https://specs.apollo.dev/federation/v2.7"
-    import: ["@key", "@requiresScopes"]
+    import: ["@key", "@requiresScopes", "@composeDirective"]
   )
+  @link(
+    url: "https://the-guild.dev/graphql/mesh/spec/v1.0"
+    import: ["@rateLimit"]
+  )
+  @composeDirective(name: "@rateLimit")
+
+directive @rateLimit(
+  max: Int!
+  window: String!
+  message: String
+) on FIELD_DEFINITION
 
 type Query {
   posts: [Post!]!
@@ -11,6 +22,11 @@ type Query {
 type Mutation {
   createPost(title: String!, content: String!): Post!
     @requiresScopes(scopes: [["editor"]])
+    @rateLimit(
+      max: 5
+      window: "1m"
+      message: "Too many createPost requests, please try again later."
+    )
 }
 
 type Post @key(fields: "id") {
