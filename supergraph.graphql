@@ -107,15 +107,16 @@ type Query @join__type(graph: POSTS)  @join__type(graph: USERS)  {
   posts: [Post!]! @join__field(graph: POSTS) 
 }
 
-type Post @join__type(graph: POSTS, key: "id")  {
+type Post @join__type(graph: POSTS, key: "id")  @join__type(graph: USERS, key: "id")  {
   id: ID!
-  title: String!
-  content: String!
-  author: User!
+  title: String! @join__field(graph: POSTS) 
+  content: String! @join__field(graph: POSTS) 
+  author: User! @join__field(graph: POSTS) 
 }
 
 type User @join__type(graph: POSTS, key: "id")  @join__type(graph: USERS, key: "id")  {
   id: ID!
   name: String! @join__field(graph: USERS) 
   email: String! @join__field(graph: USERS)  @authenticated
+  liked: [Post!]! @join__field(graph: USERS) 
 }

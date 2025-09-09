@@ -25,4 +25,10 @@ export const gatewayConfig = defineConfig<JWTAuthContextExtension>({
       "x-user-id": context.jwt?.payload.sub,
     }),
   },
+  maxDepth: 5,
+  maxTokens: 1000,
+  disableIntrospection: {
+    disableIf: ({ context }) => !context.jwt?.payload,
+  },
+  blockFieldSuggestions: true,
 });
