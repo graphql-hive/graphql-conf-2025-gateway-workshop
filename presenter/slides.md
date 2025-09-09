@@ -65,6 +65,8 @@ TODO: **GraphQL Mesh** - Query any API with GraphQL
 
 TODO: **GraphQL Hive** - Complete GraphQL platform with gateway, registry & observability
 
+TODO: **Stellate** - Complete GraphQL platform with gateway, registry & observability
+
 ---
 layout: image
 image: "./assets/jeff.png"

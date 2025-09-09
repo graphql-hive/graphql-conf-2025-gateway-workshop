@@ -38,6 +38,10 @@
   }
 }
 
+.slidev-layout {
+  font-family: "Neu Montreal", sans-serif;
+}
+
 .light .slidev-layout {
   color: #245850;
 }
