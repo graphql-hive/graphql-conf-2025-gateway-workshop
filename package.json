@@ -2,10 +2,16 @@
   "name": "graphql-conf-2025-gateway-workshop",
   "type": "module",
   "private": true,
+  "scripts": {
+    "format": "prettier --check --write ."
+  },
   "devDependencies": {
     "@types/bun": "latest"
   },
   "peerDependencies": {
     "typescript": "^5"
+  },
+  "dependencies": {
+    "prettier": "^3.6.2"
   }
 }
