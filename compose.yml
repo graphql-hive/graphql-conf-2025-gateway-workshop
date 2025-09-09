@@ -3,3 +3,8 @@ services:
     image: nats
     ports:
       - "4222:4222"
+  jaeger:
+    image: cr.jaegertracing.io/jaegertracing/jaeger:2.10.0
+    ports:
+      - 16686:16686 # app
+      - 54318:4318 # tracing over http
