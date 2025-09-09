@@ -789,6 +789,12 @@ persistedDocuments: {
 }
 ```
 
+and disable graphiql because there is no point having it
+
+```ts
+graphiql: false;
+```
+
 now we allow only queries from the whitelist file
 
 show in graphiql
@@ -806,6 +812,10 @@ I'll allow arbitrary ops
 ```ts
 allowArbitraryOperations: true;
 ```
+
+and re-enable graphiql
+
+Commit
 
 # edfs
 
