@@ -1,5 +1,3 @@
-<!-- TODO: what about inflight request deduplication -->
-
 <!--
 http://ec2-52-28-73-22.eu-central-1.compute.amazonaws.com:8080
 -->
@@ -741,7 +739,9 @@ Then enable rate limit in gateway.config.ts
 
 Abuse `createPost` mutation and show how it fails
 
-TODO: explain that if you would like to rate limit the whole gateway it would be best to use nginx, proxy, cloudflare, load balancer or anything in front of the gateway
+If you would like to rate limit the whole gateway it would be best to use nginx, proxy, cloudflare, load balancer or anything in front of the gateway
+
+best to use stellate!
 
 Commit
 
@@ -914,8 +914,6 @@ TODO: explain more?
 TODO: maybe start another gateway and show that?
 
 TODO: explain with edfs there's no downtime issues, connection will persist
-
-TODO: use the new pubsubPublish directive and show much better
 
 Commit
 
