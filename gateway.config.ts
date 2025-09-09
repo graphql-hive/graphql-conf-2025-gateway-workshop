@@ -1,9 +1,11 @@
 import {
   createInlineSigningKeyProvider,
   defineConfig,
+  NATSPubSub,
   type JWTAuthContextExtension,
 } from "@graphql-hive/gateway";
 import { HMAC_SECRET, JWT_SECRET } from "./env";
+import { connect } from "@nats-io/transport-node";
 
 export const gatewayConfig = defineConfig<JWTAuthContextExtension>({
   jwt: {
@@ -32,4 +34,18 @@ export const gatewayConfig = defineConfig<JWTAuthContextExtension>({
   },
   blockFieldSuggestions: true,
   rateLimiting: true,
+  persistedDocuments: {
+    getPersistedOperation: async (key) => {
+      const docs = await Bun.file("./docs.json").json();
+      return docs[key];
+    },
+    allowArbitraryDocuments: true,
+  },
+  // graphiql: false,
+  pubsub: new NATSPubSub(
+    await connect({ servers: ["nats://localhost:4222"] }),
+    {
+      subjectPrefix: "gw",
+    }
+  ),
 });

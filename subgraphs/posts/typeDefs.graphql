@@ -5,15 +5,21 @@ extend schema
   )
   @link(
     url: "https://the-guild.dev/graphql/mesh/spec/v1.0"
-    import: ["@rateLimit"]
+    import: ["@rateLimit", "@pubsubOperation", "@pubsubPublish"]
   )
   @composeDirective(name: "@rateLimit")
+  @composeDirective(name: "@pubsubOperation")
+  @composeDirective(name: "@pubsubPublish")
 
 directive @rateLimit(
   max: Int!
   window: String!
   message: String!
 ) on FIELD_DEFINITION
+
+directive @pubsubOperation(pubsubTopic: String!) on FIELD_DEFINITION
+
+directive @pubsubPublish(pubsubTopic: String!) on FIELD_DEFINITION
 
 type Mutation {
   createPost(title: String!, content: String!): Post!
@@ -23,10 +29,15 @@ type Mutation {
       window: "1m"
       message: "Too many posts created, please try again later."
     )
+    @pubsubPublish(pubsubTopic: "postAdded")
 }
 
 type Query {
   posts: [Post!]!
+}
+
+type Subscription {
+  postCreated: Post! @pubsubOperation(pubsubTopic: "postAdded")
 }
 
 type Post @key(fields: "id") {
