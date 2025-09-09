@@ -774,7 +774,7 @@ lets set that up, first we create a list of allowed queries
 
 ```json
 {
-  "q1": "{ posts { title content author { name liked { title } } } }"
+  "q1": "query GetPosts { posts { title content author { name liked { title author { name } } } } }"
 }
 ```
 
