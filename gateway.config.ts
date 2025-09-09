@@ -2,10 +2,28 @@ import {
   createInlineSigningKeyProvider,
   defineConfig,
   NATSPubSub,
+  type GatewayPlugin,
   type JWTAuthContextExtension,
 } from "@graphql-hive/gateway";
 import { HMAC_SECRET, JWT_SECRET } from "./env";
 import { connect } from "@nats-io/transport-node";
+import { openTelemetrySetup } from "@graphql-hive/gateway/opentelemetry/setup";
+import { AsyncLocalStorageContextManager } from "@opentelemetry/context-async-hooks";
+import { OTLPTraceExporter } from "@opentelemetry/exporter-trace-otlp-http";
+import { hive, trace } from "@graphql-hive/gateway/opentelemetry/api";
+
+openTelemetrySetup({
+  contextManager: new AsyncLocalStorageContextManager(),
+  traces: {
+    exporter: new OTLPTraceExporter({
+      url: "http://localhost:4318/v1/traces",
+    }),
+  },
+  resource: {
+    serviceName: "gw",
+    serviceVersion: "1.0.0",
+  },
+});
 
 export const gatewayConfig = defineConfig<JWTAuthContextExtension>({
   jwt: {
@@ -19,7 +37,15 @@ export const gatewayConfig = defineConfig<JWTAuthContextExtension>({
   },
   genericAuth: {
     mode: "protect-granular",
-    resolveUserFn: (ctx) => ctx.jwt?.payload,
+    resolveUserFn: (ctx) => {
+      const user = ctx.jwt?.payload;
+
+      const otelctx = hive.getHttpContext(ctx.request);
+      const span = trace.getSpan(otelctx!);
+      span?.setAttribute("user.id", user?.sub || "anonymous");
+
+      return ctx.jwt?.payload;
+    },
     rejectUnauthenticated: false,
   },
   propagateHeaders: {
@@ -48,4 +74,20 @@ export const gatewayConfig = defineConfig<JWTAuthContextExtension>({
       subjectPrefix: "fed",
     }
   ),
+  plugins: ({ log }) => [
+    {
+      onRequest({ request, endResponse }) {
+        if (request.url.endsWith("/toggle-debug")) {
+          log.setLevel(log.level === "debug" ? "info" : "debug");
+          log.info(`Toggled log level to ${log.level}`);
+          endResponse(
+            new Response(`Log level is now ${log.level}`, { status: 200 })
+          );
+        }
+      },
+    } as GatewayPlugin,
+  ],
+  openTelemetry: {
+    traces: true,
+  },
 });
