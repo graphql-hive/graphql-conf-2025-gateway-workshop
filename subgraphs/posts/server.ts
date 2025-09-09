@@ -1,6 +1,6 @@
 import { buildSubgraphSchema } from "@apollo/subgraph";
 import { parse } from "graphql";
-import { createYoga } from "graphql-yoga";
+import { createYoga, type YogaInitialContext } from "graphql-yoga";
 
 // @ts-expect-error
 import typeDefs from "./typeDefs.graphql" with { type: "text" };
@@ -45,7 +45,9 @@ const schema = buildSubgraphSchema({
           title,
           content,
           author: {
-            id: ctx.jwt?.payload.sub,
+            id:
+              (ctx as YogaInitialContext).request.headers.get("x-user-id") ||
+              "unknown",
           },
         };
         posts.push(newPost);
