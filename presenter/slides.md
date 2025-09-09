@@ -28,19 +28,25 @@ The team behind your GraphQL tooling
 
 ::left::
 
-## Denis [Placeholder]
+<img src="./assets/denis.jpg" alt="Denis" width="100" style="border-radius: 10px" />
 
-- [Role/Background placeholder]
-- [Experience placeholder]
-- [Fun fact placeholder]
+## Denis
+
+- [`@enisdenjo`](https://github.com/enisdenjo)
+- [the-guild.dev](https://the-guild.dev/)
+- Software Developer
+- 🐛 I create problems
 
 ::right::
 
-## Arda [Placeholder]
+<img src="./assets/arda.jpg" alt="Arda" width="100" style="border-radius: 10px" />
 
-- [Role/Background placeholder]
-- [Experience placeholder]
-- [Fun fact placeholder]
+## Arda
+
+- [`@ardatan`](https://github.com/ardatan)
+- [the-guild.dev](https://the-guild.dev/)
+- Software Developer
+- 🔧 I fix problems
 
 <!--
 - Let me start by introducing ourselves and the company behind the tools you probably use
