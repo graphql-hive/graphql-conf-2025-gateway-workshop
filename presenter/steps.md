@@ -168,14 +168,17 @@ Change data to posts
 
 Change resolvers
 
+ADD QUERY RESOLVER
+
 Change port and log
 
-Go to root, install
+Try it
 
 ```sh
-../
-bun i
+bun start
 ```
+
+Go to root, install
 
 Create new script "subgraphs"
 
@@ -371,17 +374,6 @@ Commit
 
 # add @authenticated
 
-Open gateway.config.ts
-
-```ts
-defineConfig<JWTAuthContextExtension>
-
-genericAuth: {
-  mode: "protect-granular",
-  resolveUserFn: (ctx) => ctx.jwt?.payload,
-},
-```
-
 Open subgraphs/users/typeDefs.graphql
 
 We need to upgrade federation version
@@ -397,6 +389,17 @@ extend schema
 Add @authenticated to email field
 
 Compose
+
+Open gateway.config.ts
+
+```ts
+defineConfig<JWTAuthContextExtension>
+
+genericAuth: {
+  mode: "protect-granular",
+  resolveUserFn: (ctx) => ctx.jwt?.payload,
+},
+```
 
 Show email unauthenticated graphql query
 
@@ -434,9 +437,14 @@ extend schema
     url: "https://specs.apollo.dev/federation/v2.7"
     import: ["@key", "@requiresScopes"]
   )
+
+type Mutation {
+  createPost(title: String!, content: String!): Post!
+    @requiresScopes(scopes: [["editor"]])
+}
 ```
 
-Add @requiresScope editor to email field
+Add @requiresScope to createPost mutation
 
 Compose
 
@@ -493,7 +501,7 @@ Payload will now be in yoga context
 Console log the payload inside the createPost mutation but throw a todo error
 
 ```ts
-createPost: (_, { title, content }, ctx: JWTAuthContextExtension) => {
+createPost: (_, { title, content }, ctx) => {
   console.log(ctx.jwt);
   throw "todo";
   posts.push({
@@ -566,6 +574,12 @@ createPost: (_, { title, content }, ctx: YogaInitialContext) => {
   if (!userId) {
     throw new Error("Missing user id header");
   }
+```
+
+and remove
+
+```ts
+useForwardedJWT();
 ```
 
 Execute create post query and require the author field to see that it is being propagated
