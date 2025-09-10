@@ -56,18 +56,6 @@ The team behind your GraphQL tooling
 -->
 
 ---
-
-TODO: **GraphQL Yoga** - Production-ready GraphQL server
-
-TODO: **GraphQL Code Generator** - Generate anything from GraphQL schemas
-
-TODO: **GraphQL Mesh** - Query any API with GraphQL
-
-TODO: **GraphQL Hive** - Complete GraphQL platform with gateway, registry & observability
-
-TODO: **Stellate** - Complete GraphQL platform with gateway, registry & observability
-
----
 layout: image
 image: "./assets/jeff.png"
 ---
